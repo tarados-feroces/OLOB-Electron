@@ -1,0 +1,17 @@
+@import '../../static/config.scss';
+
+.slideshow {
+    width: 100%;
+    height: 100%;
+    // color: black;
+    // background-color: black;
+
+    &__slide-header {
+        color: blue;
+        margin-bottom: 20px;
+    }
+
+    &__slide-back {
+        height: $slideshow-height;
+    }
+}

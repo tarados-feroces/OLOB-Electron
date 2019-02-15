@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "target": "es5",
+    "jsx": "react",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "declaration": false,
+    "noImplicitAny": false,
+    "noImplicitReturns": false,
+    "removeComments": true,
+    "strictNullChecks": false,
+    "keyofStringsOnly": true,
+    "outDir": "build",
+    "lib": [
+      "es5",
+      "es6",
+      "es7",
+      "dom"
+    ]
+  },
+  "include": [
+    "src",
+    "types/*.d.ts",
+    "node_modules/@types", "server/webpack.config.dev.js", "server/src/index.js"
+  ],
+  "compileOnSave": false,
+  "exclude": [
+    "dist",
+    "build",
+    "node_modules"
+  ],
+  "modules": "es2015"
+}
