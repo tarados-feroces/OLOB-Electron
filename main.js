@@ -1,5 +1,5 @@
 // Basic init
-const electron = require('electron');
+import electron from 'electron';
 const path = require('path');
 const {app, BrowserWindow} = electron;
 

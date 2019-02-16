@@ -4,6 +4,7 @@ import { Router, Route, Switch } from 'react-router';
 import { createBrowserHistory } from 'history';
 import { bindActionCreators } from 'redux';
 import * as PathConstants from '../../constants/PathsConstants';
+import 'semantic-ui-css/semantic.min.css';
 
 import MainPage from '../MainPage';
 
