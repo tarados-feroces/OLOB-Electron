@@ -1,26 +1,35 @@
-import {
-    SET_USER, LOGIN_USER, SIGNUP_USER
-} from '../constants/User';
+import { Reducer } from 'redux';
 
-const initialState = {
+import { ActionTypes } from '../constants/User';
+
+export interface UserState {
+    isAuthorized: boolean | null;
+    login: string;
+    email?: string;
+    password?: string;
+}
+
+const initialState: UserState = {
     isAuthorized: null,
     email: '',
     login: ''
 };
 
-export default function user(state = initialState, action) {
-    switch (action.type) {
-    case SET_USER:
+const userReducer: Reducer<UserState> = (state = initialState,  { payload, type }) => {
+    switch (type) {
+    case ActionTypes.SET_USER:
 
-        return { ...state, ...action.payload };
-    case LOGIN_USER:
+        return { ...state, ...payload };
+    case ActionTypes.SET_USER_AUTHORIZED:
 
-        return { ...state, ...action.payload };
-    case SIGNUP_USER:
+        return { ...state, isAuthorized: true };
+    case ActionTypes.RESET_USER_AUTHORIZED:
 
-        return { ...state, ...action.payload };
+        return { ...state, isAuthorized: false };
     default:
 
         return state;
     }
-}
+};
+
+export default userReducer;

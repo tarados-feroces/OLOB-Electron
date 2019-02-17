@@ -72,6 +72,7 @@
     "webpack-dev-server": "^3.1.9"
   },
   "dependencies": {
+    "@types/redux": "^3.6.0",
     "bem-cn": "^3.0.1",
     "react": "^16.5.2",
     "react-dom": "^16.1.1",

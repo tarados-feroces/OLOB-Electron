@@ -1,62 +1,48 @@
-import * as HttpConstants from '../../constants/HttpConstants';
-import transport from '../../modules/Transport/Transport';
+import { httpApi, LoginData, RegisterData } from '../../modules/HttpApi';
 
-import {
-    SET_USER, LOGIN_USER, SIGNUP_USER
-} from '../constants/User';
+import { UserState } from '../reducers/User';
+import { ActionTypes } from '../constants/User';
 
-export function setUser(user) {
-    return {
-        type: SET_USER,
-        payload: user
-    };
-}
+const setUser = (user: UserState) => ({
+    type: ActionTypes.SET_USER,
+    payload: user
+});
+
+const setUserAuthorized = () => ({ type: ActionTypes.SET_USER_AUTHORIZED });
+const resetUserAuthorized = () => ({ type: ActionTypes.RESET_USER_AUTHORIZED });
 
 export function getUser() {
     return async (dispatch) => {
-        dispatch(setUser({ isAuthorized: null }));
-        const response = await transport.doGet(HttpConstants.GET_USER);
-
+        const response = await httpApi.getUser();
         const json = await response.json();
 
-        dispatch(
-            setUser(
-                response.ok ? ({ ...json, isAuthorized: true }) : { isAuthorized: false }
-            )
-        );
-    };
-}
-
-export function loginUser(data) {
-    return async (dispatch) => {
-        const response = await transport.doPost(HttpConstants.LOGIN, data);
-        const json = await response.json();
         if (response.ok) {
-            dispatch(login({ ...json, isAuthorized: true }));
+            dispatch(setUserAuthorized());
+            dispatch(setUser(json));
+        } else {
+            dispatch(resetUserAuthorized());
         }
     };
 }
 
-function login(data) {
-    return {
-        type: LOGIN_USER,
-        payload: data
-    };
-}
-
-export function signupUser(data) {
+export function loginUser(data: LoginData) {
     return async (dispatch) => {
-        const response = await transport.doPost(HttpConstants.SIGNUP, data);
+        const response = await httpApi.loginUser(data);
         const json = await response.json();
         if (response.ok) {
-            dispatch(signup({ ...json, isAuthorized: true }));
+            dispatch(setUserAuthorized());
+            dispatch(setUser(json));
         }
     };
 }
 
-function signup(data) {
-    return {
-        type: SIGNUP_USER,
-        payload: data
+export function signupUser(data: RegisterData) {
+    return async (dispatch) => {
+        const response = await httpApi.loginUser(data);
+        const json = await response.json();
+        if (response.ok) {
+            dispatch(setUserAuthorized());
+            dispatch(setUser(json));
+        }
     };
 }

@@ -1,3 +1,7 @@
-export const LOGIN_USER: string = 'LOGIN_USER';
-export const SIGNUP_USER: string = 'SIGNUP_USER';
-export const SET_USER: string = 'SET_USER';
+export const enum ActionTypes {
+    LOGIN_USER = 'LOGIN_USER',
+    SIGNUP_USER = 'SIGNUP_USER',
+    SET_USER = 'SET_USER',
+    SET_USER_AUTHORIZED = 'SET_USER_AUTHORIZED',
+    RESET_USER_AUTHORIZED = 'RESET_USER_AUTHORIZED'
+}

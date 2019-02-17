@@ -3,7 +3,6 @@ const Path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const outPath = Path.join(__dirname, './dist');
 const sourcePath = Path.join(__dirname, './src');
@@ -16,16 +15,16 @@ module.exports = {
     },
     output: {
         path: outPath,
-        publicPath: './',
+        publicPath: '/',
         filename: 'bundle.js'
     },
-    target: 'electron-renderer',
+    target: 'web',
     resolve: {
         extensions: ['.js', '.ts', '.tsx'],
     },
     devtool: 'inline-source-map',
     watch: true,
-    
+
     devServer: {
         contentBase: './dist',
         historyApiFallback: true,
@@ -78,10 +77,6 @@ module.exports = {
         }),
         new ExtractTextPlugin({
             filename: 'style.css'
-        }),
-        new CopyWebpackPlugin([
-            {from: Path.join(__dirname, 'src/static/images'), to: Path.join(outPath, './images')}
-        ])
-
+        })
     ]
 };
