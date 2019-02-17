@@ -22,9 +22,6 @@ interface LoginState {
 const b = block('olob-login');
 
 export default class Login extends React.Component<LoginProps> {
-    private userNameRef = React.createRef<HTMLInputElement>();
-    private passwordRef = React.createRef<HTMLInputElement>();
-
     public state = {
         nickname: '',
         password: ''
@@ -39,18 +36,16 @@ export default class Login extends React.Component<LoginProps> {
                     <Grid>
                         <Grid.Row>
                             <Grid.Column>
-                                <Form className={b('forms')}>
+                                <Form>
                                     <Form.Input
                                         label={'Введите логин'}
                                         placeholder={'Введите логин'}
-                                        ref={this.userNameRef}
                                         onChange={this.handleInputNickname}
                                     />
                                     <Form.Input
                                         label={'Введите пароль'}
                                         placeholder={'Введите пароль'}
                                         type={'password'}
-                                        ref={this.passwordRef}
                                         onChange={this.handleInputPassword}
                                     />
                                     <Button type={'submit'} inverted={true} onClick={this.handleSubmit}>Войти</Button>
@@ -63,20 +58,20 @@ export default class Login extends React.Component<LoginProps> {
         );
     }
 
-    private handleInputNickname = () => {
-        if (!this.userNameRef.current) {
-            return;
-        }
+    private handleInputNickname = (event) => {
+        // if (!this.userNameRef.current) {
+        //     return;
+        // }
 
-        this.setState({ nickname: this.userNameRef.current.value });
+        this.setState({ nickname: event.target.value });
     }
 
-    private handleInputPassword = () => {
-        if (!this.passwordRef.current) {
-            return;
-        }
+    private handleInputPassword = (event) => {
+        // if (!this.passwordRef.current) {
+        //     return;
+        // }
 
-        this.setState({ password: this.passwordRef.current.value });
+        this.setState({ password: event.target.value });
     }
 
     private handleSubmit = () => {
