@@ -1,0 +1,14 @@
+.olob-login {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__container {
+        width: 400px;
+        height: 600px;
+        display: flex;
+        background-color: black;
+    }
+}
