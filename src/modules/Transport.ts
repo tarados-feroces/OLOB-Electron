@@ -1,4 +1,4 @@
-import { HTTP_DOMEN, HEADER_CONTENT_TYPE, JSON_CONTENT_TYPE, POST, GET } from '../../constants/HttpConstants';
+import { HTTP_DOMEN, HEADER_CONTENT_TYPE, JSON_CONTENT_TYPE, POST, GET } from '../constants/HttpConstants';
 
 class Transport {
 

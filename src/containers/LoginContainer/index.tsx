@@ -1,24 +1,16 @@
 import * as React from 'react';
-import { block } from 'bem-cn';
-import './index.scss';
-import { Simulate } from 'react-dom/test-utils';
-import compositionStart = Simulate.compositionStart;
+import { connect } from 'react-redux';
+import Login from '../../components/Login';
+import { loginUser } from '../../redux/actions/User';
+import { LoginData } from '../../modules/HttpApi';
 
-import { Button } from 'semantic-ui-react';
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onLogin(data: LoginData) {
+            dispatch(loginUser(data));
+        }
+    };
+};
 
-const b = block('main-page');
-
-export default class LoginContainer extends React.Component {
-
-    public render() {
-
-        return (
-            <div>
-                <Button color={'teal'} animated={true} size={'large'}>
-                    Hello World!
-                </Button>
-
-            </div>
-        );
-    }
-}
+// tslint:disable-next-line:no-empty
+export default connect((state: {}) => {}, mapDispatchToProps)(Login);

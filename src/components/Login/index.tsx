@@ -3,7 +3,7 @@ import { block } from 'bem-cn';
 
 import './index.scss';
 
-import { Button, Form } from 'semantic-ui-react';
+import { Button, Form, Grid } from 'semantic-ui-react';
 
 interface LoginData {
     nickname: string;
@@ -21,11 +21,17 @@ export default class Login extends React.Component<LoginProps> {
         return (
             <div className={b()}>
                 <div className={b('container')}>
-                    <Form>
-                        <Form.Input label={'Введите логин'} placeholder={'Введите логин'} />
-                        <Form.Input label={'Введите пароль'} placeholder={'Введите пароль'} type={'password'} />
-                        <Button type={'submit'}>Submit</Button>
-                    </Form>
+                    <Grid>
+                        <Grid.Row>
+                            <Grid.Column>
+                                <Form className={b('forms')}>
+                                    <Form.Input label={'Введите логин'} placeholder={'Введите логин'} />
+                                    <Form.Input label={'Введите пароль'} placeholder={'Введите пароль'} type={'password'} />
+                                    <Button type={'submit'} inverted={true}>Войти</Button>
+                                </Form>
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
                 </div>
             </div>
         );

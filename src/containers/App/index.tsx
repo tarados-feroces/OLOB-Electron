@@ -7,6 +7,8 @@ import * as PathConstants from '../../constants/PathsConstants';
 import Login from '../../components/Login';
 import MainPage from '../MainPage';
 
+import 'semantic-ui-css/semantic.min.css';
+
 const history = createBrowserHistory();
 
 class App extends React.Component {
