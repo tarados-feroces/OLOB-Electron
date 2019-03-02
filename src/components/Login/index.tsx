@@ -13,6 +13,11 @@ interface LoginProps {
     isAuthorized: boolean;
 }
 
+interface LoginState {
+    nickname: string;
+    password: string;
+}
+
 const b = block('olob-login');
 
 export default class Login extends React.Component<LoginProps> {
@@ -42,6 +47,7 @@ export default class Login extends React.Component<LoginProps> {
             </div>
         );
     }
+
 
     private onLogin = () => {
         this.props.onLogin({
