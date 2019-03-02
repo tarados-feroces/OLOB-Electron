@@ -15,10 +15,13 @@
         display: flex;
         padding: 20px;
         border-radius: 5px;
-        background: rgba(255, 255, 255, 0.5)
+        background: rgba(255, 255, 255, 0.5);
+        display: flex;
+        justify-content: center;
     }
 
     &__forms {
-        width: 300px;
+        align-self: center;
+        width: available;
     }
 }

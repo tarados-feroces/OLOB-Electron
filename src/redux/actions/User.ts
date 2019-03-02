@@ -1,4 +1,4 @@
-import { httpApi, LoginData, RegisterData } from '../../modules/HttpApi';
+import { httpApi, LoginData, SignupData } from '../../modules/HttpApi';
 
 import { UserState } from '../reducers/User';
 import { ActionTypes } from '../constants/User';
@@ -14,9 +14,9 @@ const resetUserAuthorized = () => ({ type: ActionTypes.RESET_USER_AUTHORIZED });
 export function getUser() {
     return async (dispatch) => {
         const response = await httpApi.getUser();
-        const json = await response.json();
 
         if (response.ok) {
+            const json = await response.json();
             dispatch(setUserAuthorized());
             dispatch(setUser(json));
         } else {
@@ -36,9 +36,9 @@ export function loginUser(data: LoginData) {
     };
 }
 
-export function signupUser(data: RegisterData) {
+export function signupUser(data: SignupData) {
     return async (dispatch) => {
-        const response = await httpApi.loginUser(data);
+        const response = await httpApi.signupUser(data);
         const json = await response.json();
         if (response.ok) {
             dispatch(setUserAuthorized());

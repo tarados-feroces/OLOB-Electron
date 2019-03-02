@@ -1,4 +1,4 @@
-import { HTTP_DOMEN, HEADER_CONTENT_TYPE, JSON_CONTENT_TYPE, POST, GET } from '../constants/HttpConstants';
+import { HTTP_DOMEN, HEADER_CONTENT_TYPE, JSON_CONTENT_TYPE, POST, GET, CORS, CORS_VALUE } from '../constants/HttpConstants';
 
 class Transport {
 
@@ -23,6 +23,7 @@ class Transport {
             options.body = JSON.stringify(data);
             const headers = new Headers();
             headers.append(HEADER_CONTENT_TYPE, JSON_CONTENT_TYPE);
+            headers.append(CORS, CORS_VALUE);
 
             options.headers = headers;
         }
