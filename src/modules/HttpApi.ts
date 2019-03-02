@@ -2,13 +2,13 @@ import transport from './Transport';
 import { HttpPaths } from '../constants/HttpConstants';
 
 export interface LoginData {
-    nickname: string;
+    login: string;
     password: string;
 }
 
-export interface RegisterData {
+export interface SignupData {
     email: string;
-    nickname: string;
+    login: string;
     password: string;
 }
 class HttpApi {
@@ -16,7 +16,7 @@ class HttpApi {
         return transport.doPost(HttpPaths.LOGIN, userData);
     }
 
-    public registerUser = (userData: RegisterData) => {
+    public signupUser = (userData: SignupData) => {
         return transport.doPost(HttpPaths.SIGNUP, userData);
     }
 

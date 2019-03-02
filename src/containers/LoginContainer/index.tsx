@@ -12,5 +12,9 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
+const mapStateToProps = (state) => {
+    return { isAuthorized: state.userReducer.isAuthorized };
+};
+
 // tslint:disable-next-line:no-empty
-export default connect((state: {}) => {}, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

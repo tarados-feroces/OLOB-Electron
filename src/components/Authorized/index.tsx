@@ -2,20 +2,23 @@ import * as React from 'react';
 import { block } from 'bem-cn';
 
 import './index.scss';
+import { Redirect } from 'react-router';
+import LoginContainer from '../../containers/LoginContainer';
 
 interface AuthProps {
-    nickname: string;
+    login: string;
 }
 
 const b = block('olob-auth');
 
 export default class Authorized extends React.Component<AuthProps> {
+
     public render() {
-        const { nickname } = this.props;
+        const { login } = this.props;
 
         return (
             <div className={b()}>
-                <p>{nickname}</p>
+                <p>{login}</p>
             </div>
         );
     }

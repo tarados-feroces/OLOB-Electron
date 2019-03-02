@@ -1,17 +1,16 @@
 import * as React from 'react';
 import { block } from 'bem-cn';
+import { LoginData } from '../../modules/HttpApi';
 
 import './index.scss';
 
-import { Button, Form, Grid } from 'semantic-ui-react';
-
-interface LoginData {
-    nickname: string;
-    password: string;
-}
+import { Button, Form } from 'semantic-ui-react';
+import { Redirect } from 'react-router';
+import * as PathConstants from '../../constants/PathsConstants';
 
 interface LoginProps {
     onLogin?(data: LoginData): void;
+    isAuthorized: boolean;
 }
 
 interface LoginState {
@@ -22,61 +21,38 @@ interface LoginState {
 const b = block('olob-login');
 
 export default class Login extends React.Component<LoginProps> {
-    public state = {
-        nickname: '',
-        password: ''
-    };
+    private loginRef = React.createRef<HTMLInputElement>();
+    private passwordRef = React.createRef<HTMLInputElement>();
 
     public render() {
-        const { onLogin } = this.props;
+        if (this.props.isAuthorized) {
+            return (
+                <Redirect to={PathConstants.AUTH} />
+            );
+        }
 
         return (
             <div className={b()}>
-                <div className={b('container')}>
-                    <Grid>
-                        <Grid.Row>
-                            <Grid.Column>
-                                <Form>
-                                    <Form.Input
-                                        label={'Введите логин'}
-                                        placeholder={'Введите логин'}
-                                        onChange={this.handleInputNickname}
-                                    />
-                                    <Form.Input
-                                        label={'Введите пароль'}
-                                        placeholder={'Введите пароль'}
-                                        type={'password'}
-                                        onChange={this.handleInputPassword}
-                                    />
-                                    <Button type={'submit'} inverted={true} onClick={this.handleSubmit}>Войти</Button>
-                                </Form>
-                            </Grid.Column>
-                        </Grid.Row>
-                    </Grid>
+                <div className={b('container').toString()}>
+                    <Form className={b('forms').toString()}>
+                        <input placeholder={'Введите логин'} ref={this.loginRef} />
+                        <input
+                            placeholder={'Введите пароль'}
+                            type={'password'}
+                            ref={this.passwordRef}
+                        />
+                        <Button type={'submit'} inverted={true} onClick={this.onLogin}>Войти</Button>
+                    </Form>
                 </div>
             </div>
         );
     }
 
-    private handleInputNickname = (event) => {
-        // if (!this.userNameRef.current) {
-        //     return;
-        // }
 
-        this.setState({ nickname: event.target.value });
-    }
-
-    private handleInputPassword = (event) => {
-        // if (!this.passwordRef.current) {
-        //     return;
-        // }
-
-        this.setState({ password: event.target.value });
-    }
-
-    private handleSubmit = () => {
-        if (this.props.onLogin) {
-            this.props.onLogin(this.state);
-        }
+    private onLogin = () => {
+        this.props.onLogin({
+            login: this.loginRef.current.value,
+            password: this.passwordRef.current.value
+        });
     }
 }

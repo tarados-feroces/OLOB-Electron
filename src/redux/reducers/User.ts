@@ -15,19 +15,18 @@ const initialState: UserState = {
     login: ''
 };
 
-const userReducer: Reducer<UserState> = (state = initialState,  { payload, type }) => {
-    switch (type) {
+const userReducer: Reducer<UserState> = (state = initialState,  action) => {
+    switch (action.type) {
     case ActionTypes.SET_USER:
+        return { ...state, ...action.payload };
 
-        return { ...state, ...payload };
     case ActionTypes.SET_USER_AUTHORIZED:
-
         return { ...state, isAuthorized: true };
+
     case ActionTypes.RESET_USER_AUTHORIZED:
-
         return { ...state, isAuthorized: false };
-    default:
 
+    default:
         return state;
     }
 };
