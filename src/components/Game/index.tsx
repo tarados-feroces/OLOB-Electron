@@ -5,7 +5,6 @@ import './index.scss';
 import { Redirect } from 'react-router';
 import LoginContainer from '../../containers/LoginContainer';
 import * as PathConstants from '../../constants/PathsConstants';
-import ws from '../../modules/WebSocketApi';
 
 interface AuthProps {
     login: string;
@@ -16,10 +15,6 @@ interface AuthProps {
 const b = block('olob-auth');
 
 export default class Authorized extends React.Component<AuthProps> {
-
-    public componentDidMount() {
-        ws.open('localhost:5001', (msg) => console.log(msg), () => {});
-    }
 
     public render() {
         const { login } = this.props;
@@ -35,7 +30,6 @@ export default class Authorized extends React.Component<AuthProps> {
                 <div className={b('header')}>
                     <div className={b('signout-btn')} onClick={this.props.signoutUser}>Выйти</div>
                     <p className={b('header_login')}>{login}</p>
-                    <button onClick={() => ws.sendMessage('1', 'lol')}>Send!</button>
                 </div>
             </div>
         );

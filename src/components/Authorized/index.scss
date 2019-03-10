@@ -1,7 +1,42 @@
 .olob-auth {
-  &__signout-btn {
-    width: 200px;
+  width: 100vw;
+  height: 100vh;
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+  background-image: url('../../static/images/chessboard.jpg');
+  background-size: cover;
+  filter: blur(5px), brightness(50%);
+  background-repeat: no-repeat;
+
+  &__header {
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
     height: 100px;
-    background-color: red;
+    background-color: rgba(201, 165, 165, 0.8);
+
+    &_login {
+      display: flex;
+      font-size: 24px;
+      justify-content: center;
+      align-items: center;
+      width: 200px;
+    }
+  }
+
+  &__signout-btn {
+    display: flex;
+    font-size: 18px;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    cursor: pointer;
+    color: rgb(14, 94, 168);
+
+    &:hover {
+      color: blue;
+      text-decoration: underline;
+    }
   }
 }
