@@ -5,9 +5,12 @@ import { SignupData } from '../../modules/HttpApi';
 import './index.scss';
 
 import { Button, Form } from 'semantic-ui-react';
+import { Redirect } from 'react-router';
+import * as PathConstants from '../../constants/PathsConstants';
 
 interface SignupProps {
     onSignup?(data: SignupData): void;
+    isAuthorized: boolean;
 }
 
 const b = block('olob-signup');
@@ -19,6 +22,12 @@ export default class Login extends React.Component<SignupProps> {
     private repeatPasswordRef = React.createRef<HTMLInputElement>();
 
     public render() {
+        if (this.props.isAuthorized) {
+            return (
+                <Redirect to={PathConstants.AUTH} />
+            );
+        }
+
         return (
             <div className={b()}>
                 <div className={b('container').toString()}>

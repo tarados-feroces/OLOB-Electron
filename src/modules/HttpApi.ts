@@ -20,6 +20,10 @@ class HttpApi {
         return transport.doPost(HttpPaths.SIGNUP, userData);
     }
 
+    public signoutUser = () => {
+        return transport.doPost(HttpPaths.SIGNOUT);
+    }
+
     public getUser = () => {
         return transport.doGet(HttpPaths.GET_USER);
     }

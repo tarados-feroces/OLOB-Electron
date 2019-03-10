@@ -46,3 +46,12 @@ export function signupUser(data: SignupData) {
         }
     };
 }
+
+export function signoutUser() {
+    return async (dispatch) => {
+        const response = await httpApi.signoutUser();
+        if (response.ok) {
+            dispatch(resetUserAuthorized());
+        }
+    };
+}

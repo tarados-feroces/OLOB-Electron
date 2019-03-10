@@ -48,7 +48,6 @@ export default class Login extends React.Component<LoginProps> {
         );
     }
 
-
     private onLogin = () => {
         this.props.onLogin({
             login: this.loginRef.current.value,

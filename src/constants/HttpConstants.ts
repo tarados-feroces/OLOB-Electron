@@ -9,7 +9,7 @@ export const CORS_VALUE: string = '127.0.0.1';
 export const enum HttpPaths {
     GET_USER = '/me',
     SIGNUP = '/user/signup',
+    SIGNOUT = '/user/signout',
     LOGIN = '/user/login',
-    UPDATE_USER = '/user/update',
-    LOGOUT = '/signout'
+    UPDATE_USER = '/user/update'
 }
