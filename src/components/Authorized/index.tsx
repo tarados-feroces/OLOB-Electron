@@ -18,7 +18,7 @@ const b = block('olob-auth');
 export default class Authorized extends React.Component<AuthProps> {
 
     public componentDidMount() {
-        ws.open('localhost:5001', (msg) => console.log(msg), () => {});
+        this.props.isAuthorized && ws.open('ws://localhost:5001', (msg) => console.log(msg), () => {});
     }
 
     public render() {
@@ -35,7 +35,7 @@ export default class Authorized extends React.Component<AuthProps> {
                 <div className={b('header')}>
                     <div className={b('signout-btn')} onClick={this.props.signoutUser}>Выйти</div>
                     <p className={b('header_login')}>{login}</p>
-                    <button onClick={() => ws.sendMessage('1', 'lol')}>Send!</button>
+                    <button onClick={() => ws.sendMessage('1', {text: 'lol'})}>Send!</button>
                 </div>
             </div>
         );
