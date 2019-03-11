@@ -1,28 +1,76 @@
-'use strict';
+type WsEventHandler = (message: PlainMessage) => {};
+
+interface PlainMessage {
+    text: string;
+}
+
+interface Message {
+    cls: string;
+    message: PlainMessage;
+}
+
+interface WsEventHandlers {
+    [cls: string]: Array<{
+        id: number;
+        callback: WsEventHandler;
+    }>;
+}
 
 class WebSocketApi {
-    public open(address, onmessage, onclose) {
-        self.address = address;
-        this.ws = new WebSocket(self.address);
+    private handlerCounter = 0;
+    private eventHandlers: WsEventHandlers = {};
+    private ws: WebSocket;
+
+    public registerHandler(cls: string, callback: WsEventHandler): number {
+        if (!this.eventHandlers[cls]) {
+            this.eventHandlers[cls] = [ {
+                id: this.handlerCounter,
+                callback
+            } ];
+        } else {
+            this.eventHandlers[cls].push({
+                id: this.handlerCounter,
+                callback
+            });
+        }
+
+        return this.handlerCounter++;
+    }
+
+    public deleteHandler(id: number, cls: string) {
+        if (!this.eventHandlers[cls]) {
+            return;
+        } else {
+            this.eventHandlers[cls] = this.eventHandlers[cls].filter((handler) => handler.id !== id);
+        }
+    }
+
+    private handleMessage(event: MessageEvent) {
+        const { cls, msg } = JSON.parse(event.data);
+
+        if (this.eventHandlers[cls]) {
+            this.eventHandlers[cls].forEach(({ callback }) => callback(msg));
+        }
+    }
+
+    public open(address: string) {
+        this.ws = new WebSocket(address);
         this.ws.onopen = () => {
-            console.log(`WS on ${self.address} is opened`);
-            this.ws.onmessage = onmessage;
+            this.ws.onmessage = this.handleMessage;
             this.ws.onclose = onclose;
         };
     }
 
-    public sendMessage(cls, message) {
-        message.cls = cls;
-        console.log(message);
+    public sendMessage(message: PlainMessage, cls: string) {
+        const msg: Message = {
+            cls,
+            message
+        };
 
-        if (message !== null && typeof message === 'object') {
-            this.ws.send(JSON.stringify(message));
-        } else {
-            this.ws.send(JSON.stringify({ message }));
-        }
+        this.ws.send(JSON.stringify(message));
     }
 
-    public close(code, reason) {
+    public close(code: number, reason: string) {
         if (this.ws && this.ws.readyState === WebSocket.OPEN) {
             this.ws.close(code, reason);
         }

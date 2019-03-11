@@ -10,7 +10,8 @@ import ws from '../../modules/WebSocketApi';
 interface AuthProps {
     login: string;
     isAuthorized: boolean;
-    signoutUser?(): void;
+    onSignoutUser(): void;
+    onGameRequest(): void;
 }
 
 const b = block('olob-auth');
@@ -18,11 +19,11 @@ const b = block('olob-auth');
 export default class Authorized extends React.Component<AuthProps> {
 
     public componentDidMount() {
-        this.props.isAuthorized && ws.open('ws://localhost:5001', (msg) => console.log(msg), () => {});
+        // this.props.isAuthorized && ws.open('ws://localhost:5001', (msg) => console.log(msg), () => {});
     }
 
     public render() {
-        const { login } = this.props;
+        const { login, onSignoutUser } = this.props;
 
         if (!this.props.isAuthorized) {
             return (
@@ -33,9 +34,9 @@ export default class Authorized extends React.Component<AuthProps> {
         return (
             <div className={b()}>
                 <div className={b('header')}>
-                    <div className={b('signout-btn')} onClick={this.props.signoutUser}>Выйти</div>
+                    <div className={b('signout-btn')} onClick={onSignoutUser}>Выйти</div>
                     <p className={b('header_login')}>{login}</p>
-                    <button onClick={() => ws.sendMessage('1', {text: 'lol'})}>Send!</button>
+                    {/* <button onClick={() => ws.sendMessage('1', {text: 'lol'})}>Send!</button> */}
                 </div>
             </div>
         );
