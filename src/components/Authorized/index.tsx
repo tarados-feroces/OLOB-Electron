@@ -6,6 +6,7 @@ import { Redirect } from 'react-router';
 import LoginContainer from '../../containers/LoginContainer';
 import * as PathConstants from '../../constants/PathsConstants';
 import ws from '../../modules/WebSocketApi';
+import { Button } from 'semantic-ui-react';
 
 interface AuthProps {
     login: string;
@@ -19,7 +20,12 @@ const b = block('olob-auth');
 export default class Authorized extends React.Component<AuthProps> {
 
     public componentDidMount() {
-        // this.props.isAuthorized && ws.open('ws://localhost:5001', (msg) => console.log(msg), () => {});
+        if (this.props.isAuthorized) {
+            ws.open('ws://localhost:5000');
+            ws.registerHandler('GAME_INITED', (message) => {
+                console.log(message);
+            });
+        }
     }
 
     public render() {
@@ -38,7 +44,21 @@ export default class Authorized extends React.Component<AuthProps> {
                     <p className={b('header_login')}>{login}</p>
                     {/* <button onClick={() => ws.sendMessage('1', {text: 'lol'})}>Send!</button> */}
                 </div>
+                <div className={b('container')}>
+                    <Button onClick={this.findGame} size={'massive'} color={'vk'} fluid={false}>Найти игру</Button>
+                </div>
+                <div className={b('container')}>
+                    <Button onClick={this.game} size={'massive'} color={'green'} fluid={false}>Игра</Button>
+                </div>
             </div>
         );
+    }
+
+    public findGame() {
+        ws.sendMessage({ text: 'hello' }, 'init');
+    }
+
+    public game() {
+        ws.sendMessage({ gameID: 'lol' }, 'GAME_INITED');
     }
 }
