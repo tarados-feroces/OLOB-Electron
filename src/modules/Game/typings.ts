@@ -12,7 +12,7 @@ export const enum Side {
     WHITE
 }
 
-export interface Coords {
+export interface Navigation {
     x: number;
     y: number;
 }
