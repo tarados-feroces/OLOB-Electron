@@ -6,6 +6,7 @@ import { Redirect } from 'react-router';
 import * as PathConstants from '../../constants/PathsConstants';
 import ws from '../../modules/WebSocketApi';
 import { Button } from 'semantic-ui-react';
+import Game from '../../containers/Game';
 
 interface AuthProps {
     login: string;
@@ -17,6 +18,16 @@ interface AuthProps {
 const b = block('olob-auth');
 
 export default class Authorized extends React.Component<AuthProps> {
+
+    public componentDidMount() {
+        if (this.props.isAuthorized) {
+            ws.open('ws://localhost:5000');
+            ws.registerHandler('GAME_INITED', (message) => {
+                // console.log(message);
+            });
+        }
+    }
+
     public render() {
         const { login, onSignoutUser } = this.props;
 
@@ -35,9 +46,7 @@ export default class Authorized extends React.Component<AuthProps> {
                 <div className={b('container')}>
                     <Button onClick={this.findGame} size={'massive'} color={'vk'} fluid={false}>Найти игру</Button>
                 </div>
-                <div className={b('container')}>
-                    <Button onClick={this.game} size={'massive'} color={'green'} fluid={false}>Игра</Button>
-                </div>
+                <Game />
             </div>
         );
     }
