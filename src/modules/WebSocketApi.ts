@@ -1,7 +1,8 @@
 type WsEventHandler = (message: PlainMessage) => {};
 
 interface PlainMessage {
-    text: string;
+    text?: string;
+    gameID?: string;
 }
 
 interface Message {
@@ -51,7 +52,7 @@ class WebSocketApi {
         if (this.eventHandlers[cls]) {
             this.eventHandlers[cls].forEach(({ callback }) => callback(message));
         }
-    };
+    }
 
     public open(address: string) {
         this.ws = new WebSocket(address);
@@ -61,7 +62,7 @@ class WebSocketApi {
         };
     }
 
-    public sendMessage(message: PlainMessage, cls: string) {
+    public sendMessage = (message: PlainMessage, cls: string) => {
         const msg: Message = {
             cls,
             message
@@ -70,9 +71,9 @@ class WebSocketApi {
         this.ws.send(JSON.stringify(msg));
     }
 
-    public close(code: number, reason: string) {
-        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-            this.ws.close(code, reason);
+    public close(this: WebSocket, ev: CloseEvent) {
+        if (this && this.readyState === WebSocket.OPEN) {
+            this.close(ev.code, ev.reason);
         }
     }
 }
