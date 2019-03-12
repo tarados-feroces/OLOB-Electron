@@ -19,15 +19,11 @@ class GameApi {
     }
 
     public getSteps(coords: Navigation): Navigation[] {
-        const allowedSteps: Navigation[] = [];
-
-        this.Figures.forEach((figure) => {
+        return this.Figures.reduce((result, figure) => {
             if (this.checkSimilarCoords(coords, figure)) {
-                allowedSteps.push(...figure.getAccessedAreas());
+                return [ ...result, ...figure.getAccessedAreas() ];
             }
-        });
-
-        return allowedSteps;
+        }, []);
     }
 
     public getFigures(): Figure[] {
