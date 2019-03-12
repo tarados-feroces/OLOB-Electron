@@ -24,7 +24,7 @@ export default class Authorized extends React.Component<AuthProps> {
         if (this.props.isAuthorized) {
             ws.open('ws://localhost:5000');
             ws.registerHandler('GAME_INITED', (message) => {
-                console.log(message);
+                // console.log(message);
             });
         }
     }

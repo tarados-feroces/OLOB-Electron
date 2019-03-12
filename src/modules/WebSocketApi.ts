@@ -51,7 +51,7 @@ class WebSocketApi {
         if (this.eventHandlers[cls]) {
             this.eventHandlers[cls].forEach(({ callback }) => callback(message));
         }
-    };
+    }
 
     public open(address: string) {
         this.ws = new WebSocket(address);

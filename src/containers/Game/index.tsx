@@ -29,8 +29,16 @@ class Game extends React.Component<GameProps> {
             dark: '#1f1f21',
             possible: '#15b905'
         };
+        this.options.squareWidth = this.options.width / this.options.size;
+
+        this.options.board.width = this.options.width;
+        this.options.board.height = this.options.width;
+
+        this.options.figures.width = this.options.width;
+        this.options.figures.height = this.options.width;
+
         this.drawBoard();
-        // this.drawFigures();
+        this.drawFigures();
     }
 
     public render() {
@@ -45,13 +53,10 @@ class Game extends React.Component<GameProps> {
     private drawBoard() {
         const board = this.options.board;
         const ctx = board.getContext('2d');
-        const squareWidth = this.options.width / this.options.size;
+        const squareWidth = this.options.squareWidth;
         const totalSquares = Math.pow(this.options.size, 2);
         let x = -1;
         let y = -1;
-
-        board.width = this.options.width;
-        board.height = this.options.width;
 
         for (let i = 0; i < totalSquares; i++) {
             x++;
@@ -68,27 +73,27 @@ class Game extends React.Component<GameProps> {
     }
 
     private drawFigures() {
-        const el = this.options.figures;
-        const ctx = el.getContext('2d');
-        const squareWidth = this.options.width / this.options.size;
+        const figures = this.options.figures;
+        const ctx = figures.getContext('2d');
+        const squareWidth = this.options.squareWidth;
 
-        // gameApi.getFigures().forEach((item) => {
-        //     // ctx.beginPath();
-        //     // ctx.rect(item.x, item.y, squareWidth, squareWidth);
-        //     const img = new Image();
-        //     img.src = item.image;
-        //     ctx.fillStyle = ctx.createPattern(img, 'repeat');
-        //     ctx.fillRect(item.x, item.y, squareWidth, squareWidth);
-        // });
-
+        gameApi.getFigures().forEach((item) => {
+            const img = new Image();
+            img.src = `./images/figures/${item.side}_${item.type}.svg`;
+            img.width = squareWidth;
+            img.height = squareWidth;
+            img.onload = () => {
+                ctx.drawImage(img, item.x, item.y, squareWidth, squareWidth);
+            };
+        });
     }
 
     private coordsToIndexes(x: number, y: number) {
-        const squareWidth = this.options.width / this.options.size;
+        const squareWidth = this.options.squareWidth;
 
         return {
-            y: Math.floor(y / squareWidth),
-            x: Math.floor(x / squareWidth)
+            x: Math.floor(x / squareWidth),
+            y: Math.floor(y / squareWidth)
         };
     }
 
@@ -102,18 +107,17 @@ class Game extends React.Component<GameProps> {
     }
 
     private possibleMoves() {
-        //gameApi get possible indexes
+        // gameApi get possible indexes
         const possible = [ { x: 0, y: 0 }, { x: 1, y: 3 } ];
         const board = this.options.board;
         const ctx = board.getContext('2d');
-        const squareWidth = this.options.width / this.options.size;
+        const squareWidth = this.options.squareWidth;
 
         possible.forEach((item) => {
             const { x, y } = this.indexesToCoords(item.x, item.y);
-            console.log(x, y);
 
             ctx.beginPath();
-            ctx.rect(x * squareWidth, y * squareWidth, squareWidth, squareWidth);
+            ctx.rect(x, y, squareWidth, squareWidth);
             ctx.fillStyle = this.options.possible;
             ctx.fill();
             ctx.closePath();
@@ -122,18 +126,16 @@ class Game extends React.Component<GameProps> {
 
     private handleClick = (event) => {
         this.isStep ? this.possibleMoves() : this.possibleMoves();
-        console.log('indexes: ', this.coordsToIndexes(event.pageX - this.options.left, event.pageY - this.options.top));
+        // console.log('indexes: ', this.coordsToIndexes(event.pageX - this.options.left, event.pageY - this.options.top));
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-    };
+    return {};
 };
 
 const mapStateToProps = (state) => {
-    return {
-    };
+    return {};
 };
 
 // tslint:disable-next-line:no-empty
