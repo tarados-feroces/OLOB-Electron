@@ -1,15 +1,16 @@
 import { Side, FigureType, Navigation } from './typings';
 
 export class Figure {
-    private id: number;
-    private side: Side;
-    private type: FigureType;
-    private coords: Navigation;
+    public id: number;
+    public side: Side;
+    public type: FigureType;
+    public coords: Navigation;
 
-    constructor(id: number, type: FigureType, side: Side) {
+    constructor(id: number, type: FigureType, side: Side, coords: Navigation) {
         this.id = id;
         this.side = side;
         this.type = type;
+        this.coords = coords;
     }
 
     public getBittenAreas(): Navigation[] {

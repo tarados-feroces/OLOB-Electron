@@ -2,14 +2,14 @@ export const enum FigureType {
     PAWN,     // Пешка
     HORSE,    // Конь
     ELEPHANT, // Слон
-    QUEEN,    // Ферзь
-    KING,     // Король
-    ROOK      // Ладья
+    QUEEN = 'QUEEN',    // Ферзь
+    KING = 'KING',     // Король
+    ROOK = 'ROOK'      // Ладья
 }
 
 export const enum Side {
-    BLACK,
-    WHITE
+    BLACK = 'BLACK',
+    WHITE = 'WHITE'
 }
 
 export interface Navigation {
