@@ -7,6 +7,7 @@ import LoginContainer from '../../containers/LoginContainer';
 import * as PathConstants from '../../constants/PathsConstants';
 import ws from '../../modules/WebSocketApi';
 import { Button } from 'semantic-ui-react';
+import Game from '../../containers/Game';
 
 interface AuthProps {
     login: string;
@@ -47,9 +48,7 @@ export default class Authorized extends React.Component<AuthProps> {
                 <div className={b('container')}>
                     <Button onClick={this.findGame} size={'massive'} color={'vk'} fluid={false}>Найти игру</Button>
                 </div>
-                <div className={b('container')}>
-                    <Button onClick={this.game} size={'massive'} color={'green'} fluid={false}>Игра</Button>
-                </div>
+                <Game />
             </div>
         );
     }
