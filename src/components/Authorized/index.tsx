@@ -3,7 +3,6 @@ import { block } from 'bem-cn';
 
 import './index.scss';
 import { Redirect } from 'react-router';
-import LoginContainer from '../../containers/LoginContainer';
 import * as PathConstants from '../../constants/PathsConstants';
 import ws from '../../modules/WebSocketApi';
 import { Button } from 'semantic-ui-react';
@@ -43,7 +42,6 @@ export default class Authorized extends React.Component<AuthProps> {
                 <div className={b('header')}>
                     <div className={b('signout-btn')} onClick={onSignoutUser}>Выйти</div>
                     <p className={b('header_login')}>{login}</p>
-                    {/* <button onClick={() => ws.sendMessage('1', {text: 'lol'})}>Send!</button> */}
                 </div>
                 <div className={b('container')}>
                     <Button onClick={this.findGame} size={'massive'} color={'vk'} fluid={false}>Найти игру</Button>
