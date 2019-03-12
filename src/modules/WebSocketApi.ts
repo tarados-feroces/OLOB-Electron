@@ -45,19 +45,19 @@ class WebSocketApi {
         }
     }
 
-    private handleMessage(event: MessageEvent) {
-        const { cls, msg } = JSON.parse(event.data);
+    private handleMessage = (event: MessageEvent) => {
+        const { cls, message } = JSON.parse(event.data);
 
         if (this.eventHandlers[cls]) {
-            this.eventHandlers[cls].forEach(({ callback }) => callback(msg));
+            this.eventHandlers[cls].forEach(({ callback }) => callback(message));
         }
-    }
+    };
 
     public open(address: string) {
         this.ws = new WebSocket(address);
         this.ws.onopen = () => {
             this.ws.onmessage = this.handleMessage;
-            this.ws.onclose = onclose;
+            this.ws.onclose = this.close;
         };
     }
 
@@ -67,7 +67,7 @@ class WebSocketApi {
             message
         };
 
-        this.ws.send(JSON.stringify(message));
+        this.ws.send(JSON.stringify(msg));
     }
 
     public close(code: number, reason: string) {
