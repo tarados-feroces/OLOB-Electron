@@ -1,21 +1,37 @@
-import ws from './WebSocketApi';
+import ws from '../WebSocketApi';
 import { Figure } from './Figure';
 import { FigureType, Side, Navigation } from './typings';
+import { figureData } from './initState';
 
 class GameApi {
-    private Figures: Figure[];
-    private figureTouched: boolean;
+    private Figures: Figure[] = [];
+    private figureTouched: boolean = false;
 
-    // public initialize(data) {
-
-    // }
+    public initialize(data) {
+        this.Figures = [];
+        data.forEach((item) => {
+            const figure = new Figure(item.id, item.type, item.side, item.coords);
+            this.Figures.push(figure);
+        });
+    }
 
     public makeStep(prevCoords: Navigation, newCoords: Navigation): Figure[] {
-        this.Figures.forEach((figure) => {
+        this.Figures = this.Figures.reduce((result, figure) => {
+            if (this.checkSimilarCoords(newCoords, figure)) {
+                return result;
+            }
+
             if (this.checkSimilarCoords(prevCoords, figure)) {
                 figure.updateCoords(newCoords);
             }
-        });
+
+            return [ ...result, figure ];
+        }, []);
+
+        ws.sendMessage({
+            gameID: 'lol',
+            figures: this.Figures
+        }, 'game');
     }
 
     public getSteps(coords: Navigation): Navigation[] {
@@ -23,11 +39,13 @@ class GameApi {
             if (this.checkSimilarCoords(coords, figure)) {
                 return [ ...result, ...figure.getAccessedAreas() ];
             }
+
+            return result;
         }, []);
     }
 
     public getFigures(): Figure[] {
-        return { ...this.Figures };
+        return [ ...this.Figures ];
     }
 
     private checkSimilarCoords(coords: Navigation, figure: Figure): boolean {
@@ -36,4 +54,5 @@ class GameApi {
 }
 
 const gameApi = new GameApi();
+gameApi.initialize(figureData);
 export default gameApi;
