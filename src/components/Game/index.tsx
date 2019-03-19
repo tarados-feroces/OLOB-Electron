@@ -11,7 +11,7 @@ import './index.scss';
 interface GameProps {
     onNewStep(step): void;
     onSnapshot(state): void;
-    onGetPossibleSteps(figurePos: Navigation): Navigation[];
+    onGetPossibleSteps(figurePos: Navigation): void;
     onResetPossibleSteps(): void;
     isFinished: boolean;
     opponent: User;
@@ -54,23 +54,16 @@ export default class Game extends React.Component<GameProps> {
         this.options.figures.width = this.options.width;
         this.options.figures.height = this.options.width;
 
-        this.drawFigures(GameApi.getFigures());
+        this.drawFigures(this.props.game.state);
     }
 
     public render() {
         return (
             <div className={b()}>
                 <canvas ref={this.boardRef} className={b('board')} />
-                <canvas ref={this.gameRef} className={b('figures')} onClick={this.handleClick} />
+                <canvas ref={this.gameRef} className={b('figures')} />
             </div>
         );
-    }
-
-    private parseFEN(fen: string) {
-        const data = fen.split(' ')[0].split('/').reverse();
-        data.map((item) => item.split(''));
-
-        return data;
     }
 
     private drawBoard() {
@@ -102,15 +95,17 @@ export default class Game extends React.Component<GameProps> {
         const ctx = figures.getContext('2d');
         const squareWidth = this.options.squareWidth;
 
-        data.forEach((item) => {
-            const img = new Image();
-            img.src = `./images/figures/${item.side}_${item.type}.svg`;
-            img.width = squareWidth;
-            img.height = squareWidth;
-            const { x, y } = this.indexesToCoords(item.coords);
-            img.onload = () => {
-                ctx.drawImage(img, x, y, squareWidth, squareWidth);
-            };
+        data.forEach((line) => {
+            line.forEach((item) => {
+                const img = new Image();
+                img.src = `./images/figures/${item === item.toUpperCase() ? 'w' : 'b'}${item}.svg`;
+                img.width = squareWidth;
+                img.height = squareWidth;
+                const { x, y } = this.indexesToCoords({ x: data.indexOf(line), y: line.indexOf(item) });
+                img.onload = () => {
+                    ctx.drawImage(img, x, y, squareWidth, squareWidth);
+                };
+            });
         });
     }
 
@@ -132,41 +127,41 @@ export default class Game extends React.Component<GameProps> {
         };
     }
 
-    private possibleMoves(coords) {
-        const possible = GameApi.getSteps(coords);
-        this.choosenFigure = coords;
-        this.isStep = true;
-        const board = this.options.board;
-        const ctx = board.getContext('2d');
-        const squareWidth = this.options.squareWidth;
+    // private possibleMoves(coords) {
+    //     const possible = GameApi.getSteps(coords);
+    //     this.choosenFigure = coords;
+    //     this.isStep = true;
+    //     const board = this.options.board;
+    //     const ctx = board.getContext('2d');
+    //     const squareWidth = this.options.squareWidth;
+    //
+    //     possible.forEach((item) => {
+    //         const { x, y } = this.indexesToCoords(item);
+    //
+    //         ctx.beginPath();
+    //         ctx.rect(x, y, squareWidth, squareWidth);
+    //         ctx.fillStyle = this.options.possible;
+    //         ctx.fill();
+    //         ctx.closePath();
+    //     });
+    // }
 
-        possible.forEach((item) => {
-            const { x, y } = this.indexesToCoords(item);
+    // private makeStep(prevCoords, newCoords) {
+    //     gameApi.makeStep(prevCoords, newCoords);
+    //     this.drawFigures(gameApi.getFigures());
+    //     this.choosenFigure = null;
+    //     this.isStep = false;
+    // }
 
-            ctx.beginPath();
-            ctx.rect(x, y, squareWidth, squareWidth);
-            ctx.fillStyle = this.options.possible;
-            ctx.fill();
-            ctx.closePath();
-        });
-    }
-
-    private makeStep(prevCoords, newCoords) {
-        gameApi.makeStep(prevCoords, newCoords);
-        this.drawFigures(gameApi.getFigures());
-        this.choosenFigure = null;
-        this.isStep = false;
-    }
-
-    private handleClick = (event) => {
-        const coords = {
-            x: event.pageX - this.options.left,
-            y: event.pageY - this.options.top
-        };
-        this.isStep ?
-            this.makeStep(this.choosenFigure, this.coordsToIndexes(coords)) :
-            this.possibleMoves(this.coordsToIndexes(coords));
-    }
+    // private handleClick = (event) => {
+    //     const coords = {
+    //         x: event.pageX - this.options.left,
+    //         y: event.pageY - this.options.top
+    //     };
+    //     this.isStep ?
+    //         this.makeStep(this.choosenFigure, this.coordsToIndexes(coords)) :
+    //         this.possibleMoves(this.coordsToIndexes(coords));
+    // }
 
     private clearFigures() {
         const ctx = this.options.figures.getContext('2d');
