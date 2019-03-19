@@ -1,0 +1,23 @@
+.olob-chess {
+  position: relative;
+  width: 600px;
+  height: 600px;
+
+  &__figures {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  &__board {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+}

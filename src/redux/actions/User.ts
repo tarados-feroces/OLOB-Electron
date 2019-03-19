@@ -1,15 +1,15 @@
 import { httpApi, LoginData, SignupData } from '../../modules/HttpApi';
 
 import { UserState } from '../reducers/User';
-import { ActionTypes } from '../constants/User';
+import { UserTypes } from '../constants/User';
 
 const setUser = (user: UserState) => ({
-    type: ActionTypes.SET_USER,
+    type: UserTypes.SET_USER,
     payload: user
 });
 
-const setUserAuthorized = () => ({ type: ActionTypes.SET_USER_AUTHORIZED });
-const resetUserAuthorized = () => ({ type: ActionTypes.RESET_USER_AUTHORIZED });
+const setUserAuthorized = () => ({ type: UserTypes.SET_USER_AUTHORIZED });
+const resetUserAuthorized = () => ({ type: UserTypes.RESET_USER_AUTHORIZED });
 
 export function getUser() {
     return async (dispatch) => {

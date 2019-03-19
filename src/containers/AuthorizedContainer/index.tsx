@@ -2,21 +2,39 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import Authorized from '../../components/Authorized';
 import { signoutUser } from '../../redux/actions/User';
-// import { LoginData } from '../../modules/HttpApi';
-// import { loginUser } from '../../redux/actions/User';
+import { startGame, endGame, receiveNewStep, updateGameState } from '../../redux/actions/Game';
 
 const mapDispatchToProps = (dispatch) => {
     return {
         signoutUser() {
             dispatch(signoutUser());
+        },
+        onGameStarted(state) {
+            dispatch(startGame(state));
+        },
+        onGameEnd(state) {
+            dispatch(endGame(state));
+        },
+        onNewStep(step) {
+            dispatch(receiveNewStep(step));
+        },
+        onSnapshot(state) {
+            dispatch(updateGameState(state));
         }
     };
 };
 
 const mapStateToProps = (state) => {
+    const { user, isAuthorized } = state.userReducer;
+    const { game, opponent, isFinished, winner } = state.gameReducer;
+
     return {
-        login: state.userReducer.login,
-        isAuthorized: state.userReducer.isAuthorized
+        user,
+        isAuthorized,
+        game,
+        opponent,
+        isFinished,
+        winner
     };
 };
 

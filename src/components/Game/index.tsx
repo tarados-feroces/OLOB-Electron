@@ -1,21 +1,27 @@
 import * as React from 'react';
 import { block } from 'bem-cn';
 
-import './index.scss';
+import { GameType, Navigation, Figure } from '../../typings/GameTypings';
+import { User } from '../../typings/UserTypings';
 
-import { connect } from 'react-redux';
+import './index.scss';
 
 import gameApi from '../../modules/Game/GameApi';
 import ws from '../../modules/WebSocketApi';
 import { httpApi } from '../../modules/HttpApi';
 
 interface GameProps {
+    getPossibleSteps(figure: Figure): Navigation[];
+    isFinished: boolean;
+    opponent?: User;
+    game?: GameType;
+    winner?: number;
+    user?: User;
 }
 
-const b = block('olob-board');
-const g = block('olob-game');
+const b = block('olob-chess');
 
-class Game extends React.Component<GameProps> {
+export default class Game extends React.Component<GameProps> {
     private options;
     private boardRef = React.createRef<HTMLCanvasElement>();
     private gameRef = React.createRef<HTMLCanvasElement>();
@@ -23,11 +29,10 @@ class Game extends React.Component<GameProps> {
     private choosenFigure = null;
 
     public componentDidMount() {
-        ws.registerHandler('game', (message) => {
-            // console.log(message);
-            gameApi.initialize(message.figures);
-            this.drawFigures(message.figures);
-        });
+        // ws.registerHandler('game', (message) => {
+        //     gameApi.initialize(message.figures);
+        //     this.drawFigures(message.figures);
+        // });
 
         this.options = {
             top: this.boardRef.current.parentElement.offsetTop,
@@ -40,6 +45,7 @@ class Game extends React.Component<GameProps> {
             dark: '#1f1f21',
             possible: '#15b905'
         };
+
         this.options.squareWidth = this.options.width / this.options.size;
 
         this.options.board.width = this.options.width;
@@ -53,9 +59,9 @@ class Game extends React.Component<GameProps> {
 
     public render() {
         return (
-            <div className={'olob-chess'}>
-                <canvas ref={this.boardRef} className={b()} />
-                <canvas ref={this.gameRef} className={g()} onClick={this.handleClick} />
+            <div className={b()}>
+                <canvas ref={this.boardRef} className={b('board')} />
+                <canvas ref={this.gameRef} className={b('figures')} onClick={this.handleClick} />
             </div>
         );
     }
@@ -160,14 +166,3 @@ class Game extends React.Component<GameProps> {
         ctx.clearRect(0, 0, this.options.width, this.options.width);
     }
 }
-
-const mapDispatchToProps = (dispatch) => {
-    return {};
-};
-
-const mapStateToProps = (state) => {
-    return {};
-};
-
-// tslint:disable-next-line:no-empty
-export default connect(mapStateToProps, mapDispatchToProps)(Game);

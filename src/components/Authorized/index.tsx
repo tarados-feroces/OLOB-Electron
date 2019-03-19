@@ -6,13 +6,24 @@ import { Redirect } from 'react-router';
 import * as PathConstants from '../../constants/PathsConstants';
 import ws from '../../modules/WebSocketApi';
 import { Button } from 'semantic-ui-react';
-import Game from '../../containers/Game';
+import { User } from '../../typings/UserTypings';
+import Game from '../../components/Game';
+import GameApi from '../../modules/GameApi';
+import { GameType } from '../../typings/GameTypings';
+import { WS_DOMEN } from '../../constants/WebSocketConstants';
 
 interface AuthProps {
-    login: string;
-    isAuthorized: boolean;
+    onGameStarted(state): void;
+    onGameEnd(state): void;
+    onNewStep(step): void;
+    onSnapshot(state): void;
     onSignoutUser(): void;
-    onGameRequest(): void;
+    isAuthorized: boolean;
+    isFinished: boolean;
+    opponent?: User;
+    game?: GameType;
+    winner?: number;
+    user?: User;
 }
 
 const b = block('olob-auth');
@@ -20,18 +31,18 @@ const b = block('olob-auth');
 export default class Authorized extends React.Component<AuthProps> {
 
     public componentDidMount() {
-        if (this.props.isAuthorized) {
-            ws.open('ws://localhost:5000');
-            ws.registerHandler('GAME_INITED', (message) => {
-                // console.log(message);
-            });
+        const { onGameStarted, onGameEnd, onNewStep, onSnapshot, isAuthorized } = this.props;
+
+        if (isAuthorized) {
+            ws.open(WS_DOMEN);
+            GameApi.init({ onGameStarted, onGameEnd, onGameUpdate: onNewStep, onReceiveSnapshot: onSnapshot });
         }
     }
 
     public render() {
-        const { login, onSignoutUser } = this.props;
+        const { user, isAuthorized, onSignoutUser, ...restProps } = this.props;
 
-        if (!this.props.isAuthorized) {
+        if (!(isAuthorized || user)) {
             return (
                 <Redirect to={PathConstants.LOGIN} />
             );
@@ -41,21 +52,15 @@ export default class Authorized extends React.Component<AuthProps> {
             <div className={b()}>
                 <div className={b('header')}>
                     <div className={b('signout-btn')} onClick={onSignoutUser}>Выйти</div>
-                    <p className={b('header_login')}>{login}</p>
+                    <p className={b('header_login')}>{user.login}</p>
                 </div>
                 <div className={b('container')}>
-                    <Button onClick={this.findGame} size={'massive'} color={'vk'} fluid={false}>Найти игру</Button>
+                    <Button onClick={GameApi.sendSearchGameRequest} size={'massive'} color={'vk'} fluid={false}>
+                        Найти игру
+                    </Button>
                 </div>
-                <Game />
+                <Game user={user} {...restProps} />
             </div>
         );
-    }
-
-    public findGame() {
-        ws.sendMessage({ text: 'hello' }, 'init');
-    }
-
-    public game() {
-        ws.sendMessage({ gameID: 'lol' }, 'GAME_INITED');
     }
 }
