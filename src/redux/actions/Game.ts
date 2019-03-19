@@ -41,7 +41,7 @@ export function endGame(state: EndGameState) {
  * Получает новый ход и обновляет информацию об игре
  * @param event Новый ход
  */
-export function receiveNewStep(event: GameStepEvent) {
+export function getNewStep(event: GameStepEvent) {
     return async (dispatch, getState) => {
         const game: GameType = getState().gameReducer.game;
 
@@ -76,3 +76,7 @@ export function receiveNewStep(event: GameStepEvent) {
 export function updateGameState(newGameState: GameType) {
     return { type: GameTypes.UPDATE_GAME_STATE, payload: newGameState };
 }
+
+// export function getPossibleSteps(position: Navigation) {
+//     return { type: GameTypes.UPDATE_GAME_STATE, payload: newGameState };
+// }

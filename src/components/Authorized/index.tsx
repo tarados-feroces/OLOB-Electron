@@ -16,6 +16,8 @@ import { WS_DOMEN } from '../../constants/WebSocketConstants';
 interface AuthProps {
     onGameStarted(state): void;
     onGameEnd(state): void;
+    onNewStep(step): void;
+    onSnapshot(state): void;
     onSignoutUser(): void;
     isAuthorized: boolean;
     isFinished: boolean;
@@ -40,7 +42,7 @@ export default class Authorized extends React.Component<AuthProps> {
     }
 
     public render() {
-        const { user, isAuthorized, onSignoutUser, ...restProps } = this.props;
+        const { user, game, isAuthorized, onSignoutUser, ...restProps } = this.props;
 
         if (!(isAuthorized || user)) {
             return (
@@ -55,12 +57,16 @@ export default class Authorized extends React.Component<AuthProps> {
                     <p className={b('header_login')}>{user.login}</p>
                 </div>
                 <div className={b('container')}>
-                    <Button onClick={GameApi.sendSearchGameRequest} size={'massive'} color={'vk'} fluid={false}>
+                    <Button onClick={this.sendSearchGameRequest} size={'massive'} color={'vk'} fluid={false}>
                         Найти игру
                     </Button>
                 </div>
-                <Game user={user} {...restProps} />
+                {game && <Game user={user} game={game} {...restProps} />}
             </div>
         );
+    }
+
+    public sendSearchGameRequest = (): void => {
+        ws.sendMessage({}, GameMessages.SEARCH);
     }
 }

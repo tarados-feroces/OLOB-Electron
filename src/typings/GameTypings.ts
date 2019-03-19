@@ -33,6 +33,7 @@ export interface GameType {
     figures: Figure[];
     info: GameInfo;
     currentUser: number;
+    possibleSteps?: Navigation[];
 }
 
 export interface Step {

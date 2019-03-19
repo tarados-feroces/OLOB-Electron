@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import Authorized from '../../components/Authorized';
 import { signoutUser } from '../../redux/actions/User';
-import { startGame, endGame, receiveNewStep, updateGameState } from '../../redux/actions/Game';
+import { startGame, endGame, getNewStep, updateGameState } from '../../redux/actions/Game';
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -16,7 +16,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(endGame(state));
         },
         onNewStep(step) {
-            dispatch(receiveNewStep(step));
+            dispatch(getNewStep(step));
         },
         onSnapshot(state) {
             dispatch(updateGameState(state));
