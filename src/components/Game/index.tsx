@@ -54,7 +54,7 @@ export default class Game extends React.Component<GameProps> {
         this.options.figures.width = this.options.width;
         this.options.figures.height = this.options.width;
 
-        this.drawFigures(gameApi.getFigures());
+        this.drawFigures(GameApi.getFigures());
     }
 
     public render() {
@@ -64,6 +64,13 @@ export default class Game extends React.Component<GameProps> {
                 <canvas ref={this.gameRef} className={b('figures')} onClick={this.handleClick} />
             </div>
         );
+    }
+
+    private parseFEN(fen: string) {
+        const data = fen.split(' ')[0].split('/').reverse();
+        data.map((item) => item.split(''));
+
+        return data;
     }
 
     private drawBoard() {
@@ -126,7 +133,7 @@ export default class Game extends React.Component<GameProps> {
     }
 
     private possibleMoves(coords) {
-        const possible = gameApi.getSteps(coords);
+        const possible = GameApi.getSteps(coords);
         this.choosenFigure = coords;
         this.isStep = true;
         const board = this.options.board;
