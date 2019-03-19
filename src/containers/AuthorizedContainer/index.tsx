@@ -38,5 +38,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-// tslint:disable-next-line:no-empty
 export default connect(mapStateToProps, mapDispatchToProps)(Authorized);

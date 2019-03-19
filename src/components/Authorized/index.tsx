@@ -8,22 +8,21 @@ import ws from '../../modules/WebSocketApi';
 import { Button } from 'semantic-ui-react';
 import { User } from '../../typings/UserTypings';
 import Game from '../../components/Game';
-import GameApi from '../../modules/GameApi';
-import { GameType } from '../../typings/GameTypings';
+import { GameType, Navigation } from '../../typings/GameTypings';
+import { GameMessages } from '../../redux/constants/Game';
+
 import { WS_DOMEN } from '../../constants/WebSocketConstants';
 
 interface AuthProps {
     onGameStarted(state): void;
     onGameEnd(state): void;
-    onNewStep(step): void;
-    onSnapshot(state): void;
     onSignoutUser(): void;
     isAuthorized: boolean;
     isFinished: boolean;
     opponent?: User;
     game?: GameType;
     winner?: number;
-    user?: User;
+    user: User;
 }
 
 const b = block('olob-auth');
@@ -31,11 +30,12 @@ const b = block('olob-auth');
 export default class Authorized extends React.Component<AuthProps> {
 
     public componentDidMount() {
-        const { onGameStarted, onGameEnd, onNewStep, onSnapshot, isAuthorized } = this.props;
+        const { onGameStarted, onGameEnd, isAuthorized } = this.props;
 
         if (isAuthorized) {
             ws.open(WS_DOMEN);
-            GameApi.init({ onGameStarted, onGameEnd, onGameUpdate: onNewStep, onReceiveSnapshot: onSnapshot });
+            ws.registerHandler(GameMessages.STARTED, onGameStarted);
+            ws.registerHandler(GameMessages.FINISHED, onGameEnd);
         }
     }
 

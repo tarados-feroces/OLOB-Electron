@@ -1,4 +1,5 @@
-type WsEventHandler = (data: object) => {};
+// tslint:disable-next-line:no-any
+type WsEventHandler = (data: object) => any;
 
 interface Message {
     cls: string;

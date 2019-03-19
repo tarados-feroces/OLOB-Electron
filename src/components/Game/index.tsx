@@ -4,19 +4,19 @@ import { block } from 'bem-cn';
 import { GameType, Navigation, Figure } from '../../typings/GameTypings';
 import { User } from '../../typings/UserTypings';
 
+import GameApi from '../../modules/GameApi';
+
 import './index.scss';
 
-import gameApi from '../../modules/Game/GameApi';
-import ws from '../../modules/WebSocketApi';
-import { httpApi } from '../../modules/HttpApi';
-
 interface GameProps {
-    getPossibleSteps(figure: Figure): Navigation[];
+    onNewStep(step): void;
+    onSnapshot(state): void;
+    getPossibleSteps(figurePos: Navigation): Navigation[];
     isFinished: boolean;
-    opponent?: User;
-    game?: GameType;
+    opponent: User;
+    game: GameType;
     winner?: number;
-    user?: User;
+    user: User;
 }
 
 const b = block('olob-chess');
@@ -29,10 +29,9 @@ export default class Game extends React.Component<GameProps> {
     private choosenFigure = null;
 
     public componentDidMount() {
-        // ws.registerHandler('game', (message) => {
-        //     gameApi.initialize(message.figures);
-        //     this.drawFigures(message.figures);
-        // });
+        const { onNewStep, onSnapshot } = this.props;
+
+        GameApi.init({ onGameUpdate: onNewStep, onReceiveSnapshot: onSnapshot });
 
         this.options = {
             top: this.boardRef.current.parentElement.offsetTop,
