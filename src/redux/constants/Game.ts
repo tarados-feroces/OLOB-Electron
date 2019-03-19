@@ -2,7 +2,8 @@ export const enum GameTypes {
     SEND_TURN,
     UPDATE_GAME_STATE,
     START_GAME,
-    END_GAME
+    END_GAME,
+    CLOSE_GAME
 }
 
 export const enum GameMessages {

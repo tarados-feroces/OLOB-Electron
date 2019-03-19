@@ -70,13 +70,42 @@ export function getNewStep(event: GameStepEvent) {
 }
 
 /**
+ * Получает и записывает возможные ходы, которые может сделать фигура
+ * @param possibleSteps Возможные ходы
+ */
+export function getPossibleSteps(possibleSteps: Navigation[]) {
+    return async (dispatch, getState) => {
+        const game: GameType = getState().gameReducer.game;
+
+        dispatch(updateGameState({
+            ...game,
+            possibleSteps
+        }));
+    };
+}
+
+/**
+ * Сбрасывает возможные ходы, которые может сделать фигура
+ */
+export function resetPossibleSteps() {
+    return async (dispatch, getState) => {
+        const game: GameType = getState().gameReducer.game;
+
+        dispatch(updateGameState({
+            ...game,
+            possibleSteps: []
+        }));
+    };
+}
+
+export function closeGame() {
+    return { type: GameTypes.CLOSE_GAME };
+}
+
+/**
  * Обновляет информацию об игре
  * @param newGameState Новое состояние игры
  */
 export function updateGameState(newGameState: GameType) {
     return { type: GameTypes.UPDATE_GAME_STATE, payload: newGameState };
 }
-
-// export function getPossibleSteps(position: Navigation) {
-//     return { type: GameTypes.UPDATE_GAME_STATE, payload: newGameState };
-// }

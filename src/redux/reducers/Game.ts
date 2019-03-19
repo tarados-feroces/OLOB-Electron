@@ -36,7 +36,11 @@ const gameReducer: Reducer<GameState> = (state = initialState,  action) => {
             ...action.payload,
             isFinished: true
         };
-
+    case GameTypes.CLOSE_GAME:
+        return {
+            ...state,
+            game: null
+        };
     default:
         return state;
     }

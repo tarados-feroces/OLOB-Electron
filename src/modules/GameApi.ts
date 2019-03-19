@@ -4,14 +4,13 @@ import { GameMessages } from '../redux/constants/Game';
 import { Step, Navigation } from '../typings/GameTypings';
 
 class GameApi {
-    public init({ onReceiveSnapshot, onGameUpdate }) {
+    public init({ onReceiveSnapshot, onGameUpdate, onGetPossibleSteps }) {
         ws.registerHandler(GameMessages.UPDATE, onGameUpdate);
+        ws.registerHandler(GameMessages.UPDATE, onGetPossibleSteps);
         ws.registerHandler(GameMessages.SNAPSHOT, onReceiveSnapshot);
     }
 
     public clear() {
-        ws.deleteHandler(GameMessages.STARTED);
-        ws.deleteHandler(GameMessages.FINISHED);
         ws.deleteHandler(GameMessages.UPDATE);
         ws.deleteHandler(GameMessages.SNAPSHOT);
     }

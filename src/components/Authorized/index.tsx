@@ -4,7 +4,7 @@ import { block } from 'bem-cn';
 import './index.scss';
 import { Redirect } from 'react-router';
 import * as PathConstants from '../../constants/PathsConstants';
-import ws from '../../modules/WebSocketApi';
+import WebSocketApi from '../../modules/WebSocketApi';
 import { Button } from 'semantic-ui-react';
 import { User } from '../../typings/UserTypings';
 import Game from '../../components/Game';
@@ -16,8 +16,11 @@ import { WS_DOMEN } from '../../constants/WebSocketConstants';
 interface AuthProps {
     onGameStarted(state): void;
     onGameEnd(state): void;
+    onGameClose(): void;
     onNewStep(step): void;
     onSnapshot(state): void;
+    onGetPossibleSteps(state): void;
+    onResetPossibleSteps(state): void;
     onSignoutUser(): void;
     isAuthorized: boolean;
     isFinished: boolean;
@@ -35,9 +38,9 @@ export default class Authorized extends React.Component<AuthProps> {
         const { onGameStarted, onGameEnd, isAuthorized } = this.props;
 
         if (isAuthorized) {
-            ws.open(WS_DOMEN);
-            ws.registerHandler(GameMessages.STARTED, onGameStarted);
-            ws.registerHandler(GameMessages.FINISHED, onGameEnd);
+            WebSocketApi.open(WS_DOMEN);
+            WebSocketApi.registerHandler(GameMessages.STARTED, onGameStarted);
+            WebSocketApi.registerHandler(GameMessages.FINISHED, onGameEnd);
         }
     }
 
@@ -67,6 +70,6 @@ export default class Authorized extends React.Component<AuthProps> {
     }
 
     public sendSearchGameRequest = (): void => {
-        ws.sendMessage({}, GameMessages.SEARCH);
+        WebSocketApi.sendMessage({}, GameMessages.SEARCH);
     }
 }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { block } from 'bem-cn';
 
-import { GameType, Navigation, Figure } from '../../typings/GameTypings';
+import { GameType, Navigation } from '../../typings/GameTypings';
 import { User } from '../../typings/UserTypings';
 
 import GameApi from '../../modules/GameApi';
@@ -11,7 +11,8 @@ import './index.scss';
 interface GameProps {
     onNewStep(step): void;
     onSnapshot(state): void;
-    getPossibleSteps(figurePos: Navigation): Navigation[];
+    onGetPossibleSteps(figurePos: Navigation): Navigation[];
+    onResetPossibleSteps(): void;
     isFinished: boolean;
     opponent: User;
     game: GameType;
@@ -29,9 +30,9 @@ export default class Game extends React.Component<GameProps> {
     private choosenFigure = null;
 
     public componentDidMount() {
-        const { onNewStep, onSnapshot } = this.props;
+        const { onNewStep, onSnapshot, onGetPossibleSteps } = this.props;
 
-        GameApi.init({ onGameUpdate: onNewStep, onReceiveSnapshot: onSnapshot });
+        GameApi.init({ onGameUpdate: onNewStep, onReceiveSnapshot: onSnapshot, onGetPossibleSteps });
 
         this.options = {
             top: this.boardRef.current.parentElement.offsetTop,
