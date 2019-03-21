@@ -9,7 +9,6 @@ import GameApi from '../../modules/GameApi';
 import './index.scss';
 
 interface GameProps {
-    onNewStep(step): void;
     onSnapshot(state): void;
     onGetPossibleSteps(figurePos: Navigation): void;
     onResetPossibleSteps(state): void;
@@ -30,9 +29,9 @@ export default class Game extends React.Component<GameProps> {
     private choosenFigure = null;
 
     public componentDidMount() {
-        const { onNewStep, onSnapshot, onGetPossibleSteps } = this.props;
+        const { onSnapshot, onGetPossibleSteps } = this.props;
 
-        GameApi.init({ onGameUpdate: onNewStep, onReceiveSnapshot: onSnapshot, onGetPossibleSteps });
+        GameApi.init({ onReceiveSnapshot: onSnapshot, onGetPossibleSteps });
 
         this.options = {
             top: this.boardRef.current.parentElement.offsetTop,
@@ -126,42 +125,6 @@ export default class Game extends React.Component<GameProps> {
             y: Math.floor(coords.y * squareWidth)
         };
     }
-
-    // private possibleMoves(coords) {
-    //     const possible = GameApi.getSteps(coords);
-    //     this.choosenFigure = coords;
-    //     this.isStep = true;
-    //     const board = this.options.board;
-    //     const ctx = board.getContext('2d');
-    //     const squareWidth = this.options.squareWidth;
-    //
-    //     possible.forEach((item) => {
-    //         const { x, y } = this.indexesToCoords(item);
-    //
-    //         ctx.beginPath();
-    //         ctx.rect(x, y, squareWidth, squareWidth);
-    //         ctx.fillStyle = this.options.possible;
-    //         ctx.fill();
-    //         ctx.closePath();
-    //     });
-    // }
-
-    // private makeStep(prevCoords, newCoords) {
-    //     gameApi.makeStep(prevCoords, newCoords);
-    //     this.drawFigures(gameApi.getFigures());
-    //     this.choosenFigure = null;
-    //     this.isStep = false;
-    // }
-
-    // private handleClick = (event) => {
-    //     const coords = {
-    //         x: event.pageX - this.options.left,
-    //         y: event.pageY - this.options.top
-    //     };
-    //     this.isStep ?
-    //         this.makeStep(this.choosenFigure, this.coordsToIndexes(coords)) :
-    //         this.possibleMoves(this.coordsToIndexes(coords));
-    // }
 
     private clearFigures() {
         const ctx = this.options.figures.getContext('2d');

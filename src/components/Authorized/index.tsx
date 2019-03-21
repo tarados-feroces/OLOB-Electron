@@ -17,10 +17,9 @@ interface AuthProps {
     onGameStarted(state): void;
     onGameEnd(state): void;
     onGameClose(): void;
-    onNewStep(step): void;
     onSnapshot(state): void;
     onGetPossibleSteps(state): void;
-    onResetPossibleSteps(state): void;
+    onResetPossibleSteps(): void;
     onSignoutUser(): void;
     isAuthorized: boolean;
     isFinished: boolean;

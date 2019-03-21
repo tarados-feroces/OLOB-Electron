@@ -4,8 +4,7 @@ import { GameMessages } from '../redux/constants/Game';
 import { Step, Navigation } from '../typings/GameTypings';
 
 class GameApi {
-    public init({ onReceiveSnapshot, onGameUpdate, onGetPossibleSteps }) {
-        ws.registerHandler(GameMessages.UPDATE, onGameUpdate);
+    public init({ onReceiveSnapshot, onGetPossibleSteps }) {
         ws.registerHandler(GameMessages.UPDATE, onGetPossibleSteps);
         ws.registerHandler(GameMessages.SNAPSHOT, onReceiveSnapshot);
     }

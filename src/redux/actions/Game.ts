@@ -1,5 +1,5 @@
 import { GameTypes } from '../constants/Game';
-import { GameType, GameInfo, Step, Navigation } from '../../typings/GameTypings';
+import { GameType, GameSituations, Navigation } from '../../typings/GameTypings';
 
 import { User } from '../../typings/UserTypings';
 
@@ -11,21 +11,10 @@ interface EndGameState {
     winner: number;
 }
 
-interface GameStepEvent {
-    step: Step;
-    info: GameInfo;
-    currentUser: number;
-}
-
 interface GameUpdateEvent {
-    info: GameInfo;
+    situation: GameSituations;
     currentUser: number;
-    possibleSteps?: Navigation[];
     fen: string;
-}
-
-function compareCoords(firstCoords: Navigation, secondCoords: Navigation) {
-    return firstCoords.x === secondCoords.x && firstCoords.y === secondCoords.y;
 }
 
 /**
@@ -48,13 +37,13 @@ export function endGame(state: EndGameState) {
  * Получает и записывает возможные ходы, которые может сделать фигура
  * @param possibleSteps Возможные ходы
  */
-export function getPossibleSteps(possibleSteps: Navigation[]) {
+export function receivePossibleSteps(steps: Navigation[]) {
     return async (dispatch, getState) => {
-        const game: GameUpdateEvent = getState().gameReducer.game;
+        const game = getState().gameReducer.game;
 
         dispatch(updateGameState({
             ...game,
-            possibleSteps
+            possibleSteps: steps
         }));
     };
 }
@@ -64,7 +53,7 @@ export function getPossibleSteps(possibleSteps: Navigation[]) {
  */
 export function resetPossibleSteps() {
     return async (dispatch, getState) => {
-        const game: GameUpdateEvent = getState().gameReducer.game;
+        const game: GameType = getState().gameReducer.game;
 
         dispatch(updateGameState({
             ...game,
@@ -77,14 +66,24 @@ export function closeGame() {
     return { type: GameTypes.CLOSE_GAME };
 }
 
+export function receiveSnapshot(snapshot: GameUpdateEvent) {
+    return async (dispatch, getState) => {
+        const game: GameType = getState().gameReducer.game;
+
+        const data = snapshot.fen.split(' ')[0].split('/').reverse();
+
+        dispatch(updateGameState({
+            ...game,
+            situation: snapshot.situation,
+            state: data.map((item) => item.split(''))
+        }));
+    };
+}
+
 /**
  * Обновляет информацию об игре
  * @param newGameState Новое состояние игры
  */
-export function updateGameState(newGameState: GameUpdateEvent) {
-    const data = newGameState.fen.split(' ')[0].split('/').reverse();
-    delete newGameState.fen;
-    const result: GameType = { ...newGameState, state: data.map((item) => item.split('')) };
-
-    return { type: GameTypes.UPDATE_GAME_STATE, payload: result };
+export function updateGameState(newGameState: GameType) {
+    return { type: GameTypes.UPDATE_GAME_STATE, payload: newGameState };
 }

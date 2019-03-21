@@ -6,7 +6,7 @@ import {
     startGame,
     endGame,
     updateGameState,
-    getPossibleSteps,
+    receivePossibleSteps,
     resetPossibleSteps,
     closeGame
 } from '../../redux/actions/Game';
@@ -23,7 +23,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(endGame(state));
         },
         onGetPossibleSteps(position) {
-            dispatch(getPossibleSteps(position));
+            dispatch(receivePossibleSteps(position));
         },
         onResetPossibleSteps() {
             dispatch(resetPossibleSteps());

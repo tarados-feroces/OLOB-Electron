@@ -8,13 +8,13 @@ export const enum FigureType {
 }
 
 export const enum Side {
-    BLACK,
-    WHITE
+    BLACK = 'BLACK',
+    WHITE = 'WHITE'
 }
 
 export const enum Situations {
-    CHECK = 1,
-    MAT = 2
+    CHECK = 'CHECK',
+    MATE = 'MATE'
 }
 
 export interface Navigation {
@@ -29,11 +29,13 @@ export interface Figure {
     position: Navigation;
 }
 
+type GameState = string[][];
+
 export interface GameType {
-    info: GameInfo;
+    situation: GameSituations;
     currentUser: number;
-    possibleSteps?: Navigation[];
-    state: string[][];
+    possibleSteps: Navigation[];
+    state: GameState;
 }
 
 export interface Step {
@@ -41,6 +43,7 @@ export interface Step {
     nextPos: Navigation;
 }
 
-export interface GameInfo {
-    [status: number]: Navigation;
+export interface GameSituations {
+    type: Situations;
+    position: Navigation;
 }
