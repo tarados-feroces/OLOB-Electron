@@ -33,7 +33,7 @@ type GameState = string[][];
 
 export interface GameType {
     situation: GameSituations;
-    currentUser: number;
+    currentUser: string;
     possibleSteps: Navigation[];
     state: GameState;
 }

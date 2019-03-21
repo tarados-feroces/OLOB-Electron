@@ -25,7 +25,19 @@ interface GameUpdateEvent {
  * @param state Объект с состоянием начала игры
  */
 export function startGame(state: StartGameState) {
-    return { type: GameTypes.START_GAME, payload: state };
+    const data = state.fen.split(' ')[0].split('/').reverse();
+
+    const game: GameType = {
+        state: data.map((item) => item.split('')),
+        situation: state.situation,
+        currentUser: state.currentUser,
+        possibleSteps: []
+    };
+
+    return { type: GameTypes.START_GAME, payload: {
+        opponent: state.opponent,
+        game
+    } };
 }
 
 /**
