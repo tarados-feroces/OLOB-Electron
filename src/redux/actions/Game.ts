@@ -8,12 +8,12 @@ interface StartGameState {
 }
 
 interface EndGameState {
-    winner: number;
+    winner: string;
 }
 
 interface GameUpdateEvent {
     situation: GameSituations;
-    currentUser: number;
+    currentUser: string;
     fen: string;
 }
 

@@ -26,7 +26,7 @@ class GameApi {
         ws.sendMessage({}, GameMessages.SEARCH);
     }
 
-    public sendAccessedAreasRequest(position: Navigation) {
+    public sendPossibleMovesRequest(position: Navigation) {
         ws.sendMessage({ position }, GameMessages.AREAS);
     }
 }
