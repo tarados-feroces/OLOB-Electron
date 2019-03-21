@@ -45,10 +45,10 @@ class WebSocketApi {
     }
 
     private handleMessage = (event: MessageEvent) => {
-        const { cls, message } = JSON.parse(event.data);
+        const { cls, data } = JSON.parse(event.data);
 
         if (this.eventHandlers[cls]) {
-            this.eventHandlers[cls].forEach(({ callback }) => callback(message));
+            this.eventHandlers[cls].forEach(({ callback }) => callback(data));
         }
     }
 

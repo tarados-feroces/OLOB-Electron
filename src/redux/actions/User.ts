@@ -17,8 +17,8 @@ export function getUser() {
 
         if (response.ok) {
             const json = await response.json();
-            dispatch(setUserAuthorized());
             dispatch(setUser(json));
+            dispatch(setUserAuthorized());
         } else {
             dispatch(resetUserAuthorized());
         }

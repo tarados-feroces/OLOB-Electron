@@ -46,10 +46,14 @@ export default class Authorized extends React.Component<AuthProps> {
     public render() {
         const { user, game, isAuthorized, onSignoutUser, ...restProps } = this.props;
 
-        if (!(isAuthorized || user)) {
+        if (!isAuthorized) {
             return (
                 <Redirect to={PathConstants.LOGIN} />
             );
+        }
+
+        if (!user) {
+            return (<h1>LOADING...</h1>);
         }
 
         return (
