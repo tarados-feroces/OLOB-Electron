@@ -19,7 +19,6 @@ const gameReducer: Reducer<GameState> = (state = initialState,  action) => {
     switch (action.type) {
     case GameTypes.START_GAME:
         return {
-            ...state,
             ...action.payload,
             isFinished: false
         };

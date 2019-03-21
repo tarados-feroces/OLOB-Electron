@@ -5,6 +5,9 @@ import { User } from '../../typings/UserTypings';
 
 interface StartGameState {
     opponent: User;
+    situation: GameSituations;
+    currentUser: string;
+    fen: string;
 }
 
 interface EndGameState {
