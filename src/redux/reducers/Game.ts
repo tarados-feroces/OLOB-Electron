@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 
 import { GameTypes } from '../constants/Game';
-import { Figure, GameType } from '../../typings/GameTypings';
+import { GameType } from '../../typings/GameTypings';
 import { User } from '../../typings/UserTypings';
 
 export interface GameState {

@@ -12,9 +12,9 @@ interface GameProps {
     onNewStep(step): void;
     onSnapshot(state): void;
     onGetPossibleSteps(figurePos: Navigation): void;
-    onResetPossibleSteps(): void;
+    onResetPossibleSteps(state): void;
     isFinished: boolean;
-    opponent: User;
+    opponent?: User;
     game: GameType;
     winner?: number;
     user: User;
