@@ -5,7 +5,6 @@ import { signoutUser } from '../../redux/actions/User';
 import {
     startGame,
     endGame,
-    getNewStep,
     updateGameState,
     getPossibleSteps,
     resetPossibleSteps,
@@ -22,9 +21,6 @@ const mapDispatchToProps = (dispatch) => {
         },
         onGameEnd(state) {
             dispatch(endGame(state));
-        },
-        onNewStep(step) {
-            dispatch(getNewStep(step));
         },
         onGetPossibleSteps(position) {
             dispatch(getPossibleSteps(position));

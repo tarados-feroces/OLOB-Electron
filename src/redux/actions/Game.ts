@@ -17,6 +17,13 @@ interface GameStepEvent {
     currentUser: number;
 }
 
+interface GameUpdateEvent {
+    info: GameInfo;
+    currentUser: number;
+    possibleSteps?: Navigation[];
+    fen: string;
+}
+
 function compareCoords(firstCoords: Navigation, secondCoords: Navigation) {
     return firstCoords.x === secondCoords.x && firstCoords.y === secondCoords.y;
 }
@@ -38,44 +45,12 @@ export function endGame(state: EndGameState) {
 }
 
 /**
- * Получает новый ход и обновляет информацию об игре
- * @param event Новый ход
- */
-export function getNewStep(event: GameStepEvent) {
-    return async (dispatch, getState) => {
-        const game: GameType = getState().gameReducer.game;
-
-        // удаляем съеденные и перемещенную фигуры
-        const newFigures = game.figures.filter((figure) =>
-            !compareCoords(figure.position, event.step.nextPos) &&
-            !compareCoords(figure.position, event.step.prevPos)
-        );
-
-        const updatedFigure = game.figures.filter((figure) => compareCoords(figure.position, event.step.prevPos))[0];
-
-        if (!updatedFigure) {
-            return;
-        }
-
-        updatedFigure.position = event.step.nextPos;
-
-        newFigures.push(updatedFigure);
-
-        dispatch(updateGameState({
-            figures: newFigures,
-            info: event.info,
-            currentUser: event.currentUser
-        }));
-    };
-}
-
-/**
  * Получает и записывает возможные ходы, которые может сделать фигура
  * @param possibleSteps Возможные ходы
  */
 export function getPossibleSteps(possibleSteps: Navigation[]) {
     return async (dispatch, getState) => {
-        const game: GameType = getState().gameReducer.game;
+        const game: GameUpdateEvent = getState().gameReducer.game;
 
         dispatch(updateGameState({
             ...game,
@@ -89,7 +64,7 @@ export function getPossibleSteps(possibleSteps: Navigation[]) {
  */
 export function resetPossibleSteps() {
     return async (dispatch, getState) => {
-        const game: GameType = getState().gameReducer.game;
+        const game: GameUpdateEvent = getState().gameReducer.game;
 
         dispatch(updateGameState({
             ...game,
@@ -106,6 +81,10 @@ export function closeGame() {
  * Обновляет информацию об игре
  * @param newGameState Новое состояние игры
  */
-export function updateGameState(newGameState: GameType) {
-    return { type: GameTypes.UPDATE_GAME_STATE, payload: newGameState };
+export function updateGameState(newGameState: GameUpdateEvent) {
+    const data = newGameState.fen.split(' ')[0].split('/').reverse();
+    delete newGameState.fen;
+    const result: GameType = { ...newGameState, state: data.map((item) => item.split('')) };
+
+    return { type: GameTypes.UPDATE_GAME_STATE, payload: result };
 }
