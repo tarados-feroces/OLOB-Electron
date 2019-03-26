@@ -41,7 +41,8 @@ export default class Game extends React.Component<GameProps> {
             size: 8,
             light: '#d1eefc',
             dark: '#1f1f21',
-            possible: '#15b905'
+            possible: '#15b905',
+            captured: '#b90100'
         };
 
         this.options.squareWidth = this.options.width / this.options.size;
@@ -139,10 +140,11 @@ export default class Game extends React.Component<GameProps> {
 
         this.props.game.possibleSteps.forEach((item) => {
             const { x, y } = this.indexesToCoords(item);
+            console.log(item);
 
             ctx.beginPath();
-            ctx.rect(x, y, squareWidth, squareWidth);
-            ctx.fillStyle = this.options.possible;
+            ctx.rect(x, y, squareWidth - 2, squareWidth - 2);
+            ctx.fillStyle = item.captured ? this.options.captured : this.options.possible;
             ctx.fill();
             ctx.closePath();
         });

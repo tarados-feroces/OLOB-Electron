@@ -1,5 +1,5 @@
 import { GameTypes } from '../constants/Game';
-import { GameType, GameSituations, Navigation } from '../../typings/GameTypings';
+import { GameType, GameSituations, Navigation, PossibleSteps } from '../../typings/GameTypings';
 
 import { User } from '../../typings/UserTypings';
 
@@ -51,7 +51,7 @@ export function endGame(state: EndGameState) {
  * Получает и записывает возможные ходы, которые может сделать фигура
  * @param possibleSteps Возможные ходы
  */
-export function receivePossibleSteps(data: { steps: Navigation[] }) {
+export function receivePossibleSteps(data: { steps: PossibleSteps[] }) {
     return async (dispatch, getState) => {
         const game = getState().gameReducer.game;
         console.log(data.steps);

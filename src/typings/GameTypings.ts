@@ -22,6 +22,12 @@ export interface Navigation {
     y: number;
 }
 
+export interface PossibleSteps {
+    x: number;
+    y: number;
+    captured: boolean;
+}
+
 export interface Figure {
     id: number;
     type: FigureType;
@@ -34,7 +40,7 @@ type GameState = string[][];
 export interface GameType {
     situation: GameSituations;
     currentUser: string;
-    possibleSteps: Navigation[];
+    possibleSteps: PossibleSteps[];
     state: GameState;
 }
 
