@@ -1,21 +1,27 @@
 import * as React from 'react';
 import { block } from 'bem-cn';
 
+import { GameType, Navigation } from '../../typings/GameTypings';
+import { User } from '../../typings/UserTypings';
+
+import GameApi from '../../modules/GameApi';
+
 import './index.scss';
 
-import { connect } from 'react-redux';
-
-import gameApi from '../../modules/Game/GameApi';
-import ws from '../../modules/WebSocketApi';
-import { httpApi } from '../../modules/HttpApi';
-
 interface GameProps {
+    onSnapshot(state): void;
+    onGetPossibleSteps(figurePos: Navigation): void;
+    onResetPossibleSteps(state): void;
+    isFinished: boolean;
+    opponent?: User;
+    game: GameType;
+    winner?: number;
+    user: User;
 }
 
-const b = block('olob-board');
-const g = block('olob-game');
+const b = block('olob-chess');
 
-class Game extends React.Component<GameProps> {
+export default class Game extends React.Component<GameProps> {
     private options;
     private boardRef = React.createRef<HTMLCanvasElement>();
     private gameRef = React.createRef<HTMLCanvasElement>();
@@ -23,11 +29,9 @@ class Game extends React.Component<GameProps> {
     private choosenFigure = null;
 
     public componentDidMount() {
-        ws.registerHandler('game', (message) => {
-            // console.log(message);
-            gameApi.initialize(message.figures);
-            this.drawFigures(message.figures);
-        });
+        const { onSnapshot, onGetPossibleSteps } = this.props;
+
+        GameApi.init({ onReceiveSnapshot: onSnapshot, onGetPossibleSteps });
 
         this.options = {
             top: this.boardRef.current.parentElement.offsetTop,
@@ -40,6 +44,7 @@ class Game extends React.Component<GameProps> {
             dark: '#1f1f21',
             possible: '#15b905'
         };
+
         this.options.squareWidth = this.options.width / this.options.size;
 
         this.options.board.width = this.options.width;
@@ -48,14 +53,14 @@ class Game extends React.Component<GameProps> {
         this.options.figures.width = this.options.width;
         this.options.figures.height = this.options.width;
 
-        this.drawFigures(gameApi.getFigures());
+        this.drawFigures(this.props.game.state);
     }
 
     public render() {
         return (
-            <div className={'olob-chess'}>
-                <canvas ref={this.boardRef} className={b()} />
-                <canvas ref={this.gameRef} className={g()} onClick={this.handleClick} />
+            <div className={b()}>
+                <canvas ref={this.boardRef} className={b('board')} />
+                <canvas ref={this.gameRef} className={b('figures')} />
             </div>
         );
     }
@@ -89,15 +94,17 @@ class Game extends React.Component<GameProps> {
         const ctx = figures.getContext('2d');
         const squareWidth = this.options.squareWidth;
 
-        data.forEach((item) => {
-            const img = new Image();
-            img.src = `./images/figures/${item.side}_${item.type}.svg`;
-            img.width = squareWidth;
-            img.height = squareWidth;
-            const { x, y } = this.indexesToCoords(item.coords);
-            img.onload = () => {
-                ctx.drawImage(img, x, y, squareWidth, squareWidth);
-            };
+        data.forEach((line) => {
+            line.forEach((item) => {
+                const img = new Image();
+                img.src = `./images/figures/${item === item.toUpperCase() ? 'w' : 'b'}${item}.svg`;
+                img.width = squareWidth;
+                img.height = squareWidth;
+                const { x, y } = this.indexesToCoords({ x: data.indexOf(line), y: line.indexOf(item) });
+                img.onload = () => {
+                    ctx.drawImage(img, x, y, squareWidth, squareWidth);
+                };
+            });
         });
     }
 
@@ -119,55 +126,8 @@ class Game extends React.Component<GameProps> {
         };
     }
 
-    private possibleMoves(coords) {
-        const possible = gameApi.getSteps(coords);
-        this.choosenFigure = coords;
-        this.isStep = true;
-        const board = this.options.board;
-        const ctx = board.getContext('2d');
-        const squareWidth = this.options.squareWidth;
-
-        possible.forEach((item) => {
-            const { x, y } = this.indexesToCoords(item);
-
-            ctx.beginPath();
-            ctx.rect(x, y, squareWidth, squareWidth);
-            ctx.fillStyle = this.options.possible;
-            ctx.fill();
-            ctx.closePath();
-        });
-    }
-
-    private makeStep(prevCoords, newCoords) {
-        gameApi.makeStep(prevCoords, newCoords);
-        this.drawFigures(gameApi.getFigures());
-        this.choosenFigure = null;
-        this.isStep = false;
-    }
-
-    private handleClick = (event) => {
-        const coords = {
-            x: event.pageX - this.options.left,
-            y: event.pageY - this.options.top
-        };
-        this.isStep ?
-            this.makeStep(this.choosenFigure, this.coordsToIndexes(coords)) :
-            this.possibleMoves(this.coordsToIndexes(coords));
-    }
-
     private clearFigures() {
         const ctx = this.options.figures.getContext('2d');
         ctx.clearRect(0, 0, this.options.width, this.options.width);
     }
 }
-
-const mapDispatchToProps = (dispatch) => {
-    return {};
-};
-
-const mapStateToProps = (state) => {
-    return {};
-};
-
-// tslint:disable-next-line:no-empty
-export default connect(mapStateToProps, mapDispatchToProps)(Game);

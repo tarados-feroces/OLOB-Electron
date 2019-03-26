@@ -4,15 +4,29 @@ import { block } from 'bem-cn';
 import './index.scss';
 import { Redirect } from 'react-router';
 import * as PathConstants from '../../constants/PathsConstants';
-import ws from '../../modules/WebSocketApi';
+import WebSocketApi from '../../modules/WebSocketApi';
 import { Button } from 'semantic-ui-react';
-import Game from '../../containers/Game';
+import { User } from '../../typings/UserTypings';
+import Game from '../../components/Game';
+import { GameType, Navigation } from '../../typings/GameTypings';
+import { GameMessages } from '../../redux/constants/Game';
+
+import { WS_DOMEN } from '../../constants/WebSocketConstants';
 
 interface AuthProps {
-    login: string;
-    isAuthorized: boolean;
+    onGameStarted(state): void;
+    onGameEnd(state): void;
+    onGameClose(): void;
+    onSnapshot(state): void;
+    onGetPossibleSteps(state): void;
+    onResetPossibleSteps(): void;
     onSignoutUser(): void;
-    onGameRequest(): void;
+    isAuthorized: boolean;
+    isFinished: boolean;
+    opponent?: User;
+    game?: GameType;
+    winner?: number;
+    user: User;
 }
 
 const b = block('olob-auth');
@@ -20,42 +34,45 @@ const b = block('olob-auth');
 export default class Authorized extends React.Component<AuthProps> {
 
     public componentDidMount() {
-        if (this.props.isAuthorized) {
-            ws.open('ws://localhost:5000');
-            ws.registerHandler('GAME_INITED', (message) => {
-                // console.log(message);
-            });
+        const { onGameStarted, onGameEnd, isAuthorized } = this.props;
+
+        if (isAuthorized) {
+            WebSocketApi.open(WS_DOMEN);
+            WebSocketApi.registerHandler(GameMessages.STARTED, onGameStarted);
+            WebSocketApi.registerHandler(GameMessages.FINISHED, onGameEnd);
         }
     }
 
     public render() {
-        const { login, onSignoutUser } = this.props;
+        const { user, game, isAuthorized, onSignoutUser, ...restProps } = this.props;
 
-        if (!this.props.isAuthorized) {
+        if (!isAuthorized) {
             return (
                 <Redirect to={PathConstants.LOGIN} />
             );
+        }
+
+        if (!user) {
+            return (<h1>LOADING...</h1>);
         }
 
         return (
             <div className={b()}>
                 <div className={b('header')}>
                     <div className={b('signout-btn')} onClick={onSignoutUser}>Выйти</div>
-                    <p className={b('header_login')}>{login}</p>
+                    <p className={b('header_login')}>{user.login}</p>
                 </div>
                 <div className={b('container')}>
-                    <Button onClick={this.findGame} size={'massive'} color={'vk'} fluid={false}>Найти игру</Button>
+                    <Button onClick={this.sendSearchGameRequest} size={'massive'} color={'vk'} fluid={false}>
+                        Найти игру
+                    </Button>
                 </div>
-                <Game />
+                {game && <Game user={user} game={game} {...restProps} />}
             </div>
         );
     }
 
-    public findGame() {
-        ws.sendMessage({ text: 'hello' }, 'init');
-    }
-
-    public game() {
-        ws.sendMessage({ gameID: 'lol' }, 'GAME_INITED');
+    public sendSearchGameRequest = (): void => {
+        WebSocketApi.sendMessage({}, GameMessages.SEARCH);
     }
 }

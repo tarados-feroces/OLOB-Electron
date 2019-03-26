@@ -27,7 +27,7 @@ class App extends React.Component<AppProps> {
         return (
             <Router history={history}>
                 <Switch>
-                    {/*<Route exact={true} path={PathConstants.MAINPAGE} component={MainPage} />*/}
+                    <Route exact={true} path={PathConstants.MAINPAGE} component={LoginContainer} />
                     <Route exact={true} path={PathConstants.LOGIN} component={LoginContainer} />
                     <Route exact={true} path={PathConstants.SIGNUP} component={SignupContainer} />
                     <Route exact={true} path={PathConstants.AUTH} component={AuthorizedContainer} />

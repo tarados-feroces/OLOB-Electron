@@ -1,4 +1,4 @@
-export const enum ActionTypes {
+export const enum UserTypes {
     LOGIN_USER = 'LOGIN_USER',
     SIGNUP_USER = 'SIGNUP_USER',
     SET_USER = 'SET_USER',

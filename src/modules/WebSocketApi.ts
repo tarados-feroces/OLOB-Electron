@@ -1,13 +1,9 @@
-type WsEventHandler = (message: PlainMessage) => {};
-
-interface PlainMessage {
-    text?: string;
-    gameID?: string;
-}
+// tslint:disable-next-line:no-any
+type WsEventHandler = (data: object) => any;
 
 interface Message {
     cls: string;
-    message: PlainMessage;
+    data: object;
 }
 
 interface WsEventHandlers {
@@ -38,19 +34,21 @@ class WebSocketApi {
         return this.handlerCounter++;
     }
 
-    public deleteHandler(id: number, cls: string) {
+    public deleteHandler(cls: string, id?: number) {
         if (!this.eventHandlers[cls]) {
             return;
-        } else {
+        } else if (id != null) {
             this.eventHandlers[cls] = this.eventHandlers[cls].filter((handler) => handler.id !== id);
+        } else {
+            this.eventHandlers[cls] = [];
         }
     }
 
     private handleMessage = (event: MessageEvent) => {
-        const { cls, message } = JSON.parse(event.data);
+        const { cls, data } = JSON.parse(event.data);
 
         if (this.eventHandlers[cls]) {
-            this.eventHandlers[cls].forEach(({ callback }) => callback(message));
+            this.eventHandlers[cls].forEach(({ callback }) => callback(data));
         }
     }
 
@@ -62,10 +60,10 @@ class WebSocketApi {
         };
     }
 
-    public sendMessage = (message: PlainMessage, cls: string) => {
+    public sendMessage = (data: object, cls: string) => {
         const msg: Message = {
             cls,
-            message
+            data
         };
 
         this.ws.send(JSON.stringify(msg));
