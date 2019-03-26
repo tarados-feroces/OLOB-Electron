@@ -13,7 +13,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const mapStateToProps = (state) => {
-    return { isAuthorized: state.userReducer.isAuthorized };
+    return { isAuthorized: state.user.isAuthorized };
 };
 
 // tslint:disable-next-line:no-empty

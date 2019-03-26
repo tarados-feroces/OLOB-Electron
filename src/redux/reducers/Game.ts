@@ -15,7 +15,7 @@ const initialState: GameState = {
     isFinished: true
 };
 
-const gameReducer: Reducer<GameState> = (state = initialState,  action) => {
+const game: Reducer<GameState> = (state = initialState, action) => {
     switch (action.type) {
     case GameTypes.START_GAME:
         return {
@@ -45,4 +45,4 @@ const gameReducer: Reducer<GameState> = (state = initialState,  action) => {
     }
 };
 
-export default gameReducer;
+export default game;

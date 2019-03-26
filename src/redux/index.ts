@@ -1,13 +1,13 @@
 import { combineReducers } from 'redux';
 
-import userReducer from './reducers/User';
-import gameReducer from './reducers/Game';
 import popup from './reducers/Popup';
+import user from './reducers/User';
+import game from './reducers/Game';
 
 export default combineReducers(
     {
-        userReducer,
-        gameReducer,
+        user,
+        game,
         popup
     }
 );

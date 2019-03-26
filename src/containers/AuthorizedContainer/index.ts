@@ -43,8 +43,8 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const mapStateToProps = (state) => {
-    const { user, isAuthorized } = state.userReducer;
-    const { game, opponent, isFinished, winner } = state.gameReducer;
+    const { user, isAuthorized } = state.user;
+    const { game, opponent, isFinished, winner } = state.game;
 
     return {
         user,
