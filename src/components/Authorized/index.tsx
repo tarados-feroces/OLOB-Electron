@@ -35,12 +35,12 @@ const b = block('olob-auth');
 export default class Authorized extends React.Component<AuthProps> {
 
     public componentDidMount() {
-        const { onGameStarted, onGameEnd, isAuthorized } = this.props;
+        const { onGameStarted, isAuthorized } = this.props;
 
         if (isAuthorized) {
             WebSocketApi.open(WS_DOMEN);
             WebSocketApi.registerHandler(GameMessages.STARTED, onGameStarted);
-            WebSocketApi.registerHandler(GameMessages.FINISHED, onGameEnd);
+            WebSocketApi.registerHandler(GameMessages.FINISHED, this.onGameEnd);
         }
     }
 
@@ -78,6 +78,11 @@ export default class Authorized extends React.Component<AuthProps> {
 
     private openPopup = () => {
         this.props.onOpenPopup({ text: 'lol', buttonText: 'kek' });
+    }
+
+    private onGameEnd = (data) => {
+        console.log('ENDED');
+        this.props.onOpenPopup({ text: data.winner, buttonText: 'kek' });
     }
 
     public sendSearchGameRequest = (): void => {
