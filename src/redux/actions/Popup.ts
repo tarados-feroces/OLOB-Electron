@@ -7,7 +7,7 @@ export function openInfoPopup(data: { text: string, buttonText: string }) {
             InfoPopup,
             {
                 ...data,
-                onClick: dispatch(closePopup())
+                onClick: () => dispatch(closePopup())
             }
         ));
     };

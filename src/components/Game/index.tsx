@@ -136,11 +136,8 @@ export default class Game extends React.Component<GameProps> {
         const ctx = board.getContext('2d');
         const squareWidth = this.options.squareWidth;
 
-        console.log(this.props.game.possibleSteps);
-
         this.props.game.possibleSteps.forEach((item) => {
             const { x, y } = this.indexesToCoords(item);
-            console.log(item);
 
             ctx.beginPath();
             ctx.rect(x, y, squareWidth - 2, squareWidth - 2);
