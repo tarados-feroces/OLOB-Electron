@@ -51,13 +51,14 @@ export function endGame(state: EndGameState) {
  * Получает и записывает возможные ходы, которые может сделать фигура
  * @param possibleSteps Возможные ходы
  */
-export function receivePossibleSteps(steps: Navigation[]) {
+export function receivePossibleSteps(data: { steps: Navigation[] }) {
     return async (dispatch, getState) => {
         const game = getState().gameReducer.game;
+        console.log(data.steps);
 
         dispatch(updateGameState({
             ...game,
-            possibleSteps: steps
+            possibleSteps: data.steps
         }));
     };
 }

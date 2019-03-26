@@ -11,7 +11,7 @@ import './index.scss';
 interface GameProps {
     onSnapshot(state): void;
     onGetPossibleSteps(figurePos: Navigation): void;
-    onResetPossibleSteps(state): void;
+    onResetPossibleSteps(): void;
     isFinished: boolean;
     opponent?: User;
     game: GameType;
@@ -25,7 +25,6 @@ export default class Game extends React.Component<GameProps> {
     private options;
     private boardRef = React.createRef<HTMLCanvasElement>();
     private gameRef = React.createRef<HTMLCanvasElement>();
-    private isStep = false;
     private choosenFigurePos = null;
 
     public componentDidMount() {
@@ -56,8 +55,14 @@ export default class Game extends React.Component<GameProps> {
         this.drawFigures();
     }
 
-    public componentDidUpdate() {
-        this.drawFigures();
+    public componentDidUpdate(prevProps, prevState) {
+        if (prevProps.game.state !== this.props.game.state) {
+            this.drawFigures();
+        }
+
+        if (this.props.game.possibleSteps) {
+            this.drawPossibleMoves();
+        }
     }
 
     public render() {
@@ -116,17 +121,21 @@ export default class Game extends React.Component<GameProps> {
 
     private makeStep(prevPos, nextPos) {
         GameApi.makeStep({ prevPos, nextPos });
+        this.props.onResetPossibleSteps();
         this.choosenFigurePos = null;
-        this.isStep = false;
     }
 
     private possibleMoves(pos) {
-        // const possible = GameApi.getSteps(coords);
+        GameApi.sendPossibleMovesRequest(pos);
         this.choosenFigurePos = pos;
-        this.isStep = true;
+    }
+
+    private drawPossibleMoves() {
         const board = this.options.board;
         const ctx = board.getContext('2d');
         const squareWidth = this.options.squareWidth;
+
+        console.log(this.props.game.possibleSteps);
 
         this.props.game.possibleSteps.forEach((item) => {
             const { x, y } = this.indexesToCoords(item);
@@ -140,13 +149,23 @@ export default class Game extends React.Component<GameProps> {
     }
 
     private handleClick = (event) => {
-        const coords = {
+        const coords = this.coordsToIndexes({
             x: event.pageX - this.options.left,
             y: event.pageY - this.options.top
-        };
-        this.isStep ?
-            this.makeStep(this.choosenFigurePos, this.coordsToIndexes(coords)) :
-            this.possibleMoves(this.coordsToIndexes(coords));
+        });
+        this.checkStepInPossible(coords) ?
+            this.makeStep(this.choosenFigurePos, coords) :
+            this.possibleMoves(coords);
+    }
+
+    private checkStepInPossible = (coords: Navigation) => {
+        for (const step of this.props.game.possibleSteps) {
+            if (step.x === coords.x && step.y === coords.y) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private coordsToIndexes(coords) {
