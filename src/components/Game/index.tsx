@@ -11,7 +11,7 @@ import './index.scss';
 interface GameProps {
     onSnapshot(state): void;
     onGetPossibleSteps(figurePos: Navigation): void;
-    onResetPossibleSteps(state): void;
+    onResetPossibleSteps(): void;
     isFinished: boolean;
     opponent?: User;
     game: GameType;
@@ -25,8 +25,7 @@ export default class Game extends React.Component<GameProps> {
     private options;
     private boardRef = React.createRef<HTMLCanvasElement>();
     private gameRef = React.createRef<HTMLCanvasElement>();
-    private isStep = false;
-    private choosenFigure = null;
+    private choosenFigurePos = null;
 
     public componentDidMount() {
         const { onSnapshot, onGetPossibleSteps } = this.props;
@@ -42,7 +41,8 @@ export default class Game extends React.Component<GameProps> {
             size: 8,
             light: '#d1eefc',
             dark: '#1f1f21',
-            possible: '#15b905'
+            possible: '#15b905',
+            captured: '#b90100'
         };
 
         this.options.squareWidth = this.options.width / this.options.size;
@@ -53,14 +53,24 @@ export default class Game extends React.Component<GameProps> {
         this.options.figures.width = this.options.width;
         this.options.figures.height = this.options.width;
 
-        this.drawFigures(this.props.game.state);
+        this.drawFigures();
+    }
+
+    public componentDidUpdate(prevProps, prevState) {
+        if (prevProps.game.state !== this.props.game.state) {
+            this.drawFigures();
+        }
+
+        if (this.props.game.possibleSteps) {
+            this.drawPossibleMoves();
+        }
     }
 
     public render() {
         return (
             <div className={b()}>
                 <canvas ref={this.boardRef} className={b('board')} />
-                <canvas ref={this.gameRef} className={b('figures')} />
+                <canvas ref={this.gameRef} className={b('figures')} onClick={this.handleClick} />
             </div>
         );
     }
@@ -87,25 +97,77 @@ export default class Game extends React.Component<GameProps> {
         }
     }
 
-    private drawFigures(data) {
+    private drawFigures() {
         this.clearFigures();
         this.drawBoard();
         const figures = this.options.figures;
         const ctx = figures.getContext('2d');
         const squareWidth = this.options.squareWidth;
 
-        data.forEach((line) => {
-            line.forEach((item) => {
-                const img = new Image();
-                img.src = `./images/figures/${item === item.toUpperCase() ? 'w' : 'b'}${item}.svg`;
-                img.width = squareWidth;
-                img.height = squareWidth;
-                const { x, y } = this.indexesToCoords({ x: data.indexOf(line), y: line.indexOf(item) });
-                img.onload = () => {
-                    ctx.drawImage(img, x, y, squareWidth, squareWidth);
-                };
+        this.props.game.state.forEach((line, lineKey) => {
+            line.forEach((item, itemKey) => {
+                if (isNaN(parseInt(item, 10))) {
+                    const img = new Image();
+                    img.src = `./images/figures/${item === item.toLowerCase() ? 'b' : 'w'}${item.toLowerCase()}.svg`;
+                    img.width = squareWidth;
+                    img.height = squareWidth;
+                    const { x, y } = this.indexesToCoords({ x: itemKey, y: lineKey });
+                    img.onload = () => {
+                        ctx.drawImage(img, x, y, squareWidth, squareWidth);
+                    };
+                }
             });
         });
+    }
+
+    private makeStep(prevPos, nextPos) {
+        GameApi.makeStep({ prevPos, nextPos });
+        this.props.onResetPossibleSteps();
+        this.choosenFigurePos = null;
+    }
+
+    private possibleMoves(pos) {
+        GameApi.sendPossibleMovesRequest(pos);
+        this.choosenFigurePos = pos;
+    }
+
+    private drawPossibleMoves() {
+        const board = this.options.board;
+        const ctx = board.getContext('2d');
+        const squareWidth = this.options.squareWidth;
+
+        console.log(this.props.game.possibleSteps);
+
+        this.props.game.possibleSteps.forEach((item) => {
+            const { x, y } = this.indexesToCoords(item);
+            console.log(item);
+
+            ctx.beginPath();
+            ctx.rect(x, y, squareWidth - 2, squareWidth - 2);
+            ctx.fillStyle = item.captured ? this.options.captured : this.options.possible;
+            ctx.fill();
+            ctx.closePath();
+        });
+    }
+
+    private handleClick = (event) => {
+        const coords = this.coordsToIndexes({
+            x: event.pageX - this.options.left,
+            y: event.pageY - this.options.top
+        });
+        this.checkStepInPossible(coords) ?
+            this.makeStep(this.choosenFigurePos, coords) :
+            this.possibleMoves(coords);
+    }
+
+    private checkStepInPossible = (coords: Navigation) => {
+        for (const step of this.props.game.possibleSteps) {
+            if (step.x === coords.x && step.y === coords.y) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private coordsToIndexes(coords) {

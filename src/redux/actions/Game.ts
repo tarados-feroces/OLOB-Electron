@@ -1,5 +1,5 @@
 import { GameTypes } from '../constants/Game';
-import { GameType, GameSituations, Navigation } from '../../typings/GameTypings';
+import { GameType, GameSituations, Navigation, PossibleSteps } from '../../typings/GameTypings';
 
 import { User } from '../../typings/UserTypings';
 
@@ -25,10 +25,9 @@ interface GameUpdateEvent {
  * @param state Объект с состоянием начала игры
  */
 export function startGame(state: StartGameState) {
-    const data = state.fen.split(' ')[0].split('/').reverse();
 
     const game: GameType = {
-        state: data.map((item) => item.split('')),
+        state: parseFEN(state.fen),
         situation: state.situation,
         currentUser: state.currentUser,
         possibleSteps: []
@@ -52,13 +51,14 @@ export function endGame(state: EndGameState) {
  * Получает и записывает возможные ходы, которые может сделать фигура
  * @param possibleSteps Возможные ходы
  */
-export function receivePossibleSteps(steps: Navigation[]) {
+export function receivePossibleSteps(data: { steps: PossibleSteps[] }) {
     return async (dispatch, getState) => {
         const game = getState().gameReducer.game;
+        console.log(data.steps);
 
         dispatch(updateGameState({
             ...game,
-            possibleSteps: steps
+            possibleSteps: data.steps
         }));
     };
 }
@@ -85,12 +85,10 @@ export function receiveSnapshot(snapshot: GameUpdateEvent) {
     return async (dispatch, getState) => {
         const game: GameType = getState().gameReducer.game;
 
-        const data = snapshot.fen.split(' ')[0].split('/').reverse();
-
         dispatch(updateGameState({
             ...game,
             situation: snapshot.situation,
-            state: data.map((item) => item.split(''))
+            state: parseFEN(snapshot.fen)
         }));
     };
 }
@@ -101,4 +99,19 @@ export function receiveSnapshot(snapshot: GameUpdateEvent) {
  */
 export function updateGameState(newGameState: GameType) {
     return { type: GameTypes.UPDATE_GAME_STATE, payload: newGameState };
+}
+
+function parseFEN(fen) {
+    const data = fen.split(' ')[0].split('/').reverse();
+    const result = data.map((item) => {
+        const line = [];
+        for (const letter of item) {
+            const digit = parseInt(letter, 10);
+            isNaN(digit) ? line.push(letter) : line.push(...Array(digit).keys());
+        }
+
+        return line;
+    });
+
+    return result;
 }
