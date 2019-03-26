@@ -16,6 +16,7 @@ import { WS_DOMEN } from '../../constants/WebSocketConstants';
 interface AuthProps {
     onGameStarted(state): void;
     onGameEnd(state): void;
+    onOpenPopup(data): void;
     onGameClose(): void;
     onSnapshot(state): void;
     onGetPossibleSteps(state): void;
@@ -44,7 +45,7 @@ export default class Authorized extends React.Component<AuthProps> {
     }
 
     public render() {
-        const { user, game, isAuthorized, onSignoutUser, ...restProps } = this.props;
+        const { user, game, isAuthorized, onSignoutUser, onOpenPopup, ...restProps } = this.props;
 
         if (!isAuthorized) {
             return (
@@ -66,10 +67,17 @@ export default class Authorized extends React.Component<AuthProps> {
                     <Button onClick={this.sendSearchGameRequest} size={'massive'} color={'vk'} fluid={false}>
                         Найти игру
                     </Button>
+                    <Button onClick={this.openPopup} size={'massive'} color={'vk'} fluid={false}>
+                        Открыть попапчик
+                    </Button>
                 </div>
                 {game && <Game user={user} game={game} {...restProps} />}
             </div>
         );
+    }
+
+    private openPopup = () => {
+        this.props.onOpenPopup({ text: 'lol', buttonText: 'kek' });
     }
 
     public sendSearchGameRequest = (): void => {

@@ -25,7 +25,6 @@ interface GameUpdateEvent {
  * @param state Объект с состоянием начала игры
  */
 export function startGame(state: StartGameState) {
-
     const game: GameType = {
         state: parseFEN(state.fen),
         situation: state.situation,
@@ -54,7 +53,6 @@ export function endGame(state: EndGameState) {
 export function receivePossibleSteps(data: { steps: PossibleSteps[] }) {
     return async (dispatch, getState) => {
         const game = getState().gameReducer.game;
-        console.log(data.steps);
 
         dispatch(updateGameState({
             ...game,
