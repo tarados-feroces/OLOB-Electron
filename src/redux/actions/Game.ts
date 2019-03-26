@@ -1,5 +1,5 @@
 import { GameTypes } from '../constants/Game';
-import { GameType, GameSituations, Navigation, PossibleSteps } from '../../typings/GameTypings';
+import { GameType, GameSituations, PossibleSteps, Side } from '../../typings/GameTypings';
 
 import { User } from '../../typings/UserTypings';
 
@@ -8,6 +8,7 @@ interface StartGameState {
     situation: GameSituations;
     currentUser: string;
     fen: string;
+    side: Side;
 }
 
 interface EndGameState {
@@ -29,7 +30,8 @@ export function startGame(state: StartGameState) {
         state: parseFEN(state.fen),
         situation: state.situation,
         currentUser: state.currentUser,
-        possibleSteps: []
+        possibleSteps: [],
+        side: state.side
     };
 
     return { type: GameTypes.START_GAME, payload: {
@@ -52,7 +54,9 @@ export function endGame(state: EndGameState) {
  */
 export function receivePossibleSteps(data: { steps: PossibleSteps[] }) {
     return async (dispatch, getState) => {
-        const game = getState().gameReducer.game;
+        const game = getState().game.game;
+
+        delete game.possibleSteps;
 
         dispatch(updateGameState({
             ...game,
@@ -66,7 +70,7 @@ export function receivePossibleSteps(data: { steps: PossibleSteps[] }) {
  */
 export function resetPossibleSteps() {
     return async (dispatch, getState) => {
-        const game: GameType = getState().gameReducer.game;
+        const game: GameType = getState().game.game;
 
         dispatch(updateGameState({
             ...game,
@@ -81,12 +85,13 @@ export function closeGame() {
 
 export function receiveSnapshot(snapshot: GameUpdateEvent) {
     return async (dispatch, getState) => {
-        const game: GameType = getState().gameReducer.game;
+        const game: GameType = getState().game.game;
 
         dispatch(updateGameState({
             ...game,
             situation: snapshot.situation,
-            state: parseFEN(snapshot.fen)
+            state: parseFEN(snapshot.fen),
+            currentUser: snapshot.currentUser
         }));
     };
 }
@@ -100,7 +105,7 @@ export function updateGameState(newGameState: GameType) {
 }
 
 function parseFEN(fen) {
-    const data = fen.split(' ')[0].split('/').reverse();
+    const data = fen.split(' ')[0].split('/');
     const result = data.map((item) => {
         const line = [];
         for (const letter of item) {

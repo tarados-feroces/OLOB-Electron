@@ -12,7 +12,7 @@ const initialState: UserState = {
     isAuthorized: null
 };
 
-const userReducer: Reducer<UserState> = (state = initialState,  action) => {
+const user: Reducer<UserState> = (state = initialState, action) => {
     switch (action.type) {
     case UserTypes.SET_USER:
         return {
@@ -35,4 +35,4 @@ const userReducer: Reducer<UserState> = (state = initialState,  action) => {
     }
 };
 
-export default userReducer;
+export default user;

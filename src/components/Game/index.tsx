@@ -56,12 +56,12 @@ export default class Game extends React.Component<GameProps> {
         this.drawFigures();
     }
 
-    public componentDidUpdate(prevProps, prevState) {
+    public componentDidUpdate(prevProps) {
         if (prevProps.game.state !== this.props.game.state) {
             this.drawFigures();
         }
 
-        if (this.props.game.possibleSteps) {
+        if (prevProps.game.possibleSteps !== this.props.game.possibleSteps) {
             this.drawPossibleMoves();
         }
     }
@@ -100,20 +100,22 @@ export default class Game extends React.Component<GameProps> {
     private drawFigures() {
         this.clearFigures();
         this.drawBoard();
-        const figures = this.options.figures;
-        const ctx = figures.getContext('2d');
+        const figuresCanvas = this.options.figures;
+        const ctx = figuresCanvas.getContext('2d');
         const squareWidth = this.options.squareWidth;
 
-        this.props.game.state.forEach((line, lineKey) => {
-            line.forEach((item, itemKey) => {
+        const figures = this.props.game.side ? this.props.game.state.reverse() : this.props.game.state;
+
+        figures.forEach((line, lineKey) => {
+            const row = this.props.game.side ? line.reverse() : line;
+            row.forEach((item, itemKey) => {
                 if (isNaN(parseInt(item, 10))) {
                     const img = new Image();
                     img.src = `./images/figures/${item === item.toLowerCase() ? 'b' : 'w'}${item.toLowerCase()}.svg`;
                     img.width = squareWidth;
                     img.height = squareWidth;
-                    const { x, y } = this.indexesToCoords({ x: itemKey, y: lineKey });
                     img.onload = () => {
-                        ctx.drawImage(img, x, y, squareWidth, squareWidth);
+                        ctx.drawImage(img, itemKey * squareWidth, lineKey * squareWidth, squareWidth, squareWidth);
                     };
                 }
             });
@@ -122,7 +124,6 @@ export default class Game extends React.Component<GameProps> {
 
     private makeStep(prevPos, nextPos) {
         GameApi.makeStep({ prevPos, nextPos });
-        this.props.onResetPossibleSteps();
         this.choosenFigurePos = null;
     }
 
@@ -132,6 +133,8 @@ export default class Game extends React.Component<GameProps> {
     }
 
     private drawPossibleMoves() {
+        this.clearBoard();
+        this.drawBoard();
         const board = this.options.board;
         const ctx = board.getContext('2d');
         const squareWidth = this.options.squareWidth;
@@ -140,7 +143,7 @@ export default class Game extends React.Component<GameProps> {
             const { x, y } = this.indexesToCoords(item);
 
             ctx.beginPath();
-            ctx.rect(x, y, squareWidth - 2, squareWidth - 2);
+            ctx.rect(x + 2, y + 2, squareWidth - 4, squareWidth - 4);
             ctx.fillStyle = item.captured ? this.options.captured : this.options.possible;
             ctx.fill();
             ctx.closePath();
@@ -148,10 +151,17 @@ export default class Game extends React.Component<GameProps> {
     }
 
     private handleClick = (event) => {
+        this.props.onResetPossibleSteps();
+
+        if (this.props.opponent.id === this.props.game.currentUser) {
+            return;
+        }
+
         const coords = this.coordsToIndexes({
             x: event.pageX - this.options.left,
-            y: event.pageY - this.options.top
+            y: Math.abs(Number(this.options.top) + Number(this.options.width) - Number(event.pageY))
         });
+
         this.checkStepInPossible(coords) ?
             this.makeStep(this.choosenFigurePos, coords) :
             this.possibleMoves(coords);
@@ -169,24 +179,32 @@ export default class Game extends React.Component<GameProps> {
 
     private coordsToIndexes(coords) {
         const squareWidth = this.options.squareWidth;
+        const diff = this.props.game.side ? 7 : 0;
 
         return {
-            x: Math.floor(coords.x / squareWidth),
-            y: Math.floor(coords.y / squareWidth)
+            x: Math.abs(diff - Math.floor(coords.x / squareWidth)),
+            y: Math.abs(diff - Math.floor(coords.y / squareWidth))
         };
     }
 
     private indexesToCoords(coords) {
         const squareWidth = this.options.squareWidth;
+        const diffY = this.props.game.side ? 0 : 7;
+        const diffX = this.props.game.side ? 7 : 0;
 
         return {
-            x: Math.floor(coords.x * squareWidth),
-            y: Math.floor(coords.y * squareWidth)
+            x: Math.floor(Math.abs(diffX - coords.x) * squareWidth),
+            y: Math.floor(Math.abs(diffY - coords.y) * squareWidth)
         };
     }
 
     private clearFigures() {
         const ctx = this.options.figures.getContext('2d');
+        ctx.clearRect(0, 0, this.options.width, this.options.width);
+    }
+
+    private clearBoard() {
+        const ctx = this.options.board.getContext('2d');
         ctx.clearRect(0, 0, this.options.width, this.options.width);
     }
 }

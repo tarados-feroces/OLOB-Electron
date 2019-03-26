@@ -1,15 +1,6 @@
-export const enum FigureType {
-    PAWN,     // Пешка
-    HORSE,    // Конь
-    ELEPHANT, // Слон
-    QUEEN,    // Ферзь
-    KING,     // Король
-    ROOK      // Ладья
-}
-
 export const enum Side {
-    BLACK = 'BLACK',
-    WHITE = 'WHITE'
+    WHITE,
+    BLACK
 }
 
 export const enum Situations {
@@ -28,19 +19,13 @@ export interface PossibleSteps {
     captured: boolean;
 }
 
-export interface Figure {
-    id: number;
-    type: FigureType;
-    side: Side;
-    position: Navigation;
-}
-
 type GameState = string[][];
 
 export interface GameType {
     situation: GameSituations;
     currentUser: string;
     possibleSteps: PossibleSteps[];
+    side: Side;
     state: GameState;
 }
 
