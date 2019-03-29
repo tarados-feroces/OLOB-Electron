@@ -60,14 +60,23 @@ export default class Authorized extends React.Component<AuthProps> {
         return (
             <div className={b()}>
                 <div className={b('header')}>
-                    <div className={b('signout-btn')} onClick={onSignoutUser}>Выйти</div>
+                    {/*<div className={b('signout-btn')} onClick={onSignoutUser}>Выйти</div>*/}
+                    <Button
+                        className={b('signout-btn').toString()}
+                        onClick={onSignoutUser}
+                        size={'small'}
+                        inverted={true}
+                        fluid={false}
+                    >
+                        Выйти
+                    </Button>
                     <p className={b('header_login')}>{user.login}</p>
                 </div>
                 <div className={b('container')}>
-                    <Button onClick={this.sendSearchGameRequest} size={'massive'} color={'vk'} fluid={false}>
+                    <Button onClick={this.sendSearchGameRequest} size={'massive'} inverted={true} fluid={false}>
                         Найти игру
                     </Button>
-                    <Button onClick={this.openPopup} size={'massive'} color={'vk'} fluid={false}>
+                    <Button onClick={this.openPopup} size={'massive'} inverted={true} fluid={false}>
                         Открыть попапчик
                     </Button>
                 </div>
@@ -81,7 +90,6 @@ export default class Authorized extends React.Component<AuthProps> {
     }
 
     private onGameEnd = (data) => {
-        console.log('ENDED');
         this.props.onOpenPopup({ text: data.winner, buttonText: 'kek' });
     }
 

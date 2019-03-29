@@ -12,7 +12,7 @@ interface GameProps {
     onSnapshot(state): void;
     onGetPossibleSteps(figurePos: Navigation): void;
     onResetPossibleSteps(): void;
-    onGameEnd
+    onGameEnd?(): void;
     isFinished: boolean;
     opponent?: User;
     game: GameType;
@@ -40,8 +40,8 @@ export default class Game extends React.Component<GameProps> {
             figures: this.gameRef.current,
             width: 600,
             size: 8,
-            light: '#d1eefc',
-            dark: '#1f1f21',
+            light: '#F0D8B5',
+            dark: '#B58863',
             possible: '#15b905',
             captured: '#b90100'
         };
@@ -95,6 +95,20 @@ export default class Game extends React.Component<GameProps> {
             ctx.rect(x * squareWidth, y * squareWidth, squareWidth, squareWidth);
             ctx.fillStyle = (x + y) % 2 ? this.options.dark : this.options.light;
             ctx.fill();
+            ctx.closePath();
+
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = 'white';
+
+            this.roundRect(
+                ctx,
+                x * squareWidth + 5,
+                y * squareWidth + 5,
+                squareWidth - 10,
+                squareWidth - 10,
+                10,
+                false,
+                true);
         }
     }
 
@@ -143,11 +157,18 @@ export default class Game extends React.Component<GameProps> {
         this.props.game.possibleSteps.forEach((item) => {
             const { x, y } = this.indexesToCoords(item);
 
-            ctx.beginPath();
-            ctx.rect(x + 2, y + 2, squareWidth - 4, squareWidth - 4);
-            ctx.fillStyle = item.captured ? this.options.captured : this.options.possible;
-            ctx.fill();
-            ctx.closePath();
+            ctx.strokeStyle = item.captured ? this.options.captured : this.options.possible;
+            ctx.lineWidth = 3;
+
+            this.roundRect(
+                ctx,
+                x + 5,
+                y + 5,
+                squareWidth - 10,
+                squareWidth - 10,
+                10,
+                false,
+                true);
         });
     }
 
@@ -207,5 +228,27 @@ export default class Game extends React.Component<GameProps> {
     private clearBoard() {
         const ctx = this.options.board.getContext('2d');
         ctx.clearRect(0, 0, this.options.width, this.options.width);
+    }
+
+    private roundRect(ctx, x: number, y: number, width: number, height: number,
+                      radius: number, fill: boolean, stroke: boolean = true) {
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+        ctx.lineTo(x + width, y + height - radius);
+        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        ctx.lineTo(x + radius, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.closePath();
+
+        if (stroke) {
+            ctx.stroke();
+        }
+        if (fill) {
+            ctx.fill();
+        }
     }
 }

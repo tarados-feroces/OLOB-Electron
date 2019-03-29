@@ -1,23 +1,25 @@
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="110" width="110" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
-<metadata>
-<rdf:RDF>
-<cc:Work rdf:about="">
-<dc:format>image/svg+xml</dc:format>
-<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-<dc:title/>
-</cc:Work>
-</rdf:RDF>
-</metadata>
-<g transform="translate(-338.49252,-466.17115)">
-<g transform="translate(43.419345,271.49995)">
-<path fill="#000" d="m357.4,213.2,9.093,0,0-7.328,14.66,0,0,20.06-11.87,9.147,0,25.57,9.093,9.093,0,10.97,8.184,0,0,12.78-73.01,0,0-12.78,8.184,0,0-10.97,9.147-9.093,0-25.57-11.87-9.147,0-20.06,14.6,0,0,7.328,9.147,0,0-7.328,14.66,0,0,7.328"/>
-<path fill="#FFF" d="m383,284.3-65.79,0,0,5.51,65.79,0,0-5.51"/>
-<path fill="#FFF" d="m374.7,273.4-49.21,0,0,7.275,49.21,0,0-7.275"/>
-<path fill="#FFF" d="m365.6,235.1-31.02,0,0,25.57,31.02,0,0-25.57"/>
-<path fill="#FFF" d="m377.5,222.3,0-12.78-7.328,0,0,7.328-16.48,0,0-7.328-7.221,0,0,7.328-16.42,0,0-7.328-7.328,0,0,12.78,54.77,0"/>
-<path fill="#FFF" d="m373.4,269.7-5.51-5.456-35.46,0-5.617,5.456,46.59,0"/>
-<path fill="#FFF" d="m367.5,231.4,6.793-5.51-48.36,0,6.847,5.51,34.72,0"/>
-</g>
-</g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="45" height="45">
+  <g style="opacity:1; fill:#ffffff; fill-opacity:1; fill-rule:evenodd; stroke:#000000; stroke-width:1.5; stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4; stroke-dasharray:none; stroke-opacity:1;">
+    <path
+      d="M 9,39 L 36,39 L 36,36 L 9,36 L 9,39 z "
+      style="stroke-linecap:butt;" />
+    <path
+      d="M 12,36 L 12,32 L 33,32 L 33,36 L 12,36 z "
+      style="stroke-linecap:butt;" />
+    <path
+      d="M 11,14 L 11,9 L 15,9 L 15,11 L 20,11 L 20,9 L 25,9 L 25,11 L 30,11 L 30,9 L 34,9 L 34,14"
+      style="stroke-linecap:butt;" />
+    <path
+      d="M 34,14 L 31,17 L 14,17 L 11,14" />
+    <path
+      d="M 31,17 L 31,29.5 L 14,29.5 L 14,17"
+      style="stroke-linecap:butt; stroke-linejoin:miter;" />
+    <path
+      d="M 31,29.5 L 32.5,32 L 12.5,32 L 14,29.5" />
+    <path
+      d="M 11,14 L 34,14"
+      style="fill:none; stroke:#000000; stroke-linejoin:miter;" />
+  </g>
 </svg>
