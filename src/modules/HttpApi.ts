@@ -6,6 +6,11 @@ export interface LoginData {
     password: string;
 }
 
+export interface UpdateUserData {
+    avatar?: string;
+    login?: string;
+}
+
 export interface SignupData {
     email: string;
     login: string;
@@ -14,6 +19,10 @@ export interface SignupData {
 class HttpApi {
     public loginUser = (userData: LoginData) => {
         return transport.doPost(HttpPaths.LOGIN, userData);
+    }
+
+    public updateUser = (userData: UpdateUserData) => {
+        return transport.doPost(HttpPaths.UPDATE_USER, userData);
     }
 
     public signupUser = (userData: SignupData) => {

@@ -43,16 +43,18 @@ const PopupWrapper: React.FunctionComponent<PopupState & OwnProps & DispatchProp
 
         return (
             <div className={b()}>
-                <div className={b('content')}>
+                <div className={b('container')}>
                     <div className={b('header')}>
                         <div className={b('header-item')}>
                             <p className={b('description')}>{description}</p>
                         </div>
                         <div className={b('header-item')}>
-                            <IconButton size="s" icon="cancel" onClick={onClose} />
+                            <IconButton className={b('close-icon')} size="xs" icon="cancel" onClick={onClose} />
                         </div>
                     </div>
-                    {component && React.createElement(component, props)}
+                    <div className={b('content')}>
+                        {component && React.createElement(component, props)}
+                    </div>
                 </div>
             </div>
         );

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import UserCard from '../../components/UserCard';
 import { signoutUser } from '../../redux/actions/User';
+import { openUserInfoPopup } from '../../redux/actions/Popup';
 import { MapDispatchToProps, MapStateToProps } from '../../store/store';
 
 interface StateProps {
@@ -20,6 +21,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatc
     return {
         onLogOut() {
             dispatch(signoutUser());
+        },
+        onOpenUserInfo(data: object) {
+            dispatch(openUserInfoPopup('Настройки', data));
         }
     };
 };

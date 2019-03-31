@@ -9,6 +9,7 @@ interface UserCardProps {
     // avatar?: string;
     login: string;
     onLogOut(): void;
+    onOpenUserInfo(data: object): void;
     // onProfileChange(): void;
 }
 
@@ -79,6 +80,6 @@ export default class UserCard extends React.Component<UserCardProps, UserCardSta
     }
 
     private handleProfileChange = () => {
-        // this.props.onProfileChange();
+        this.props.onOpenUserInfo({});
     }
 }

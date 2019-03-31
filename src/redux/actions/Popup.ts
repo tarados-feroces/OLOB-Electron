@@ -1,35 +1,40 @@
 import { PopupTypes } from '../constants/Popup';
 import { InfoPopup } from '../../components/InfoPopup';
+import UserInfo from '../../containers/UserInfo';
 
-
-export function openInfoPopup(props: object) {
+export function openInfoPopup(description: string, props: object) {
     return async (dispatch) => {
         dispatch(openPopup(
             InfoPopup,
             {
                 ...props
-            }
+            },
+            description
         ));
     };
 }
 
 export function openUserInfoPopup(description: string, props: object) {
+    console.log(description);
+
     return async (dispatch) => {
         dispatch(openPopup(
-            InfoPopup,
+            UserInfo,
             {
-                ...props
-            }
+                props
+            },
+            description
         ));
     };
 }
 
-export function openPopup(component: React.ComponentType, props: object) {
+export function openPopup(component: React.ComponentType, props: object, description: string) {
     return {
         type: PopupTypes.OPEN_POPUP,
         payload: {
             component,
-            props
+            props,
+            description
         }
     };
 }

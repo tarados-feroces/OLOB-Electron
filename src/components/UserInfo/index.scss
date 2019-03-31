@@ -1,3 +1,21 @@
 .olob-user-info {
-    
+    width: 100%;
+
+    &__content {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        &-item {
+            align-self: center;
+        }
+    }
+
+    &__avatar {
+        width: 200px;
+        height: 200px;
+        border-radius: 100px;
+        align-self: center;
+    }
 }
