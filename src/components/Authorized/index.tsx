@@ -11,11 +11,12 @@ import Game from '../../components/Game';
 import { GameType, Navigation } from '../../typings/GameTypings';
 import { GameMessages } from '../../redux/constants/Game';
 
+import UserCard from '../../containers/UserCard';
 import { WS_DOMEN } from '../../constants/WebSocketConstants';
 
 interface AuthProps {
     onGameStarted(state): void;
-    onGameEnd(state): void;
+    onGameEnd(): void;
     onOpenPopup(data): void;
     onGameClose(): void;
     onSnapshot(state): void;
@@ -61,7 +62,7 @@ export default class Authorized extends React.Component<AuthProps> {
             <div className={b()}>
                 <div className={b('header')}>
                     {/*<div className={b('signout-btn')} onClick={onSignoutUser}>Выйти</div>*/}
-                    <Button
+                    {/* <Button
                         className={b('signout-btn').toString()}
                         onClick={onSignoutUser}
                         size={'small'}
@@ -70,7 +71,10 @@ export default class Authorized extends React.Component<AuthProps> {
                     >
                         Выйти
                     </Button>
-                    <p className={b('header_login')}>{user.login}</p>
+                    <p className={b('header_login')}>{user.login}</p> */}
+                    <div className={b('card')}>
+                        <UserCard />
+                    </div>
                 </div>
                 <div className={b('container')}>
                     <Button onClick={this.sendSearchGameRequest} size={'massive'} inverted={true} fluid={false}>

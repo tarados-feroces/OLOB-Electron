@@ -1,0 +1,36 @@
+.olob-popup {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba($color: #000000, $alpha: 0.4);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+
+    &__content {
+        align-self: center;
+        border: thin white solid;
+        width: 400px;
+    }
+
+    &__header {
+        height: 40px;
+        color: white;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        border: thin white solid;
+        padding-left: 12px;
+        background-color: rgba($color: #ffffff, $alpha: 0.3);
+
+        &-item {
+            align-self: center;
+        }
+    }
+
+    &__description {
+        font-size: 25px;
+    }
+}

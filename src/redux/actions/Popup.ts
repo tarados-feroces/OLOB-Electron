@@ -1,13 +1,24 @@
 import { PopupTypes } from '../constants/Popup';
 import { InfoPopup } from '../../components/InfoPopup';
 
-export function openInfoPopup(data: { text: string, buttonText: string }) {
+
+export function openInfoPopup(props: object) {
     return async (dispatch) => {
         dispatch(openPopup(
             InfoPopup,
             {
-                ...data,
-                onClick: () => dispatch(closePopup())
+                ...props
+            }
+        ));
+    };
+}
+
+export function openUserInfoPopup(description: string, props: object) {
+    return async (dispatch) => {
+        dispatch(openPopup(
+            InfoPopup,
+            {
+                ...props
             }
         ));
     };

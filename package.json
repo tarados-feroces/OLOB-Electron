@@ -4,12 +4,13 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "build": "webpack --mode development",
+    "build-dev": "webpack --mode development -w",
+    "build": "webpack --mode production",
     "tslint": "tslint -p ./ -c ./tslint.json 'src/**/*.ts' 'src/**/*.tsx'",
     "start": "webpack-dev-server --mode development --inline",
-    "electron-start": "electron .",
-    "preelectron-pack": "npm run build",
-    "electron-pack": "build -c.extraMetadata.main=build/main.js"
+    "electron-start": "APP_DEV=true electron .",
+    "preelectron-pack": "npm run build &",
+    "electron-pack": "build -c.extraMetadata.main=main.js"
   },
   "pre-commit": [
     "tslint"

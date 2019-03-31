@@ -1,0 +1,22 @@
+.ui-icon-button {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding: 12px;
+    margin: 0;
+    border: none;
+    outline: none;
+    color: white;
+    background-color: transparent;
+    cursor: pointer;
+
+    object {
+        align-self: center;
+    }
+
+    &_disabled,
+    &_disabled:hover {
+        opacity: .4;
+        pointer-events: none;
+    }
+}
