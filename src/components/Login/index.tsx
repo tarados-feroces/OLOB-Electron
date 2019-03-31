@@ -4,10 +4,11 @@ import { LoginData } from '../../modules/HttpApi';
 
 import './index.scss';
 
-import { Button, Input } from 'semantic-ui-react';
+import { Button, Input, Popup } from 'semantic-ui-react';
 import { Redirect } from 'react-router';
 import * as PathConstants from '../../constants/PathsConstants';
 import Form from '../../ui/Form';
+import { SyntheticEvent } from 'react';
 
 interface OwnProps {
     history?: any;
@@ -25,18 +26,21 @@ interface LoginState {
     login: string;
     password: string;
     loading: boolean;
+    showError?: boolean;
 }
 
 const b = block('olob-login');
 const f = block('ui-form');
 
 export default class Login extends React.Component<LoginProps, LoginState> {
+    private btnRef = React.createRef<HTMLDivElement>();
     constructor(props: LoginProps) {
         super(props);
         this.state = {
             loading: false,
             login: '',
-            password: ''
+            password: '',
+            showError: true
         };
     }
 
@@ -44,7 +48,15 @@ export default class Login extends React.Component<LoginProps, LoginState> {
         if (prevState.loading !== this.state.loading) {
             setTimeout(() => {
                 this.setState({
-                    loading: false
+                    loading: false,
+                });
+            }, 1000);
+        }
+
+        if (prevProps.error !== this.props.error && this.state.loading) {
+            setTimeout(() => {
+                this.setState({
+                    showError: false
                 });
             }, 1000);
         }
@@ -57,12 +69,29 @@ export default class Login extends React.Component<LoginProps, LoginState> {
             );
         }
 
+        const errorStyle = {
+            borderRadius: 0,
+            fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
+            fontWeight: 'lighter',
+            color: '#f60207'
+        };
+
+        console.log(this.props.error && this.state.showError);
+
         return (
             <div className={b()}>
                 <div className={b('title')}>
                     Добро пожаловать!
                 </div>
-                <div className={b('container').toString()}>
+                <div className={b('container').toString()} ref={this.btnRef}>
+                    <Popup
+                        context={this.btnRef.current}
+                        open={this.props.error && this.state.showError && !this.state.loading}
+                        position="top center"
+                        style={errorStyle}
+                    >
+                        Вы ввели некорректные данные.
+                    </Popup>
                     <Form>
                         <Input
                             className={f('item').toString()}
@@ -123,7 +152,8 @@ export default class Login extends React.Component<LoginProps, LoginState> {
         });
 
         this.setState({
-            loading: true
+            loading: true,
+            showError: true
         });
     }
 }

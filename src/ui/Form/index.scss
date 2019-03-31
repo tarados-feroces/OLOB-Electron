@@ -26,3 +26,10 @@
     font-weight: lighter;
   }
 }
+
+#root .error {
+  font-family: $font-family;
+  font-weight: lighter;
+  color: #780206;
+  text-align: center;
+}
