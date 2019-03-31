@@ -1,3 +1,5 @@
+@import '../../static/config.scss';
+
 .olob-auth {
   width: 100vw;
   height: 100vh;
@@ -13,8 +15,9 @@
   &__header {
     width: 100%;
     display: flex;
-    flex-direction: row-reverse;
-    height: 70px;
+    justify-content: space-between;
+    height: 120px;
+    padding: 30px 20px;
     // background-color: rgba(255, 255, 255, 0.3);
 
     &_login {
@@ -22,32 +25,37 @@
       font-size: 24px;
       justify-content: center;
       align-items: center;
+      font-family: $font-family;
       width: 200px;
     }
   }
 
+  &__logo {
+    color: white;
+    font-size: 50px;
+    font-family: $font-family;
+    font-weight: lighter;
+    cursor: default;
+    user-select: none;
+    align-self: center;
+    min-width: 380px;
+  }
+
   &__card {
     align-self: center;
-  }
-
-  &__signout-btn {
     display: flex;
-    font-size: 18px;
-    justify-content: center;
-    align-items: center;
-    width: 100px;
-
-    &:hover {
-      color: blue;
-      text-decoration: underline;
-    }
+    justify-content: flex-end;
+    width: 310px;
   }
+
   &__container {
     display: flex;
   }
 
-  &__button_play {
-    height: 200px;
+  &__play-button {
+    min-width: 192px;
+    align-self: center;
+    margin: 0;
   }
 
 }
