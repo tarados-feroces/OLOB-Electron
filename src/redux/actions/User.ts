@@ -10,6 +10,8 @@ const setUser = (user: UserState) => ({
 
 const setUserAuthorized = () => ({ type: UserTypes.SET_USER_AUTHORIZED });
 const resetUserAuthorized = () => ({ type: UserTypes.RESET_USER_AUTHORIZED });
+const setError = () => ({ type: UserTypes.SET_ERROR });
+const resetError = () => ({ type: UserTypes.RESET_ERROR });
 
 export function getUser() {
     return async (dispatch) => {
@@ -31,7 +33,10 @@ export function loginUser(data: LoginData) {
         const json = await response.json();
         if (response.ok) {
             dispatch(setUserAuthorized());
+            dispatch(resetError());
             dispatch(setUser(json));
+        } else {
+            dispatch(setError());
         }
     };
 }
@@ -52,7 +57,10 @@ export function signupUser(data: SignupData) {
         const json = await response.json();
         if (response.ok) {
             dispatch(setUserAuthorized());
+            dispatch(resetError());
             dispatch(setUser(json));
+        } else {
+            dispatch(setError());
         }
     };
 }

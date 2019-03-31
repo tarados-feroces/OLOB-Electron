@@ -2,6 +2,8 @@
   position: relative;
   width: 600px;
   height: 600px;
+  min-width: 600px;
+  min-height: 600px;
 
   &__figures {
     position: absolute;
