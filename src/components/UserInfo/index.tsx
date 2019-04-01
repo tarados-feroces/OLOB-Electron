@@ -6,11 +6,15 @@ import Form from '../../ui/Form';
 
 import './index.scss';
 
-interface UserInfoProps {
-    onSubmit(): void;
-    login: string;
-    avatar: string;
+interface OwnProps {}
+
+interface ReduxProps {
+    onSubmit?(): void;
+    login?: string;
+    avatar?: string;
 }
+
+type UserInfoProps = OwnProps & ReduxProps;
 
 interface UserInfoState {
     login?: string;

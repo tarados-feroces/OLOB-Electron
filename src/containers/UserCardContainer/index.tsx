@@ -13,9 +13,7 @@ interface DispatchProps {
     onLogOut(): void;
 }
 
-interface OwnProps {
-
-}
+interface OwnProps {}
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch) => {
     return {

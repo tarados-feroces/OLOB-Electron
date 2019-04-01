@@ -1,6 +1,6 @@
 import { PopupTypes } from '../constants/Popup';
 import { InfoPopup } from '../../components/InfoPopup';
-import UserInfo from '../../containers/UserInfo';
+import UserInfo from '../../containers/UserInfoContainer';
 
 export function openInfoPopup(description: string, props: object) {
     return async (dispatch) => {

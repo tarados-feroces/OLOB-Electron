@@ -5,13 +5,15 @@ import IconButton from '../../ui/IconButton';
 import './index.scss';
 import { Image } from 'semantic-ui-react';
 
-interface UserCardProps {
-    // avatar?: string;
-    login: string;
-    onLogOut(): void;
-    onOpenUserInfo(data: object): void;
-    // onProfileChange(): void;
+interface OwnProps {}
+
+interface ReduxProps {
+    login?: string;
+    onLogOut?(): void;
+    onOpenUserInfo?(data: object): void;
 }
+
+type UserCardProps = OwnProps & ReduxProps;
 
 interface UserCardState {
     closed: boolean;

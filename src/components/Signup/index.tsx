@@ -7,10 +7,14 @@ import { Redirect } from 'react-router';
 import * as PathConstants from '../../constants/PathsConstants';
 import Form from '../../ui/Form';
 
-interface SignupProps {
+interface OwnProps {}
+
+interface ReduxProps {
     onSignup?(data: SignupData): void;
-    isAuthorized: boolean;
+    isAuthorized?: boolean;
 }
+
+type SignupProps = OwnProps & ReduxProps;
 
 const b = block('olob-login');
 const f = block('ui-form');

@@ -9,10 +9,14 @@ import { Redirect } from 'react-router';
 import * as PathConstants from '../../constants/PathsConstants';
 import Form from '../../ui/Form';
 
-interface LoginProps {
+interface OwnProps {}
+
+interface ReduxProps {
     onLogin?(data: LoginData): void;
-    isAuthorized: boolean;
+    isAuthorized?: boolean;
 }
+
+type LoginProps = OwnProps & ReduxProps;
 
 interface LoginState {
     loading: boolean;

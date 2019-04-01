@@ -1,26 +1,27 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { PopupState } from '../../redux/reducers/Popup';
 import { closePopup } from '../../redux/actions/Popup';
 import IconButton from '../../ui/IconButton';
 
 import block from 'bem-cn';
 
 import './index.scss';
+import { MapDispatchToProps, MapStateToProps } from '../../store/store';
 
-// interface StateProps {
-//     login: string;
-// }
+interface StateProps {
+    component?: React.ComponentType;
+    props?: object;
+    visibility?: boolean;
+    description?: string;
+}
 
 interface DispatchProps {
-    onClose(): void;
+    onClose?(): void;
 }
 
-interface OwnProps {
-    description: string;
-}
+interface OwnProps {}
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch) => {
     return {
         onClose() {
             dispatch(closePopup());
@@ -28,13 +29,13 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps: MapStateToProps<StateProps, OwnProps> = (state) => {
     return state.popup;
 };
 
 const b = block('olob-popup');
 
-const PopupWrapper: React.FunctionComponent<PopupState & OwnProps & DispatchProps> =
+const PopupWrapper: React.FunctionComponent<StateProps & OwnProps & DispatchProps> =
     ({ component, props, visibility, description, onClose }) => {
 
         if (!visibility) {

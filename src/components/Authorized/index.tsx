@@ -1,35 +1,40 @@
 import * as React from 'react';
 import { block } from 'bem-cn';
 
-import './index.scss';
 import { Redirect } from 'react-router';
 import * as PathConstants from '../../constants/PathsConstants';
 import WebSocketApi from '../../modules/WebSocketApi';
 import { Button } from 'semantic-ui-react';
 import { User } from '../../typings/UserTypings';
 import Game from '../../components/Game';
-import { GameType, Navigation } from '../../typings/GameTypings';
+import { GameType } from '../../typings/GameTypings';
 import { GameMessages } from '../../redux/constants/Game';
 
-import UserCard from '../../containers/UserCard';
+import './index.scss';
+
+import UserCard from '../../containers/UserCardContainer';
 import { WS_DOMEN } from '../../constants/WebSocketConstants';
 
-interface AuthProps {
-    onGameStarted(state): void;
-    onGameEnd(): void;
-    onOpenPopup(data): void;
-    onGameClose(): void;
-    onSnapshot(state): void;
-    onGetPossibleSteps(state): void;
-    onResetPossibleSteps(): void;
-    onSignoutUser(): void;
-    isAuthorized: boolean;
-    isFinished: boolean;
+interface OwnProps {}
+
+interface ReduxProps {
+    onGameStarted?(state: object): void;
+    onGameEnd?(): void;
+    onOpenPopup?(data: object): void;
+    onGameClose?(): void;
+    onSnapshot?(state: object): void;
+    onGetPossibleSteps?(state: object): void;
+    onResetPossibleSteps?(): void;
+    onSignoutUser?(): void;
+    isAuthorized?: boolean;
+    isFinished?: boolean;
     opponent?: User;
     game?: GameType;
     winner?: number;
-    user: User;
+    user?: User;
 }
+
+type AuthProps = OwnProps & ReduxProps;
 
 const b = block('olob-auth');
 
@@ -77,15 +82,9 @@ export default class Authorized extends React.Component<AuthProps> {
                         <UserCard />
                     </div>
                 </div>
-                <div className={b('container')}>
-                </div>
-                {game && <Game user={user} game={game} {...restProps} />}
+                {game && <Game user={user} game={game} />}
             </div>
         );
-    }
-
-    private openPopup = () => {
-        this.props.onOpenPopup({ text: 'lol', buttonText: 'kek' });
     }
 
     private onGameEnd = (data) => {
