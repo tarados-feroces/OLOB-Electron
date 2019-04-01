@@ -6,6 +6,7 @@ export interface PopupState {
     component?: React.ComponentType;
     props?: object;
     visibility: boolean;
+    description?: string;
 }
 
 const initialState: PopupState = {

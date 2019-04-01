@@ -1,4 +1,4 @@
-import { httpApi, LoginData, SignupData } from '../../modules/HttpApi';
+import { httpApi, LoginData, SignupData, UpdateUserData } from '../../modules/HttpApi';
 
 import { UserState } from '../reducers/User';
 import { UserTypes } from '../constants/User';
@@ -31,6 +31,16 @@ export function loginUser(data: LoginData) {
         const json = await response.json();
         if (response.ok) {
             dispatch(setUserAuthorized());
+            dispatch(setUser(json));
+        }
+    };
+}
+
+export function updateUser(data: UpdateUserData) {
+    return async (dispatch) => {
+        const response = await httpApi.updateUser(data);
+        const json = await response.json();
+        if (response.ok) {
             dispatch(setUser(json));
         }
     };

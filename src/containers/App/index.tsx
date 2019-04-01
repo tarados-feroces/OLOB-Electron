@@ -6,7 +6,7 @@ import * as PathConstants from '../../constants/PathsConstants';
 import LoginContainer from '../LoginContainer';
 import SignupContainer from '../SignupContainer';
 import AuthorizedContainer from '../AuthorizedContainer';
-import PopupWrapper from '../Popup';
+import PopupWrapper from '../PopupContainer';
 
 import 'semantic-ui-css/semantic.min.css';
 import { getUser } from '../../redux/actions/User';

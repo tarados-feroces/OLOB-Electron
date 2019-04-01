@@ -7,9 +7,6 @@ import { openInfoPopup } from '../../redux/actions/Popup';
 import {
     startGame,
     endGame,
-    receiveSnapshot,
-    receivePossibleSteps,
-    resetPossibleSteps,
     closeGame
 } from '../../redux/actions/Game';
 
@@ -19,7 +16,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(signoutUser());
         },
         onOpenPopup(data: { text: string, buttonText: string }) {
-            dispatch(openInfoPopup(data));
+            dispatch(openInfoPopup('Info', data));
         },
         onGameStarted(state) {
             dispatch(startGame(state));
@@ -27,17 +24,8 @@ const mapDispatchToProps = (dispatch) => {
         onGameEnd(state) {
             dispatch(endGame(state));
         },
-        onGetPossibleSteps(steps) {
-            dispatch(receivePossibleSteps(steps));
-        },
-        onResetPossibleSteps() {
-            dispatch(resetPossibleSteps());
-        },
         onGameClose() {
             dispatch(closeGame());
-        },
-        onSnapshot(state) {
-            dispatch(receiveSnapshot(state));
         }
     };
 };

@@ -4,25 +4,37 @@ import { LoginData } from '../../modules/HttpApi';
 
 import './index.scss';
 
-import { Button, Form } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import { Redirect } from 'react-router';
 import * as PathConstants from '../../constants/PathsConstants';
+import Form from '../../ui/Form';
 
-interface LoginProps {
+interface OwnProps {}
+
+interface ReduxProps {
     onLogin?(data: LoginData): void;
-    isAuthorized: boolean;
+    isAuthorized?: boolean;
 }
 
+type LoginProps = OwnProps & ReduxProps;
+
 interface LoginState {
-    nickname: string;
-    password: string;
+    loading: boolean;
 }
 
 const b = block('olob-login');
+const f = block('ui-form');
 
-export default class Login extends React.Component<LoginProps> {
+export default class Login extends React.Component<LoginProps, LoginState> {
     private loginRef = React.createRef<HTMLInputElement>();
     private passwordRef = React.createRef<HTMLInputElement>();
+
+    constructor(props: LoginProps) {
+        super(props);
+        this.state = {
+            loading: false
+        };
+    }
 
     public render() {
         if (this.props.isAuthorized) {
@@ -33,15 +45,27 @@ export default class Login extends React.Component<LoginProps> {
 
         return (
             <div className={b()}>
+                <div className={b('title')}>
+                    Добро пожаловать!
+                </div>
                 <div className={b('container').toString()}>
-                    <Form className={b('forms').toString()}>
-                        <input placeholder={'Введите логин'} ref={this.loginRef} />
+                    <Form>
+                        <input className={f('item').toString()} placeholder={'Введите логин'} ref={this.loginRef} />
                         <input
                             placeholder={'Введите пароль'}
                             type={'password'}
                             ref={this.passwordRef}
+                            className={f('item').toString()}
                         />
-                        <Button type={'submit'} inverted={true} onClick={this.onLogin}>Войти</Button>
+                        <Button
+                            className={f('button').toString()}
+                            type={'submit'}
+                            inverted={true}
+                            loading={this.state.loading}
+                            onClick={this.onLogin}
+                        >
+                                Войти
+                        </Button>
                     </Form>
                 </div>
             </div>
@@ -52,6 +76,10 @@ export default class Login extends React.Component<LoginProps> {
         this.props.onLogin({
             login: this.loginRef.current.value,
             password: this.passwordRef.current.value
+        });
+
+        this.setState({
+            loading: true
         });
     }
 }
