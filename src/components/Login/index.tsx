@@ -5,13 +5,13 @@ import { LoginData } from '../../modules/HttpApi';
 import './index.scss';
 
 import { Button, Input, Popup } from 'semantic-ui-react';
-import { Redirect } from 'react-router';
+import { History } from 'history';
 import * as PathConstants from '../../constants/PathsConstants';
 import Form from '../../ui/Form';
-import { SyntheticEvent } from 'react';
+import { NavLink } from 'react-router-dom';
 
 interface OwnProps {
-    history?: any;
+    history?: History;
 }
 
 interface ReduxProps {
@@ -40,7 +40,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
             loading: false,
             login: '',
             password: '',
-            showError: true
+            showError: false
         };
     }
 
@@ -48,35 +48,36 @@ export default class Login extends React.Component<LoginProps, LoginState> {
         if (prevState.loading !== this.state.loading) {
             setTimeout(() => {
                 this.setState({
-                    loading: false,
+                    loading: false
                 });
             }, 1000);
         }
 
-        if (prevProps.error !== this.props.error && this.state.loading) {
+        if (this.props.error && prevState.loading !== this.state.loading && !prevState.showError) {
+            this.setState({
+                showError: true
+            });
+        }
+
+        if (prevState.showError && !this.state.loading) {
             setTimeout(() => {
                 this.setState({
                     showError: false
                 });
-            }, 1000);
+            }, 2000);
         }
     }
 
     public render() {
         if (this.props.isAuthorized) {
-            return (
-                <Redirect to={PathConstants.AUTH} />
-            );
+            this.props.history.push(PathConstants.AUTH);
         }
 
         const errorStyle = {
-            borderRadius: 0,
             fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
             fontWeight: 'lighter',
-            color: '#f60207'
+            color: '#cc1600'
         };
-
-        console.log(this.props.error && this.state.showError);
 
         return (
             <div className={b()}>
@@ -87,7 +88,10 @@ export default class Login extends React.Component<LoginProps, LoginState> {
                     <Popup
                         context={this.btnRef.current}
                         open={this.props.error && this.state.showError && !this.state.loading}
-                        position="top center"
+                        verticalOffset={-125}
+                        horizontalOffset={150}
+                        position="bottom right"
+                        basic={true}
                         style={errorStyle}
                     >
                         Вы ввели некорректные данные.
@@ -96,41 +100,31 @@ export default class Login extends React.Component<LoginProps, LoginState> {
                         <Input
                             className={f('item').toString()}
                             placeholder={'Введите логин'}
-                            error={this.props.error}
+                            error={this.state.showError}
                             onChange={this.changeLogin}
                         />
                         <Input
                             className={f('item').toString()}
                             placeholder={'Введите пароль'}
                             type={'password'}
-                            error={this.props.error}
+                            error={this.state.showError}
                             onChange={this.changePassword}
                         />
-                        <Button
-                            className={f('button').toString()}
-                            type={'submit'}
-                            inverted={true}
-                            loading={this.state.loading}
-                            onClick={this.onLogin}
-                        >
-                                Войти
-                        </Button>
-                        <Button
-                            className={f('button').toString()}
-                            inverted={true}
-                            loading={this.state.loading}
-                            onClick={this.goToSignup}
-                        >
+                            <Button
+                                className={f('button').toString()}
+                                type={'submit'}
+                                loading={this.state.loading}
+                                onClick={this.onLogin}
+                            >
+                                    Войти
+                            </Button>
+                        <NavLink className={f('link').toString()} to={PathConstants.SIGNUP}>
                             Регистрация
-                        </Button>
+                        </NavLink>
                     </Form>
                 </div>
             </div>
         );
-    }
-
-    private goToSignup = () => {
-        this.props.history.push('/signup');
     }
 
     private changeLogin = (event) => {

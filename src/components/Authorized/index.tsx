@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { block } from 'bem-cn';
 
-import { Redirect } from 'react-router';
 import * as PathConstants from '../../constants/PathsConstants';
 import WebSocketApi from '../../modules/WebSocketApi';
 import { Button } from 'semantic-ui-react';
@@ -9,13 +8,16 @@ import { User } from '../../typings/UserTypings';
 import Game from '../../containers/GameContainer';
 import { GameType } from '../../typings/GameTypings';
 import { GameMessages } from '../../redux/constants/Game';
+import { History } from 'history';
 
 import './index.scss';
 
 import UserCard from '../../containers/UserCardContainer';
 import { WS_DOMEN } from '../../constants/WebSocketConstants';
 
-interface OwnProps {}
+interface OwnProps {
+    history?: History;
+}
 
 interface ReduxProps {
     onGameStarted?(state: object): void;
@@ -54,9 +56,7 @@ export default class Authorized extends React.Component<AuthProps> {
         const { user, game, isAuthorized, onSignoutUser, onOpenPopup, ...restProps } = this.props;
 
         if (!isAuthorized) {
-            return (
-                <Redirect to={PathConstants.LOGIN} />
-            );
+            this.props.history.push(PathConstants.LOGIN);
         }
 
         if (!user) {

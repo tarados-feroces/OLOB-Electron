@@ -20,16 +20,22 @@
   &__button {
     align-self: center;
     margin-top: 20px;
-    width: 50%;
+    min-width: 50%;
     font-size: 17px;
     font-family: $font-family;
     font-weight: lighter;
+    background-color: inherit;
+    color: white;
+    border: white solid 1px;
+    border-radius: 4px;
   }
-}
 
-#root .error {
-  font-family: $font-family;
-  font-weight: lighter;
-  color: #780206;
-  text-align: center;
+  &__link {
+    align-self: center;
+    margin-top: 20px;
+    font-family: $font-family;
+    font-weight: lighter;
+    font-size: 15px;
+    text-align: center;
+  }
 }

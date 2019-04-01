@@ -6,6 +6,7 @@ import { Button, Input } from 'semantic-ui-react';
 import { Redirect } from 'react-router';
 import * as PathConstants from '../../constants/PathsConstants';
 import Form from '../../ui/Form';
+import { NavLink } from 'react-router-dom';
 
 interface OwnProps {}
 
@@ -93,12 +94,14 @@ export default class Login extends React.Component<SignupProps, SignupState> {
                         <Button
                             className={f('button').toString()}
                             type={'submit'}
-                            inverted={true}
                             onClick={this.onSignup}
                             loading={this.state.loading}
                         >
-                            Войти
+                            Присоединиться
                         </Button>
+                        <NavLink className={f('link').toString()} to={PathConstants.LOGIN}>
+                            Уже есть аккаунт?
+                        </NavLink>
                     </Form>
                 </div>
             </div>

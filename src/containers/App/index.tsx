@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect, Provider } from 'react-redux';
-import { Router, Route, Switch } from 'react-router';
+import { Router, Route, Switch } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import * as PathConstants from '../../constants/PathsConstants';
 import LoginContainer from '../LoginContainer';
