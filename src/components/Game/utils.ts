@@ -101,7 +101,7 @@ export function drawFigures(options: Options, isWhiteSide: boolean, state: strin
     });
 }
 
-export function drawPossibleMoves(options: Options, possibleSteps: PossibleSteps[]) {
+export function drawPossibleMoves(options: Options, possibleSteps: PossibleSteps[], isWhiteSide: boolean) {
     clearBoard(options);
     drawBoard(options);
 
@@ -109,7 +109,7 @@ export function drawPossibleMoves(options: Options, possibleSteps: PossibleSteps
     const ctx = board.getContext('2d');
 
     possibleSteps.forEach((item) => {
-        const { x, y } = this.indexesToCoords(item);
+        const { x, y } = indexesToCoords(item, isWhiteSide, options);
 
         ctx.strokeStyle = item.captured ? captured : possible;
         ctx.lineWidth = 3;

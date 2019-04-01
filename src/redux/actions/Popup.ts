@@ -15,8 +15,6 @@ export function openInfoPopup(description: string, props: object) {
 }
 
 export function openUserInfoPopup(description: string, props: object) {
-    console.log(description);
-
     return async (dispatch) => {
         dispatch(openPopup(
             UserInfo,

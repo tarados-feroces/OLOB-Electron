@@ -6,7 +6,7 @@ import * as PathConstants from '../../constants/PathsConstants';
 import WebSocketApi from '../../modules/WebSocketApi';
 import { Button } from 'semantic-ui-react';
 import { User } from '../../typings/UserTypings';
-import Game from '../../components/Game';
+import Game from '../../containers/GameContainer';
 import { GameType } from '../../typings/GameTypings';
 import { GameMessages } from '../../redux/constants/Game';
 

@@ -50,7 +50,7 @@ export default class Game extends React.Component<GameProps> {
         }
 
         if (prevProps.game.possibleSteps !== game.possibleSteps) {
-            drawPossibleMoves(this.options, game.possibleSteps);
+            drawPossibleMoves(this.options, game.possibleSteps, game.side === Side.WHITE);
         }
     }
 
