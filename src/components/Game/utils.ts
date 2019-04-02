@@ -20,7 +20,7 @@ export function constructOptions(board: HTMLCanvasElement, figures: HTMLCanvasEl
         figures,
         top: board.parentElement.offsetTop,
         left: board.parentElement.offsetLeft,
-        width: 600,
+        width: board.parentElement.offsetWidth,
         size: 8,
         light: '#F0D8B5',
         dark: '#B58863',

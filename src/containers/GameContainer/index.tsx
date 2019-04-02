@@ -8,8 +8,12 @@ import {
     resetPossibleSteps
 } from '../../redux/actions/Game';
 
+import { User } from '../../typings/UserTypings';
+
 interface StateProps {
-    login: string;
+    opponent?: User;
+    isFinished?: boolean;
+    winner?: string;
 }
 
 interface DispatchProps {
@@ -18,7 +22,10 @@ interface DispatchProps {
     onResetPossibleSteps(): void;
 }
 
-interface OwnProps {}
+interface OwnProps {
+    game: GameType;
+    user: User;
+}
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch) => {
     return {
@@ -34,4 +41,10 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatc
     };
 };
 
-export default connect(null, mapDispatchToProps)(Game);
+const mapStateToProps: MapStateToProps<StateProps, OwnProps> = (state) => {
+    return {
+        ...state.game
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Game);

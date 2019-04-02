@@ -1,0 +1,32 @@
+@import '../../static/config.scss';
+
+.olob-player-info {
+    position: relative;
+    display: flex;
+    height: 50px;
+    flex-direction: row;
+
+    &__login {
+        color: rgba(230, 221, 221, 0.808);
+
+        align-self: center;
+
+        &_active {
+            color: white;
+            font-weight: 300;
+        }
+
+        font-family: $font-family;
+        font-size: 28px;
+        font-weight: lighter;
+        margin: 0 5px;
+    }
+
+    &__avatar {
+        align-self: center;
+        width: 50px;
+        height: 50px;
+        border-radius: 25px;
+        margin: 0 5px;
+    }
+}

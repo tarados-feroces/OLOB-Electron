@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { block } from 'bem-cn';
 import IconButton from '../../ui/IconButton';
+import { Avatar } from '../../ui/Avatar';
 
 import './index.scss';
 import { Image } from 'semantic-ui-react';
@@ -8,6 +9,7 @@ import { Image } from 'semantic-ui-react';
 interface OwnProps {}
 
 interface ReduxProps {
+    avatar?: string;
     login?: string;
     onLogOut?(): void;
     onOpenUserInfo?(data: object): void;
@@ -27,7 +29,7 @@ export default class UserCard extends React.Component<UserCardProps, UserCardSta
     };
 
     public render() {
-        const { login, onLogOut } = this.props;
+        const { login, onLogOut, avatar } = this.props;
         const { closed } = this.state;
 
         return (
@@ -55,9 +57,7 @@ export default class UserCard extends React.Component<UserCardProps, UserCardSta
                         </div>
                     }
                     <div className={b('content-item')} >
-                        <div className={b('avatar')}>
-                            <Image className={b('avatar-image').toString()} src={'./images/team.jpg'} />
-                        </div>
+                        <Avatar src={avatar} className={b('avatar')} />
                     </div>
                     {!closed &&
                         <div className={b('content-item')} >

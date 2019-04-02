@@ -28,7 +28,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatc
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps> = (state) => {
     return {
-        login: state.user.user.login
+        login: state.user.user.login,
+        avatar: state.user.user.avatar
     };
 };
 

@@ -1,11 +1,20 @@
 import { httpApi, LoginData, SignupData, UpdateUserData } from '../../modules/HttpApi';
 
-import { UserState } from '../reducers/User';
 import { UserTypes } from '../constants/User';
+import { User } from '../../typings/UserTypings';
 
-const setUser = (user: UserState) => ({
+interface UserData {
+    _id: string;
+    avatar: string;
+    email: string;
+}
+
+const setUser = (user: UserData) => ({
     type: UserTypes.SET_USER,
-    payload: user
+    payload: {
+        ...user,
+        id: user._id
+    }
 });
 
 const setUserAuthorized = () => ({ type: UserTypes.SET_USER_AUTHORIZED });

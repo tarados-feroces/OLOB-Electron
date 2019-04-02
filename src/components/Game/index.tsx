@@ -5,19 +5,21 @@ import { GameType, Navigation, Side } from '../../typings/GameTypings';
 import { User } from '../../typings/UserTypings';
 import { Options, constructOptions, drawFigures, drawPossibleMoves, coordsToIndexes, checkStepInPossible } from './utils';
 
+import PlayerInfo from '../PlayerInfo';
+
 import GameApi from '../../modules/GameApi';
 
 import './index.scss';
 
 interface OwnProps {
-    isFinished?: boolean;
-    opponent?: User;
     game: GameType;
-    winner?: number;
     user: User;
 }
 
 interface ReduxProps {
+    opponent?: User;
+    isFinished?: boolean;
+    winner?: number;
     onSnapshot?(state): void;
     onGetPossibleSteps?(steps): void;
     onResetPossibleSteps?(): void;
@@ -55,10 +57,20 @@ export default class Game extends React.Component<GameProps> {
     }
 
     public render() {
+        const { opponent, user, game } = this.props;
+
         return (
             <div className={b()}>
-                <canvas ref={this.boardRef} className={b('board')} />
-                <canvas ref={this.figuresRef} className={b('figures')} onClick={this.handleClick} />
+                <div className={b('user-info')}>
+                    {opponent &&  <PlayerInfo {...opponent} active={game.currentUser === opponent.id} />}
+                </div>
+                <div className={b('board-container')}>
+                    <canvas ref={this.boardRef} className={b('board')} />
+                    <canvas ref={this.figuresRef} className={b('figures')} onClick={this.handleClick} />
+                </div>
+                <div className={b('user-info', { reverse: true })}>
+                    <PlayerInfo {...user} active={game.currentUser === user.id} />
+                </div>
             </div>
         );
     }
