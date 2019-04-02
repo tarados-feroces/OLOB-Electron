@@ -1,7 +1,7 @@
 import { httpApi, LoginData, SignupData, UpdateUserData } from '../../modules/HttpApi';
 
 import { UserTypes } from '../constants/User';
-import { User } from '../../typings/UserTypings';
+import { startGame } from './Game';
 
 interface UserData {
     _id: string;
@@ -28,7 +28,8 @@ export function getUser() {
 
         if (response.ok) {
             const json = await response.json();
-            dispatch(setUser(json));
+            dispatch(setUser(json.user));
+            dispatch(startGame(json.game));
             dispatch(setUserAuthorized());
         } else {
             dispatch(resetUserAuthorized());
@@ -56,6 +57,9 @@ export function updateUser(data: UpdateUserData) {
         const json = await response.json();
         if (response.ok) {
             dispatch(setUser(json));
+            dispatch(resetError());
+        } else {
+            dispatch(setError());
         }
     };
 }

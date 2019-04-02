@@ -46,7 +46,6 @@ export default class Game extends React.Component<GameProps> {
 
     public componentDidUpdate(prevProps) {
         const game = this.props.game;
-
         if (prevProps.game.state !== game.state) {
             drawFigures(this.options, game.side === Side.WHITE, game.state);
         }

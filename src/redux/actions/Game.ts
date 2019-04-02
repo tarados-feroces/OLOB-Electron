@@ -1,10 +1,14 @@
 import { GameTypes } from '../constants/Game';
 import { GameType, GameSituations, PossibleSteps, Side } from '../../typings/GameTypings';
 
-import { User } from '../../typings/UserTypings';
+interface UserData {
+    _id: string;
+    avatar: string;
+    email: string;
+}
 
 interface StartGameState {
-    opponent: User;
+    opponent: UserData;
     situation: GameSituations;
     currentUser: string;
     fen: string;
@@ -35,7 +39,7 @@ export function startGame(state: StartGameState) {
     };
 
     return { type: GameTypes.START_GAME, payload: {
-        opponent: state.opponent,
+        opponent: { ...state.opponent, id: state.opponent._id  },
         game
     } };
 }

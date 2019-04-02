@@ -26,7 +26,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch) => 
 const mapStateToProps: MapStateToProps<StateProps, {}> = (state) => {
     return {
         login: state.user.user.login,
-        avatar: state.user.user.avatar
+        avatar: state.user.user.avatar,
+        error: state.user.error
     };
 };
 
