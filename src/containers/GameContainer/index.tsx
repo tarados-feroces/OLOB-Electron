@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import Game from '../../components/Game';
 import { MapDispatchToProps, MapStateToProps } from '../../store/store';
-import { GameType, Navigation } from '../../typings/GameTypings';
+import { GameType } from '../../typings/GameTypings';
 import {
     receiveSnapshot,
     receivePossibleSteps,

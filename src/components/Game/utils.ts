@@ -11,6 +11,7 @@ export interface Options {
     dark: string;
     possible: string;
     captured: string;
+    lightPadding: number;
     squareWidth?: number;
 }
 
@@ -25,7 +26,8 @@ export function constructOptions(board: HTMLCanvasElement, figures: HTMLCanvasEl
         light: '#F0D8B5',
         dark: '#B58863',
         possible: '#15b905',
-        captured: '#b90100'
+        captured: '#b90100',
+        lightPadding: 10
     };
 
     options.squareWidth = options.width / options.size;
@@ -64,10 +66,10 @@ export function drawBoard(options: Options): void {
 
         roundRect(
             ctx,
-            x * squareWidth + 5,
-            y * squareWidth + 5,
-            squareWidth - 10,
-            squareWidth - 10,
+            x * squareWidth + options.lightPadding / 2,
+            y * squareWidth + options.lightPadding / 2,
+            squareWidth - options.lightPadding,
+            squareWidth - options.lightPadding,
             10,
             false,
             true
@@ -83,16 +85,16 @@ export function drawFigures(options: Options, isWhiteSide: boolean, state: strin
 
     const ctx = figuresCanvas.getContext('2d');
 
-    const figures = isWhiteSide ? state.reverse() : state;
+    const figures = isWhiteSide ? state : state.reverse() ;
 
     figures.forEach((line, lineKey) => {
-        const row = isWhiteSide ? line.reverse() : line;
+        const row = isWhiteSide ? line : line.reverse();
         row.forEach((item, itemKey) => {
             if (isNaN(parseInt(item, 10))) {
                 const img = new Image();
                 img.src = `./images/figures/${item === item.toLowerCase() ? 'b' : 'w'}${item.toLowerCase()}.svg`;
-                img.width = squareWidth;
-                img.height = squareWidth;
+                img.width = squareWidth - options.lightPadding;
+                img.height = squareWidth - options.lightPadding;
                 img.onload = () => {
                     ctx.drawImage(img, itemKey * squareWidth, lineKey * squareWidth, squareWidth, squareWidth);
                 };
@@ -116,10 +118,10 @@ export function drawPossibleMoves(options: Options, possibleSteps: PossibleSteps
 
         roundRect(
             ctx,
-            Number(x) + 5,
-            Number(y) + 5,
-            squareWidth - 10,
-            squareWidth - 10,
+            Number(x) + options.lightPadding / 2,
+            Number(y) + options.lightPadding / 2,
+            squareWidth - options.lightPadding,
+            squareWidth - options.lightPadding,
             10,
             false,
             true
@@ -129,7 +131,7 @@ export function drawPossibleMoves(options: Options, possibleSteps: PossibleSteps
 
 export function coordsToIndexes(coords: Navigation, isWhiteSide: boolean, options: Options): { x: number, y: number } {
     const { squareWidth } = options;
-    const diff = isWhiteSide ? 7 : 0;
+    const diff = isWhiteSide ? 0 : 7;
 
     return {
         x: Math.abs(diff - Math.floor(coords.x / squareWidth)),
@@ -139,8 +141,8 @@ export function coordsToIndexes(coords: Navigation, isWhiteSide: boolean, option
 
 export function indexesToCoords(coords: { x: number, y: number }, isWhiteSide: boolean, options: Options): Navigation {
     const { squareWidth } = options;
-    const diffY = isWhiteSide ? 0 : 7;
-    const diffX = isWhiteSide ? 7 : 0;
+    const diffY = isWhiteSide ? 7 : 0;
+    const diffX = isWhiteSide ? 0 : 7;
 
     return {
         x: Math.floor(Math.abs(diffX - coords.x) * squareWidth),

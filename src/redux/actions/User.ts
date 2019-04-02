@@ -1,7 +1,6 @@
 import { httpApi, LoginData, SignupData, UpdateUserData } from '../../modules/HttpApi';
 
 import { UserTypes } from '../constants/User';
-import { User } from '../../typings/UserTypings';
 import { startGame } from './Game';
 
 interface UserData {
