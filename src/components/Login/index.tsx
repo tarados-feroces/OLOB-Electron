@@ -33,7 +33,10 @@ const b = block('olob-login');
 const f = block('ui-form');
 
 export default class Login extends React.Component<LoginProps, LoginState> {
-    private btnRef = React.createRef<HTMLDivElement>();
+    private errorRef = React.createRef<HTMLDivElement>();
+    private loadingTimeout;
+    private errorTimeout;
+
     constructor(props: LoginProps) {
         super(props);
         this.state = {
@@ -46,7 +49,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
 
     public componentDidUpdate(prevProps: Readonly<LoginProps>, prevState: Readonly<LoginState>) {
         if (prevState.loading !== this.state.loading) {
-            setTimeout(() => {
+            this.loadingTimeout = setTimeout(() => {
                 this.setState({
                     loading: false
                 });
@@ -60,7 +63,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
         }
 
         if (prevState.showError && !this.state.loading) {
-            setTimeout(() => {
+            this.errorTimeout = setTimeout(() => {
                 this.setState({
                     showError: false
                 });
@@ -84,9 +87,9 @@ export default class Login extends React.Component<LoginProps, LoginState> {
                 <div className={b('title')}>
                     Добро пожаловать!
                 </div>
-                <div className={b('container').toString()} ref={this.btnRef}>
+                <div className={b('container').toString()} ref={this.errorRef}>
                     <Popup
-                        context={this.btnRef.current}
+                        context={this.errorRef.current}
                         open={this.props.error && this.state.showError && !this.state.loading}
                         verticalOffset={-125}
                         horizontalOffset={150}
@@ -98,17 +101,19 @@ export default class Login extends React.Component<LoginProps, LoginState> {
                     </Popup>
                     <Form>
                         <Input
+                            id={'login'}
                             className={f('item').toString()}
                             placeholder={'Введите логин'}
                             error={this.state.showError}
-                            onChange={this.changeLogin}
+                            onChange={this.changeData}
                         />
                         <Input
+                            id={'password'}
                             className={f('item').toString()}
                             placeholder={'Введите пароль'}
                             type={'password'}
                             error={this.state.showError}
-                            onChange={this.changePassword}
+                            onChange={this.changeData}
                         />
                             <Button
                                 className={f('button').toString()}
@@ -127,15 +132,14 @@ export default class Login extends React.Component<LoginProps, LoginState> {
         );
     }
 
-    private changeLogin = (event) => {
-        this.setState({
-            login: event.target.value
-        });
+    public componentWillUnmount() {
+        clearTimeout(this.loadingTimeout);
+        clearTimeout(this.errorTimeout);
     }
 
-    private changePassword = (event) => {
+    private changeData = (event) => {
         this.setState({
-            password: event.target.value
+            [event.target.id]: event.target.value
         });
     }
 
