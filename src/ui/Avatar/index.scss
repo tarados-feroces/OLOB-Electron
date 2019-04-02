@@ -1,0 +1,12 @@
+.ui-avatar {
+    width: 50px;
+    height: 50px;
+    box-sizing: border-box;
+    border-radius: 25px;
+
+    &__image {
+        width: 100%;
+        height: 100%;
+        border-radius: inherit;
+    }
+}

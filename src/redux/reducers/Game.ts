@@ -8,7 +8,7 @@ export interface GameState {
     game?: GameType;
     opponent?: User;
     isFinished: boolean;
-    winner?: boolean;
+    winner?: string;
 }
 
 const initialState: GameState = {

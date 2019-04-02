@@ -82,7 +82,13 @@ export default class Authorized extends React.Component<AuthProps> {
                         <UserCard />
                     </div>
                 </div>
-                {game && <Game user={user} game={game} />}
+                <div className={b('content')}>
+                    {game &&
+                        <div className={b('game')}>
+                            <Game user={user} game={game} />
+                        </div>
+                    }
+                </div>
             </div>
         );
     }
