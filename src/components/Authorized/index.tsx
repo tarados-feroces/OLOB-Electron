@@ -69,24 +69,25 @@ export default class Authorized extends React.Component<AuthProps> {
                     <div className={b('logo')}>
                         On Line On Board
                     </div>
-                    <Button
-                        onClick={this.sendSearchGameRequest}
-                        size={'huge'}
-                        className={b('play-button').toString()}
-                        inverted={true}
-                        fluid={false}
-                    >
-                        Найти игру
-                    </Button>
                     <div className={b('card')}>
                         <UserCard settingDisabled={Boolean(game)} />
                     </div>
                 </div>
                 <div className={b('content')}>
-                    {game &&
+                    {game ?
                         <div className={b('game')}>
                             <Game user={user} game={game} />
                         </div>
+                        :
+                        <Button
+                            onClick={this.sendSearchGameRequest}
+                            size={'huge'}
+                            className={b('play-button').toString()}
+                            inverted={true}
+                            fluid={false}
+                        >
+                            Найти игру
+                        </Button>
                     }
                 </div>
             </div>
