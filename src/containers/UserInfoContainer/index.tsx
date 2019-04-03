@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 
 import { updateUser } from '../../redux/actions/User';
+import { closePopup } from '../../redux/actions/Popup';
 
 import UserInfo from '../../components/UserInfo';
 import { UpdateUserData } from '../../modules/HttpApi';
@@ -19,6 +20,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch) => 
     return {
         onSubmit(data: UpdateUserData) {
             dispatch(updateUser(data));
+            dispatch(closePopup());
         }
     };
 };

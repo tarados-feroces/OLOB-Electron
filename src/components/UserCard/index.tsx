@@ -4,9 +4,10 @@ import IconButton from '../../ui/IconButton';
 import { Avatar } from '../../ui/Avatar';
 
 import './index.scss';
-import { Image } from 'semantic-ui-react';
 
-interface OwnProps {}
+interface OwnProps {
+    settingDisabled?: boolean;
+}
 
 interface ReduxProps {
     avatar?: string;
@@ -29,7 +30,7 @@ export default class UserCard extends React.Component<UserCardProps, UserCardSta
     };
 
     public render() {
-        const { login, onLogOut, avatar } = this.props;
+        const { login, onLogOut, avatar, settingDisabled } = this.props;
         const { closed } = this.state;
 
         return (
@@ -48,6 +49,7 @@ export default class UserCard extends React.Component<UserCardProps, UserCardSta
                                 size="m"
                                 icon="edit"
                                 onClick={this.handleProfileChange}
+                                disabled={settingDisabled}
                             />
                         </div>
                     }

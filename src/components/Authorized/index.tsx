@@ -79,7 +79,7 @@ export default class Authorized extends React.Component<AuthProps> {
                         Найти игру
                     </Button>
                     <div className={b('card')}>
-                        <UserCard />
+                        <UserCard settingDisabled={Boolean(game)} />
                     </div>
                 </div>
                 <div className={b('content')}>

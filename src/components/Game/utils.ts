@@ -12,6 +12,9 @@ export interface Options {
     possible: string;
     captured: string;
     lightPadding: number;
+    lighting: string;
+    lightWidth: number;
+    possibleStepWidth: number;
     squareWidth?: number;
 }
 
@@ -23,11 +26,14 @@ export function constructOptions(board: HTMLCanvasElement, figures: HTMLCanvasEl
         left: board.parentElement.offsetLeft,
         width: board.parentElement.offsetWidth,
         size: 8,
-        light: '#F0D8B5',
-        dark: '#B58863',
-        possible: '#15b905',
-        captured: '#b90100',
-        lightPadding: 10
+        light: '#efefef',
+        dark: '#4d4d4d',
+        possible: '#51bd3c',
+        captured: '#bc0100',
+        lightPadding: 10,
+        lighting: '#83d9ff',
+        lightWidth: 2,
+        possibleStepWidth: 3
     };
 
     options.squareWidth = options.width / options.size;
@@ -61,8 +67,8 @@ export function drawBoard(options: Options): void {
         ctx.fill();
         ctx.closePath();
 
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = 'white';
+        ctx.lineWidth = options.lightWidth;
+        ctx.strokeStyle = options.lighting;
 
         roundRect(
             ctx,
@@ -93,10 +99,14 @@ export function drawFigures(options: Options, isWhiteSide: boolean, state: strin
             if (isNaN(parseInt(item, 10))) {
                 const img = new Image();
                 img.src = `./images/figures/${item === item.toLowerCase() ? 'b' : 'w'}${item.toLowerCase()}.svg`;
-                img.width = squareWidth - options.lightPadding;
-                img.height = squareWidth - options.lightPadding;
+                const width = squareWidth - options.lightPadding;
+                img.width = img.height = width;
                 img.onload = () => {
-                    ctx.drawImage(img, itemKey * squareWidth, lineKey * squareWidth, squareWidth, squareWidth);
+                    ctx.drawImage(img,
+                        itemKey * squareWidth + options.lightPadding / 2,
+                        lineKey * squareWidth + options.lightPadding / 2,
+                        width,
+                        width);
                 };
             }
         });
@@ -114,7 +124,7 @@ export function drawPossibleMoves(options: Options, possibleSteps: PossibleSteps
         const { x, y } = indexesToCoords(item, isWhiteSide, options);
 
         ctx.strokeStyle = item.captured ? captured : possible;
-        ctx.lineWidth = 3;
+        ctx.lineWidth = options.possibleStepWidth;
 
         roundRect(
             ctx,

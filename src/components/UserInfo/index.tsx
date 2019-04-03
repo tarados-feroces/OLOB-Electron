@@ -94,6 +94,7 @@ export default class UserInfo extends React.Component<UserInfoProps, UserInfoSta
         });
 
         this.props.onSubmit(newData);
+
     }
 
     private changeAvatar = (event) => {
