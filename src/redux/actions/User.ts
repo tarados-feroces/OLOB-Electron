@@ -29,9 +29,7 @@ export function getUser() {
         if (response.ok) {
             const json = await response.json();
             dispatch(setUser(json.user));
-            if (json.game) {
-                dispatch(startGame(json.game));
-            }
+            dispatch(startGame(json.game));
             dispatch(setUserAuthorized());
         } else {
             dispatch(resetUserAuthorized());
