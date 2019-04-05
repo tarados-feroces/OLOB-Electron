@@ -92,9 +92,12 @@ export default class Game extends React.Component<GameProps> {
             return;
         }
 
+        const top = this.options.board.parentElement.offsetTop;
+        const left = this.options.board.parentElement.offsetLeft;
+
         const coords = coordsToIndexes({
-            x: event.pageX - this.options.left,
-            y: Math.abs(Number(this.options.top) + Number(this.options.width) - Number(event.pageY))
+            x: event.pageX - left,
+            y: Math.abs(Number(top) + Number(this.options.width) - Number(event.pageY))
         },
             game.side === Side.WHITE,
             this.options

@@ -3,8 +3,6 @@ import { Navigation, PossibleSteps } from '../../typings/GameTypings';
 export interface Options {
     board: HTMLCanvasElement;
     figures: HTMLCanvasElement;
-    top: number;
-    left: number;
     width: number;
     size: number;
     light: string;
@@ -22,8 +20,6 @@ export function constructOptions(board: HTMLCanvasElement, figures: HTMLCanvasEl
     const options: Options = {
         board,
         figures,
-        top: board.parentElement.offsetTop,
-        left: board.parentElement.offsetLeft,
         width: board.parentElement.offsetWidth,
         size: 8,
         light: '#efefef',
