@@ -8,11 +8,16 @@
     display: flex;
     flex-direction: row;
     height: 50px;
-    margin: 5px 5px;
+    margin: 5px;
 
     &_reverse {
       flex-direction: row-reverse;
     }
+  }
+
+  &__disconnect-button {
+    margin: 5px;
+    align-self: center;
   }
 
   &__board-container {

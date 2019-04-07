@@ -1,12 +1,11 @@
 import { Reducer } from 'redux';
 
 import { GameTypes } from '../constants/Game';
-import { GameType } from '../../typings/GameTypings';
-import { User } from '../../typings/UserTypings';
+import { GameType, Player } from '../../typings/GameTypings';
 
 export interface GameState {
     game?: GameType;
-    opponent?: User;
+    opponent?: Player;
     isFinished: boolean;
     winner?: string;
 }
@@ -27,6 +26,15 @@ const game: Reducer<GameState> = (state = initialState, action) => {
         return {
             ...state,
             game: action.payload
+        };
+
+    case GameTypes.OPPONENT_DISCONNECTED:
+        return {
+            ...state,
+            opponent: {
+                ...state.opponent,
+                connected: false
+            }
         };
 
     case GameTypes.END_GAME:

@@ -11,6 +11,7 @@ interface OwnProps {}
 
 interface ReduxProps {
     onSubmit?(data: UpdateUserData): void;
+    onOpenInfoPopup?(description: string, data: object): void;
     login?: string;
     avatar?: string;
     error?: boolean;
@@ -66,7 +67,7 @@ export default class UserInfo extends React.Component<UserInfoProps, UserInfoSta
                         </Form>
                     </div>
                     <Button
-                        className={f('button').toString()}
+                        className={b('button').toString()}
                         type={'submit'}
                         onClick={this.updateInfo}
                         negative={error}
@@ -101,10 +102,20 @@ export default class UserInfo extends React.Component<UserInfoProps, UserInfoSta
         const files = event.target.files;
         const file = files[files.length - 1];
         this.fileReader.readAsDataURL(file);
-        this.fileReader.onload = () => {
-            this.setState({
-                avatar: this.fileReader.result
-            });
-        };
+
+        const fileExtention = file.name.split('.').pop();
+
+        if (!/(jpg|png|jpeg|svg)/gi.test(fileExtention)) {
+            this.props.onOpenInfoPopup(
+                'Ошибка',
+                { text: 'Вы загрузили не картинку', buttonText: 'Ок' }
+            );
+        } else {
+            this.fileReader.onload = () => {
+                this.setState({
+                    avatar: this.fileReader.result
+                });
+            };
+        }
     }
 }

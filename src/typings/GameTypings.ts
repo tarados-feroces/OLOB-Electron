@@ -38,3 +38,10 @@ export interface GameSituations {
     type: Situations;
     position: Navigation;
 }
+
+export interface Player {
+    id: string;
+    login: string;
+    avatar: string;
+    connected: boolean;
+}

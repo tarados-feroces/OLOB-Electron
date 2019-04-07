@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import { updateUser } from '../../redux/actions/User';
-import { closePopup } from '../../redux/actions/Popup';
+import { closePopup, openInfoPopup } from '../../redux/actions/Popup';
 
 import UserInfo from '../../components/UserInfo';
 import { UpdateUserData } from '../../modules/HttpApi';
@@ -21,6 +21,17 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch) => 
         onSubmit(data: UpdateUserData) {
             dispatch(updateUser(data));
             dispatch(closePopup());
+        },
+        onOpenInfoPopup(description: string, data: { text: string, buttonText: string }) {
+            dispatch(openInfoPopup(
+                description,
+                {
+                    ...data,
+                    onClick: () => {
+                        dispatch(closePopup());
+                    }
+                }
+            ));
         }
     };
 };

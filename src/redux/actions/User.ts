@@ -1,7 +1,9 @@
 import { httpApi, LoginData, SignupData, UpdateUserData } from '../../modules/HttpApi';
 
 import { UserTypes } from '../constants/User';
-import { startGame } from './Game';
+
+import { startGame, closeGame } from './Game';
+import { ThunkAction } from '../../store/store';
 
 interface UserData {
     _id: string;
@@ -22,14 +24,18 @@ const resetUserAuthorized = () => ({ type: UserTypes.RESET_USER_AUTHORIZED });
 const setError = () => ({ type: UserTypes.SET_ERROR });
 const resetError = () => ({ type: UserTypes.RESET_ERROR });
 
-export function getUser() {
+export function getUser(): ThunkAction {
     return async (dispatch) => {
         const response = await httpApi.getUser();
 
         if (response.ok) {
             const json = await response.json();
             dispatch(setUser(json.user));
-            dispatch(startGame(json.game));
+
+            if (json.game) {
+                dispatch(startGame(json.game));
+            }
+
             dispatch(setUserAuthorized());
         } else {
             dispatch(resetUserAuthorized());
@@ -37,7 +43,7 @@ export function getUser() {
     };
 }
 
-export function loginUser(data: LoginData) {
+export function loginUser(data: LoginData): ThunkAction {
     return async (dispatch) => {
         const response = await httpApi.loginUser(data);
         const json = await response.json();
@@ -51,7 +57,7 @@ export function loginUser(data: LoginData) {
     };
 }
 
-export function updateUser(data: UpdateUserData) {
+export function updateUser(data: UpdateUserData): ThunkAction {
     return async (dispatch) => {
         const response = await httpApi.updateUser(data);
         const json = await response.json();
@@ -64,7 +70,7 @@ export function updateUser(data: UpdateUserData) {
     };
 }
 
-export function signupUser(data: SignupData) {
+export function signupUser(data: SignupData): ThunkAction {
     return async (dispatch) => {
         const response = await httpApi.signupUser(data);
         const json = await response.json();
@@ -78,11 +84,12 @@ export function signupUser(data: SignupData) {
     };
 }
 
-export function signoutUser() {
+export function signoutUser(): ThunkAction {
     return async (dispatch) => {
         const response = await httpApi.signoutUser();
         if (response.ok) {
             dispatch(resetUserAuthorized());
+            dispatch(closeGame());
         }
     };
 }

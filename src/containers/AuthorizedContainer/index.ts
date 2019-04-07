@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import Authorized from '../../components/Authorized';
 import { signoutUser } from '../../redux/actions/User';
-import { openInfoPopup } from '../../redux/actions/Popup';
+import { openInfoPopup, closePopup } from '../../redux/actions/Popup';
 
 import {
     startGame,
@@ -15,8 +15,28 @@ const mapDispatchToProps = (dispatch) => {
         signoutUser() {
             dispatch(signoutUser());
         },
-        onOpenPopup(data: { text: string, buttonText: string }) {
-            dispatch(openInfoPopup('Info', data));
+        onGameEndPopup(data: { text: string, buttonText: string }) {
+            dispatch(openInfoPopup(
+                'Конец игры',
+                {
+                    ...data,
+                    onClick: () => {
+                        dispatch(closeGame());
+                        dispatch(closePopup());
+                    }
+                }
+            ));
+        },
+        onOpenInfoPopup(description: string, data: { text: string, buttonText: string }) {
+            dispatch(openInfoPopup(
+                description,
+                {
+                    ...data,
+                    onClick: () => {
+                        dispatch(closePopup());
+                    }
+                }
+            ));
         },
         onGameStarted(state) {
             dispatch(startGame(state));

@@ -22,7 +22,8 @@ interface OwnProps {
 interface ReduxProps {
     onGameStarted?(state: object): void;
     onGameEnd?(): void;
-    onOpenPopup?(data: object): void;
+    onGameEndPopup?(data: object): void;
+    onOpenInfoPopup?(description: string, data: object): void;
     onGameClose?(): void;
     onSnapshot?(state: object): void;
     onGetPossibleSteps?(state: object): void;
@@ -53,7 +54,7 @@ export default class Authorized extends React.Component<AuthProps> {
     }
 
     public render() {
-        const { user, game, isAuthorized, onSignoutUser, onOpenPopup, ...restProps } = this.props;
+        const { user, game, isAuthorized } = this.props;
 
         if (!isAuthorized) {
             this.props.history.push(PathConstants.LOGIN);
@@ -95,7 +96,17 @@ export default class Authorized extends React.Component<AuthProps> {
     }
 
     private onGameEnd = (data) => {
-        this.props.onOpenPopup({ text: data.winner, buttonText: 'kek' });
+        const { user, opponent, onGameEndPopup } = this.props;
+
+        let text = '';
+
+        if (data.winner === user.id) {
+            text = `Вы выиграли, а ${opponent.login} с грустью уходит с поля боя!`;
+        } else {
+            text = `${opponent.login} празднует победу, а Вам стоит лучше продумывать тактику!`;
+        }
+
+        onGameEndPopup({ text, buttonText: 'ОК' });
     }
 
     public sendSearchGameRequest = (): void => {

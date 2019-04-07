@@ -14,8 +14,7 @@
     &__container {
         align-self: center;
         border: thin white solid;
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
+        border-radius: 5px;
         width: 450px;
     }
 
@@ -25,9 +24,10 @@
         width: 100%;
         display: flex;
         justify-content: space-between;
-        border-radius: inherit;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
         padding-left: 12px;
-        background-color: rgba($color: #fff0f0, $alpha: 0.6);
+        background-color: rgba($color: #a59e9e, $alpha: 1);
 
         &-item {
             align-self: center;
@@ -38,7 +38,7 @@
     &__content {
         padding: 30px 10px;
         box-sizing: border-box;
-        background-color: rgba($color: #fff0f0, $alpha: 0.2);
+        background-color: rgba($color: #c2bfbf, $alpha: 1);
     }
 
     &__close-icon {
