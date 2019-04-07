@@ -3,13 +3,16 @@ export const enum GameTypes {
     UPDATE_GAME_STATE = 'UPDATE_GAME_STATE',
     START_GAME = 'START_GAME',
     END_GAME = 'END_GAME',
-    CLOSE_GAME = 'CLOSE_GAME'
+    CLOSE_GAME = 'CLOSE_GAME',
+    OPPONENT_DISCONNECTED = 'OPPONENT_DISCONNECTED'
 }
 
 export const enum GameMessages {
     SEARCH = 'Search',
     STARTED = 'Started',
     FINISHED = 'Finished',
+    OPPONENT_DISCONNECTED = 'OpponentDisconnected',
+    DISCONNECT = 'Disconnect',
 
     STEP = 'Step',
     UPDATE = 'UpdateState',

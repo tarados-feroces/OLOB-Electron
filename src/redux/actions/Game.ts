@@ -1,5 +1,6 @@
 import { GameTypes } from '../constants/Game';
 import { GameType, GameSituations, PossibleSteps, Side } from '../../typings/GameTypings';
+import { ThunkAction } from '../../store/store';
 
 interface UserData {
     _id: string;
@@ -39,7 +40,7 @@ export function startGame(state: StartGameState) {
     };
 
     return { type: GameTypes.START_GAME, payload: {
-        opponent: { ...state.opponent, id: state.opponent._id  },
+        opponent: { ...state.opponent, id: state.opponent._id, connected: true  },
         game
     } };
 }
@@ -56,7 +57,7 @@ export function endGame(state: EndGameState) {
  * Получает и записывает возможные ходы, которые может сделать фигура
  * @param possibleSteps Возможные ходы
  */
-export function receivePossibleSteps(data: { steps: PossibleSteps[] }) {
+export function receivePossibleSteps(data: { steps: PossibleSteps[] }): ThunkAction {
     return async (dispatch, getState) => {
         const game = getState().game.game;
 
@@ -72,7 +73,7 @@ export function receivePossibleSteps(data: { steps: PossibleSteps[] }) {
 /**
  * Сбрасывает возможные ходы, которые может сделать фигура
  */
-export function resetPossibleSteps() {
+export function resetPossibleSteps(): ThunkAction {
     return async (dispatch, getState) => {
         const game: GameType = getState().game.game;
 
@@ -87,7 +88,7 @@ export function closeGame() {
     return { type: GameTypes.CLOSE_GAME };
 }
 
-export function receiveSnapshot(snapshot: GameUpdateEvent) {
+export function receiveSnapshot(snapshot: GameUpdateEvent): ThunkAction {
     return async (dispatch, getState) => {
         const game: GameType = getState().game.game;
 
@@ -100,6 +101,10 @@ export function receiveSnapshot(snapshot: GameUpdateEvent) {
     };
 }
 
+export function opponentDisconnected() {
+    return { type: GameTypes.OPPONENT_DISCONNECTED };
+}
+
 /**
  * Обновляет информацию об игре
  * @param newGameState Новое состояние игры
@@ -108,7 +113,7 @@ export function updateGameState(newGameState: GameType) {
     return { type: GameTypes.UPDATE_GAME_STATE, payload: newGameState };
 }
 
-function parseFEN(fen) {
+function parseFEN(fen: string): string[][] {
     const data = fen.split(' ')[0].split('/');
     const result = data.map((item) => {
         const line = [];

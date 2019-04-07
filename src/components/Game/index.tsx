@@ -10,6 +10,7 @@ import PlayerInfo from '../PlayerInfo';
 import GameApi from '../../modules/GameApi';
 
 import './index.scss';
+import IconButton from '../../ui/IconButton';
 
 interface OwnProps {
     game: GameType;
@@ -23,6 +24,9 @@ interface ReduxProps {
     onSnapshot?(state): void;
     onGetPossibleSteps?(steps): void;
     onResetPossibleSteps?(): void;
+    onOpponentDisconnected?(): void;
+    onCloseGame?(): void;
+    onDisconnect?(handler: () => void): void;
 }
 
 type GameProps = OwnProps & ReduxProps;
@@ -36,9 +40,9 @@ export default class Game extends React.Component<GameProps> {
     private choosenFigurePos: Navigation | null = null;
 
     public componentDidMount() {
-        const { onSnapshot, onGetPossibleSteps, game } = this.props;
+        const { onSnapshot, onGetPossibleSteps, onOpponentDisconnected, game } = this.props;
 
-        GameApi.init({ onReceiveSnapshot: onSnapshot, onGetPossibleSteps });
+        GameApi.init({ onReceiveSnapshot: onSnapshot, onGetPossibleSteps, onOpponentDisconnected });
 
         this.options = constructOptions(this.boardRef.current, this.figuresRef.current);
         drawFigures(this.options, game.side === Side.WHITE, game.state);
@@ -56,7 +60,7 @@ export default class Game extends React.Component<GameProps> {
     }
 
     public render() {
-        const { opponent, user, game } = this.props;
+        const { opponent, user, game, onDisconnect } = this.props;
 
         return (
             <div className={b()}>
@@ -68,6 +72,14 @@ export default class Game extends React.Component<GameProps> {
                     <canvas ref={this.figuresRef} className={b('figures')} onClick={this.handleClick} />
                 </div>
                 <div className={b('user-info', { reverse: true })}>
+                    <div className={b('disconnect-button')}>
+                        <IconButton
+                            className={b('icon')}
+                            icon="cancel"
+                            size="s"
+                            onClick={() => onDisconnect(this.handleDisconnect)}
+                        />
+                    </div>
                     <PlayerInfo {...user} active={game.currentUser === user.id} />
                 </div>
             </div>
@@ -106,5 +118,10 @@ export default class Game extends React.Component<GameProps> {
         checkStepInPossible(coords, game.possibleSteps) ?
             this.makeStep(this.choosenFigurePos, coords) :
             this.checkPossibleMoves(coords);
+    }
+
+    private handleDisconnect = () => {
+        GameApi.disconnect();
+        this.props.onCloseGame();
     }
 }
