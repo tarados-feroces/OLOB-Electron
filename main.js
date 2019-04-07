@@ -1,4 +1,3 @@
-// Basic init
 const electron = require('electron');
 const path = require('path');
 const {app, BrowserWindow} = electron;
@@ -13,7 +12,6 @@ if (isDev) {
     });
 }
 
-// To avoid being garbage collected
 let mainWindow;
 
 app.on('ready', () => {
@@ -23,8 +21,8 @@ app.on('ready', () => {
         mainWindow.show();
     });
 
-    // mainWindow.loadURL(`file://${path.join(__dirname, '/dist/index.html')}`);
-    mainWindow.loadFile('dist/index.html');
-    mainWindow.webContents.openDevTools();
-    // mainWindow.loadURL(`http://localhost:8080`);
+    mainWindow.loadURL(`file://${path.join(__dirname, 'dist/index.html')}`);
+    mainWindow.webContents.once('dom-ready', () => {
+        mainWindow.webContents.openDevTools()
+    })
 });
