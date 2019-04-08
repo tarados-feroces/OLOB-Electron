@@ -39,9 +39,16 @@ interface ReduxProps {
 
 type AuthProps = OwnProps & ReduxProps;
 
+interface AuthState {
+    loading: boolean;
+}
+
 const b = block('olob-auth');
 
-export default class Authorized extends React.Component<AuthProps> {
+export default class Authorized extends React.Component<AuthProps, AuthState> {
+    public state = {
+        loading: false
+    };
 
     public componentDidMount() {
         const { onGameStarted, isAuthorized } = this.props;
@@ -86,6 +93,8 @@ export default class Authorized extends React.Component<AuthProps> {
                             className={b('play-button').toString()}
                             inverted={true}
                             fluid={false}
+                            loading={this.state.loading}
+                            disabled={this.state.loading}
                         >
                             Найти игру
                         </Button>
@@ -106,10 +115,13 @@ export default class Authorized extends React.Component<AuthProps> {
             text = `${opponent.login} празднует победу, а Вам стоит лучше продумывать тактику!`;
         }
 
+        this.setState({ loading: false });
+
         onGameEndPopup({ text, buttonText: 'ОК' });
     }
 
     public sendSearchGameRequest = (): void => {
+        this.setState({ loading: true });
         WebSocketApi.sendMessage({}, GameMessages.SEARCH);
     }
 }

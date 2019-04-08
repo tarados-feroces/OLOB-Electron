@@ -20,8 +20,6 @@ const b = block('ui-icon');
 
 export const Icon: React.FunctionComponent<IconProps> = ({ id, size = 'm' }) => {
     return (
-        <object type="image/svg+xml" className={b({ size })} data={`./images/icons/${id}.svg`} >
-            {/* <use xlinkHref={`#images/icons/${id}.svg`} /> */}
-        </object>
+        <img className={b({ size })} src={`./images/icons/${id}.svg`} />
     );
 };
