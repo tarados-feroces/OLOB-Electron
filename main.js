@@ -21,8 +21,9 @@ app.on('ready', () => {
         mainWindow.show();
     });
 
-    mainWindow.loadURL(`file://${path.join(__dirname, 'dist/index.html')}`);
-    mainWindow.webContents.once('dom-ready', () => {
-        mainWindow.webContents.openDevTools()
-    })
+    // mainWindow.loadURL(`file://${path.join(__dirname, 'dist/index.html')}`);
+    mainWindow.loadURL(`http://130.193.34.42`);
+    // mainWindow.webContents.once('dom-ready', () => {
+    //     mainWindow.webContents.openDevTools()
+    // })
 });

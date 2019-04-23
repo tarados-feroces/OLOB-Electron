@@ -94,7 +94,7 @@ export function drawFigures(options: Options, isWhiteSide: boolean, state: strin
         row.forEach((item, itemKey) => {
             if (isNaN(parseInt(item, 10))) {
                 const img = new Image();
-                img.src = `./images/figures/${item === item.toLowerCase() ? 'b' : 'w'}${item.toLowerCase()}.svg`;
+                img.src = `/images/figures/${item === item.toLowerCase() ? 'b' : 'w'}${item.toLowerCase()}.svg`;
                 const width = squareWidth - options.lightPadding;
                 img.width = img.height = width;
                 img.onload = () => {
