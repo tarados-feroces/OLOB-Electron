@@ -2,11 +2,10 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import App from './containers/App';
 import { Provider } from 'react-redux';
-import configureStore from './store/store';
+import { store } from './store/store';
 
 import '../src/static/_reset.scss';
-
-const store = configureStore({});
+// import './polyfill';
 
 ReactDOM.render(
     (

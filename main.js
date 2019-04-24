@@ -16,14 +16,19 @@ let mainWindow;
 
 app.on('ready', () => {
 
-    mainWindow = new BrowserWindow({width: 1920, height: 1080, show: false});
+    mainWindow = new BrowserWindow({width: 1920, height: 1080, show: false,
+        node: {
+            __dirname: false
+        }});
+
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();
     });
 
-    // mainWindow.loadURL(`file://${path.join(__dirname, 'dist/index.html')}`);
-    mainWindow.loadURL(`http://130.193.34.42`);
-    // mainWindow.webContents.once('dom-ready', () => {
-    //     mainWindow.webContents.openDevTools()
-    // })
+    mainWindow.loadURL(`file://${path.join(__dirname, 'dist/index.html')}`);
+    // mainWindow.loadURL(`http://130.193.34.42`);
+    // mainWindow.loadURL(`http://127.0.0.1:8080`);
+    mainWindow.webContents.once('dom-ready', () => {
+        mainWindow.webContents.openDevTools()
+    })
 });

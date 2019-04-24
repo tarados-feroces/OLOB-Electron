@@ -24,11 +24,11 @@ export type MapDispatchToProps<DispatchProps, OwnProps> = (
 export type AppState = GetReducerStateType<typeof rootReducer>;
 
 export default function configureStore(initialState) {
-    const store = createStore(
+    return createStore(
         rootReducer,
         initialState,
         applyMiddleware(thunk)
     );
-
-    return store;
 }
+
+export const store = configureStore({});

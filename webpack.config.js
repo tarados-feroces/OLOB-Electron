@@ -14,12 +14,13 @@ module.exports = {
     entry: {
         main: './index.tsx'
     },
+    externals: { leveldown: 'leveldown' },
     output: {
         path: outPath,
-        publicPath: '/',
+        publicPath: '',
         filename: 'bundle.js'
     },
-    target: 'web',
+    target: 'electron-main',
     resolve: {
         extensions: ['.js', '.ts', '.tsx'],
     },
