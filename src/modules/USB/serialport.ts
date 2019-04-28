@@ -19,18 +19,18 @@ export default class USBConnector {
         this.eventHandlers = {};
 
         this.port.on('open', (() => {
-            console.log('Built-in func: serial port open');
+            // console.log('Built-in func: serial port open');
         }));
 
         this.parser.on('data', this.handleMessage || ((data) => {
-            console.log('Built-in func: got data', data);
+            // console.log('Built-in func: got data', data);
         }));
     }
 
     public sendMessage(msg) {
         this.port.write(msg, (err, bytesWritten) => {
-            console.error(err);
-            console.log(`Written ${bytesWritten} bytes.`);
+            // console.error(err);
+            // console.log(`Written ${bytesWritten} bytes.`);
         });
     }
 

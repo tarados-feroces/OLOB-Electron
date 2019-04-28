@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Router, Route, Switch } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
+import { createMemoryHistory } from 'history';
 import * as PathConstants from '../../constants/PathsConstants';
 import LoginContainer from '../LoginContainer';
 import SignupContainer from '../SignupContainer';
@@ -11,7 +11,7 @@ import PopupWrapper from '../PopupContainer';
 import 'semantic-ui-css/semantic.min.css';
 import { getUser } from '../../redux/actions/User';
 
-const history = createBrowserHistory();
+const history = createMemoryHistory();
 
 interface AppProps {
     getUser?(): void;

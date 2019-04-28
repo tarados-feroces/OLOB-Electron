@@ -1,6 +1,6 @@
 const electron = require('electron');
 const path = require('path');
-const {app, BrowserWindow} = electron;
+const { app, BrowserWindow, Session } = electron;
 
 // Let electron reloads by itself when webpack watches changes in ./app/
 // require('electron-reload')(__dirname);
@@ -16,7 +16,7 @@ let mainWindow;
 
 app.on('ready', () => {
 
-    mainWindow = new BrowserWindow({width: 1920, height: 1080, show: false,
+    mainWindow = new BrowserWindow({width: 1920, height: 1080, webSecurity: false,
         node: {
             __dirname: false
         }});
@@ -26,9 +26,13 @@ app.on('ready', () => {
     });
 
     mainWindow.loadURL(`file://${path.join(__dirname, 'dist/index.html')}`);
-    // mainWindow.loadURL(`http://130.193.34.42`);
     // mainWindow.loadURL(`http://127.0.0.1:8080`);
     mainWindow.webContents.once('dom-ready', () => {
         mainWindow.webContents.openDevTools()
-    })
+    });
+
+    mainWindow.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
+        details.requestHeaders['Origin'] = 'electron://olob-app';
+        callback({ cancel: false, requestHeaders: details.requestHeaders });
+    });
 });

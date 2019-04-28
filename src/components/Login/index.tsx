@@ -8,7 +8,7 @@ import { Button, Input, Popup } from 'semantic-ui-react';
 import { History } from 'history';
 import * as PathConstants from '../../constants/PathsConstants';
 import Form from '../../ui/Form';
-import { NavLink } from 'react-router-dom';
+import {  } from 'react-router';
 
 interface OwnProps {
     history?: History;
@@ -123,13 +123,17 @@ export default class Login extends React.Component<LoginProps, LoginState> {
                             >
                                     Войти
                             </Button>
-                        <NavLink className={f('link').toString()} to={PathConstants.SIGNUP}>
+                        <div className={f('link').toString()} onClick={this.goToSignup}>
                             Регистрация
-                        </NavLink>
+                        </div>
                     </Form>
                 </div>
             </div>
         );
+    }
+
+    private goToSignup = () => {
+        this.props.history.push(PathConstants.SIGNUP);
     }
 
     public componentWillUnmount() {

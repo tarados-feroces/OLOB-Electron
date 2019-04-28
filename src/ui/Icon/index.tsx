@@ -20,6 +20,6 @@ const b = block('ui-icon');
 
 export const Icon: React.FunctionComponent<IconProps> = ({ id, size = 'm' }) => {
     return (
-        <img className={b({ size })} src={`/images/icons/${id}.svg`} />
+        <img className={b({ size })} src={`images/icons/${id}.svg`} />
     );
 };

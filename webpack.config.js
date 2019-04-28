@@ -14,7 +14,7 @@ module.exports = {
     entry: {
         main: './index.tsx'
     },
-    externals: { leveldown: 'leveldown' },
+    // externals: { leveldown: 'leveldown' },
     output: {
         path: outPath,
         publicPath: '',
@@ -23,6 +23,7 @@ module.exports = {
     target: 'electron-main',
     resolve: {
         extensions: ['.js', '.ts', '.tsx'],
+        modules: [Path.resolve(__dirname, 'node_modules')],
     },
     devtool: 'inline-source-map',
     watch: true,

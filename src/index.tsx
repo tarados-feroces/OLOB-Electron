@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { store } from './store/store';
 
 import '../src/static/_reset.scss';
-// import './polyfill';
+import './polyfill';
 
 ReactDOM.render(
     (

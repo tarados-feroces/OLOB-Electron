@@ -28,7 +28,7 @@ class GameApi {
 
                         return arr;
                     });
-                console.log(newGameState);
+                // console.log(newGameState);
 
                 const gameState = store.getState().game.game.state;
                 const diffIndexes: {
