@@ -4,7 +4,6 @@ import { SignupData } from '../../modules/HttpApi';
 import { Button, Input, Popup } from 'semantic-ui-react';
 import * as PathConstants from '../../constants/PathsConstants';
 import Form from '../../ui/Form';
-import { NavLink } from 'react-router-dom';
 import { History } from 'history';
 
 interface OwnProps {
@@ -141,9 +140,9 @@ export default class Login extends React.Component<SignupProps, SignupState> {
                         >
                             Присоединиться
                         </Button>
-                        <NavLink className={f('link').toString()} to={PathConstants.LOGIN}>
+                        <div className={f('link').toString()} onClick={this.goToLogin}>
                             Уже есть аккаунт?
-                        </NavLink>
+                        </div>
                     </Form>
                 </div>
             </div>
@@ -166,5 +165,9 @@ export default class Login extends React.Component<SignupProps, SignupState> {
         this.setState({
             [event.target.id]: event.target.value
         });
+    }
+
+    private goToLogin = () => {
+        this.props.history.push(PathConstants.LOGIN);
     }
 }
