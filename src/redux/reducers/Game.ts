@@ -2,16 +2,21 @@ import { Reducer } from 'redux';
 
 import { GameTypes } from '../constants/Game';
 import { GameType, Player } from '../../typings/GameTypings';
+import { MessageHistory } from '../../typings/Chat';
 
 export interface GameState {
+    isFinished: boolean;
+    history: MessageHistory;
     game?: GameType;
     opponent?: Player;
-    isFinished: boolean;
     winner?: string;
 }
 
 const initialState: GameState = {
-    isFinished: true
+    isFinished: true,
+    history: {
+        messages: []
+    }
 };
 
 const game: Reducer<GameState> = (state = initialState, action) => {
@@ -47,6 +52,16 @@ const game: Reducer<GameState> = (state = initialState, action) => {
         return {
             ...state,
             game: null
+        };
+    case GameTypes.RESEIVE_MESSAGE:
+        const messageHistory = state.history ? state.history.messages : [];
+        messageHistory.push(action.payload.message);
+
+        return {
+            ...state,
+            history: {
+                messages: messageHistory
+            }
         };
     default:
         return state;

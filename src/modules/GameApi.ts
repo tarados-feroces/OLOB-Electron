@@ -81,6 +81,10 @@ class GameApi {
         ws.sendMessage({}, GameMessages.DISCONNECT);
         this.clear();
     }
+
+    public sendMessage(text: string) {
+        ws.sendMessage({ text }, GameMessages.MESSAGE);
+    }
 }
 
 const gameAPI = new GameApi();

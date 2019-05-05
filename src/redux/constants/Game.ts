@@ -4,7 +4,8 @@ export const enum GameTypes {
     START_GAME = 'START_GAME',
     END_GAME = 'END_GAME',
     CLOSE_GAME = 'CLOSE_GAME',
-    OPPONENT_DISCONNECTED = 'OPPONENT_DISCONNECTED'
+    OPPONENT_DISCONNECTED = 'OPPONENT_DISCONNECTED',
+    RESEIVE_MESSAGE = 'RECEIVE_MESSAGE'
 }
 
 export const enum GameMessages {
@@ -18,5 +19,7 @@ export const enum GameMessages {
     UPDATE = 'UpdateState',
     SNAPSHOT = 'Snapshot',
 
-    AREAS = 'Areas'
+    AREAS = 'Areas',
+
+    MESSAGE = 'Chat:Message'
 }
