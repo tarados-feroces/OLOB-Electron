@@ -14,6 +14,9 @@ import './index.scss';
 
 import UserCard from '../../containers/UserCardContainer';
 import { WS_DOMEN } from '../../constants/WebSocketConstants';
+import Chat from '../../containers/Chat';
+import gameAPI from '../../modules/GameApi';
+import { Message } from '../../typings/Chat';
 
 interface OwnProps {
     history?: History;
@@ -26,6 +29,7 @@ interface ReduxProps {
     onOpenInfoPopup?(description: string, data: object): void;
     onGameClose?(): void;
     onSnapshot?(state: object): void;
+    onReceiveMessage(message: Message): void;
     onGetPossibleSteps?(state: object): void;
     onResetPossibleSteps?(): void;
     onSignoutUser?(): void;
@@ -82,23 +86,26 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
                     </div>
                 </div>
                 <div className={b('content')}>
-                    {game ?
-                        <div className={b('game')}>
-                            <Game user={user} game={game} />
+                        <div className={b('chat')}>
+                            <Chat onSendMessage={gameAPI.sendMessage} active={Boolean(game)} />
                         </div>
-                        :
-                        <Button
-                            onClick={this.sendSearchGameRequest}
-                            size={'huge'}
-                            className={b('play-button').toString()}
-                            inverted={true}
-                            fluid={false}
-                            loading={this.state.loading}
-                            disabled={this.state.loading}
-                        >
-                            Найти игру
-                        </Button>
-                    }
+                        {game ?
+                            <div className={b('game')}>
+                                <Game user={user} game={game} />
+                            </div>
+                            :
+                            <Button
+                                onClick={this.sendSearchGameRequest}
+                                size={'huge'}
+                                className={b('play-button').toString()}
+                                inverted={true}
+                                fluid={false}
+                                loading={this.state.loading}
+                                disabled={this.state.loading}
+                            >
+                                Найти игру
+                            </Button>
+                        }
                 </div>
             </div>
         );

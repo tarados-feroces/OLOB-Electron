@@ -1,6 +1,7 @@
 import { GameTypes } from '../constants/Game';
 import { GameType, GameSituations, PossibleSteps, Side } from '../../typings/GameTypings';
 import { ThunkAction } from '../../store/store';
+import { Message } from '../../typings/Chat';
 
 interface UserData {
     _id: string;
@@ -103,6 +104,10 @@ export function receiveSnapshot(snapshot: GameUpdateEvent): ThunkAction {
 
 export function opponentDisconnected() {
     return { type: GameTypes.OPPONENT_DISCONNECTED };
+}
+
+export function receiveMessage(message: Message) {
+    return { type: GameTypes.RESEIVE_MESSAGE, payload: { message } };
 }
 
 /**
