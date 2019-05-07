@@ -10,7 +10,7 @@ import './index.scss';
 import IconButton from '../../ui/IconButton';
 import { Player } from '../../typings/GameTypings';
 import { GameMessages } from '../../redux/constants/Game';
-import OpponentCard from '../OpponentChatCard';
+import UserCard from '../UserCard';
 import Compose from '../Compose';
 import { listenerCount } from 'cluster';
 
@@ -47,7 +47,7 @@ export default class Chat extends React.Component<ChatProps> {
             <div className={b()}>
                 {active &&
                     <div className={b('opponent-card')}>
-                        <OpponentCard user={opponent} />
+                        <UserCard user={opponent} />
                     </div>
                 }
                 <div className={b('messages-list')} ref={this.msgList}>

@@ -12,11 +12,20 @@ import { History } from 'history';
 
 import './index.scss';
 
-import UserCard from '../../containers/UserCardContainer';
 import { WS_DOMEN } from '../../constants/WebSocketConstants';
-import Chat from '../../containers/Chat';
 import gameAPI from '../../modules/GameApi';
 import { Message } from '../../typings/Chat';
+import PlayerInfo from '../PlayerInfo';
+import UserInfo from '../UserInfo';
+import IconButton from '../../ui/IconButton';
+import { RightContent } from '../RightContent';
+import { LeftContent } from '../LeftContent';
+
+export enum ContentTypes {
+    HOME = 'HOME',
+    SETTINGS = 'SETTINGS',
+    ABOUT = 'ABOUT'
+}
 
 interface OwnProps {
     history?: History;
@@ -45,13 +54,15 @@ type AuthProps = OwnProps & ReduxProps;
 
 interface AuthState {
     loading: boolean;
+    currentContent: ContentTypes;
 }
 
 const b = block('olob-auth');
 
 export default class Authorized extends React.Component<AuthProps, AuthState> {
     public state = {
-        loading: false
+        loading: false,
+        currentContent: ContentTypes.HOME
     };
 
     public componentDidMount() {
@@ -64,8 +75,34 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
         }
     }
 
+    private getMainContent = () => {
+        const { user, game } = this.props;
+        switch (this.state.currentContent) {
+        case ContentTypes.HOME:
+            return game ? (
+                <div className={b('game')}>
+                    <Game user={user} game={game} />
+                </div>
+            ) : (
+                <div>Main content</div>
+            );
+        case ContentTypes.SETTINGS:
+            return <UserInfo login={user.login} avatar={user.avatar}  />;
+        case ContentTypes.ABOUT:
+            return <div />;
+        default:
+            return <div />;
+        }
+    }
+
+    private changeContent = (event: React.MouseEvent) => {
+        this.setState({
+            currentContent: event.currentTarget.getAttribute('id') as ContentTypes
+        });
+    }
+
     public render() {
-        const { user, game, isAuthorized } = this.props;
+        const { user, isAuthorized, game } = this.props;
 
         if (!isAuthorized) {
             this.props.history.push(PathConstants.LOGIN);
@@ -78,35 +115,41 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
         return (
             <div className={b()}>
                 <div className={b('header')}>
-                    <div className={b('logo')}>
-                        On Line On Board
-                    </div>
-                    <div className={b('card')}>
-                        <UserCard settingDisabled={Boolean(game)} />
-                    </div>
+                    <IconButton
+                        className={b('header-icon')}
+                        id={ContentTypes.SETTINGS}
+                        icon={'settings_dark'}
+                        size={'inherit'}
+                        onClick={this.changeContent}
+                    />
+                    <IconButton
+                        className={b('header-icon', { main: true })}
+                        id={ContentTypes.HOME}
+                        icon={'avatar_dark'}
+                        size={'inherit'}
+                        onClick={this.changeContent}
+                    />
+                    <IconButton
+                        className={b('header-icon')}
+                        id={ContentTypes.ABOUT}
+                        icon={'info_dark'}
+                        size={'inherit'}
+                        onClick={this.changeContent}
+                    />
                 </div>
                 <div className={b('content')}>
-                        <div className={b('chat')}>
-                            <Chat onSendMessage={gameAPI.sendMessage} active={Boolean(game)} />
-                        </div>
-                        {game ?
-                            <div className={b('game')}>
-                                <Game user={user} game={game} />
-                            </div>
-                            :
-                            <Button
-                                onClick={this.sendSearchGameRequest}
-                                size={'huge'}
-                                className={b('play-button').toString()}
-                                inverted={true}
-                                fluid={false}
-                                loading={this.state.loading}
-                                disabled={this.state.loading}
-                            >
-                                Найти игру
-                            </Button>
-                        }
+                    <div className={b('content-left')}>
+                        <LeftContent user={user} loading={this.state.loading} />
+                    </div>
+                    <div className={b('content-center')}>
+                        {this.getMainContent()}
+                    </div>
+                    <div className={b('content-right')}>
+                        <RightContent user={user} game={game} />
+                    </div>
+                    <div className={b('content-controls')} />
                 </div>
+                <div className={b('footer')} />
             </div>
         );
     }
@@ -125,10 +168,5 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
         this.setState({ loading: false });
 
         onGameEndPopup({ text, buttonText: 'ОК' });
-    }
-
-    public sendSearchGameRequest = (): void => {
-        this.setState({ loading: true });
-        WebSocketApi.sendMessage({}, GameMessages.SEARCH);
     }
 }

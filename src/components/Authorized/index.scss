@@ -4,59 +4,70 @@
   width: 100vw;
   height: 100vh;
   display: flex;
-  justify-content: start;
+  justify-content: space-around;
   flex-direction: column;
   align-items: center;
   background-color: #0B0B15;
+  //background: -webkit-linear-gradient(bottom right, #780206, #071161);
+  //background: -moz-linear-gradient(bottom right, #780206, #071161);
+  //background: linear-gradient(bottom right, #780206, #071161);
 
   &__header {
-    width: 100%;
+    width: 60%;
     display: flex;
     justify-content: space-between;
-    height: 10%;
+    height: 150px;
     padding: 30px 20px;
-    // background-color: rgba(255, 255, 255, 0.3);
+  }
 
-    &_login {
-      display: flex;
-      font-size: 24px;
-      justify-content: center;
-      align-items: center;
-      font-family: $font-family;
-      width: 200px;
+  &__header-icon {
+    align-self: center;
+    width: 70px;
+    height: 70px;
+
+    &_main {
+      width: 90px;
+      height: 90px;
     }
   }
 
-  &__logo {
-    color: white;
-    font-size: 50px;
-    font-family: $font-family;
-    font-weight: lighter;
-    cursor: default;
-    user-select: none;
-    align-self: center;
-    min-width: 380px;
-  }
-
-  &__card {
-    align-self: center;
-    display: flex;
-    justify-content: flex-end;
-    width: 310px;
-  }
-
-  &__chat {
-    height: 550px;
-    width: 300px;
-    margin-top: 100px;
-  }
 
   &__content {
     display: flex;
     width: 100%;
     height: 90%;
     align-self: center;
-    justify-content: center;
+    justify-content: space-between;
+    padding-left: 130px;
+  }
+
+  &__content-left {
+    background-color: #36363e;
+    width: 300px;
+    min-width: 250px;
+    margin-right: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  &__content-center {
+    background-color: #36363e;
+    width: 1000px;
+    margin-right: 15px;
+  }
+
+  &__content-right {
+    background-color: #36363e;
+    width: 300px;
+    min-width: 250px;
+  }
+
+  &__content-controls {
+    background-color: black;
+    width: 130px;
+    min-width: 130px;
   }
 
   &__game {
@@ -64,10 +75,16 @@
     align-self: center;
   }
 
-  &__play-button {
-    min-width: 192px;
-    align-self: center;
-    margin: 0;
+  &__footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    height: 100px;
   }
 
+  &__play-button {
+    align-self: center;
+    min-width: 192px;
+    margin: 0;
+  }
 }

@@ -28,7 +28,6 @@ class GameApi {
 
                         return arr;
                     });
-                // console.log(newGameState);
 
                 const gameState = store.getState().game.game.state;
                 const diffIndexes: {
@@ -84,6 +83,10 @@ class GameApi {
 
     public sendMessage(text: string) {
         const clearText = text.trim();
+
+        if (!clearText) {
+            return;
+        }
 
         ws.sendMessage({ text: clearText }, GameMessages.MESSAGE);
     }
