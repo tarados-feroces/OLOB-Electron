@@ -119,6 +119,10 @@ export function updateGameState(newGameState: GameType) {
 }
 
 function parseFEN(fen: string): string[][] {
+    // if (!fen) {
+    //     return;
+    // }
+
     const data = fen.split(' ')[0].split('/');
     const result = data.map((item) => {
         const line = [];

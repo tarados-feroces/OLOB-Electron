@@ -6,5 +6,5 @@ export interface MessageHistory {
 
 export interface Message {
     text: string;
-    author: User;
+    author: string;
 }

@@ -7,10 +7,7 @@
   justify-content: start;
   flex-direction: column;
   align-items: center;
-  background: #780206;
-  background: -webkit-linear-gradient(bottom right, #780206, #071161);
-  background: -moz-linear-gradient(bottom right, #780206, #071161);
-  background: linear-gradient(bottom right, #780206, #071161);
+  background-color: #0B0B15;
 
   &__header {
     width: 100%;
@@ -46,6 +43,12 @@
     display: flex;
     justify-content: flex-end;
     width: 310px;
+  }
+
+  &__chat {
+    height: 550px;
+    width: 300px;
+    margin-top: 100px;
   }
 
   &__content {
