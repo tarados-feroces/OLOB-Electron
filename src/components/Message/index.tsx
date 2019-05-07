@@ -16,7 +16,7 @@ export default class Message extends React.Component<MessageProps> {
 
         return (
             <div className={b({ owner })}>
-                <div className={b('baloon', { owner })}>
+                <div className={b('balloon', { owner })}>
                     <div className={b('text')}>
                         {text}
                     </div>

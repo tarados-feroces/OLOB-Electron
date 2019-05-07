@@ -13,7 +13,7 @@
         padding-bottom: 7px;
     }
 
-    &__baloon {
+    &__balloon {
         background-color: rgb(123, 124, 126);
 
         padding: 8px;
@@ -24,7 +24,7 @@
         border-top-right-radius: 5px;
 
         word-wrap: break-word;
-        white-space: pre;
+        white-space: pre-wrap;
 
         &_owner {
             background-color: rgb(97, 106, 124);

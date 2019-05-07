@@ -43,5 +43,5 @@ export interface Player {
     id: string;
     login: string;
     avatar: string;
-    connected: boolean;
+    connected?: boolean;
 }
