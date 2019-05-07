@@ -83,7 +83,9 @@ class GameApi {
     }
 
     public sendMessage(text: string) {
-        ws.sendMessage({ text }, GameMessages.MESSAGE);
+        const clearText = text.trim();
+
+        ws.sendMessage({ text: clearText }, GameMessages.MESSAGE);
     }
 }
 

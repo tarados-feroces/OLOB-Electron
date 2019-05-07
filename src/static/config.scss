@@ -13,3 +13,7 @@ $text-color: #bbc0c9;
 $slideshow-height: 500px;
 
 $font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+
+.root {
+    font-family: $font-family;
+}

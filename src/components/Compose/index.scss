@@ -1,0 +1,51 @@
+.olob-compose {
+    display: flex;
+    flex-direction: row;
+
+    border-top: thin rgb(179, 175, 175) solid;
+
+    min-height: 64px;
+    width: 100%;
+
+    &__input-container {
+        display: flex;
+        align-self: center;
+        flex-grow: 1;
+
+        box-sizing: border-box;
+        padding: 7px;
+        padding-right: 0;
+    }
+
+    &__input {
+        display: block;
+        width: 100%;
+        max-height: 135;
+        height: 45px;
+        padding: 6px;
+
+        border-radius: 5px;
+
+        font-size: 16px;
+        line-height: 18px;
+        word-wrap: break-word;
+
+        resize: none;
+        border: none;
+        box-sizing: border-box;
+
+        &:active {
+            outline: none;
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    &__submit-container {
+        width: 44px;
+        height: 48px;
+        align-self: center;
+    }
+}

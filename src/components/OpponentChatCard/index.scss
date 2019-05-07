@@ -1,0 +1,27 @@
+.olob-opponent-card {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-shrink: 0;
+
+    &__avatar {
+        padding: 2px;
+        box-sizing: border-box;
+        align-self: center;
+    }
+
+    &__avatar-content {
+        width: 45px;
+        height: 45px;
+    }
+
+    &__name {
+        text-overflow: ellipsis;
+        font-size: 24px;
+        padding-left: 15px;
+
+        align-self: center;
+
+        font-weight: 300;
+    }
+}

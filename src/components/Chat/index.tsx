@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { block } from 'bem-cn';
-import Message from '../Message';
+import MessageComponent from '../Message';
 
-import { MessageHistory } from '../../typings/Chat';
+import { MessageHistory, Message } from '../../typings/Chat';
 
 import WebSocketApi from '../../modules/WebSocketApi';
 
@@ -10,6 +10,9 @@ import './index.scss';
 import IconButton from '../../ui/IconButton';
 import { Player } from '../../typings/GameTypings';
 import { GameMessages } from '../../redux/constants/Game';
+import OpponentCard from '../OpponentChatCard';
+import Compose from '../Compose';
+import { listenerCount } from 'cluster';
 
 interface OwnProps {
     onSendMessage(text: string): void;
@@ -27,45 +30,49 @@ type ChatProps = OwnProps & ReduxProps;
 const b = block('olob-chat');
 
 export default class Chat extends React.Component<ChatProps> {
-    private textareaRef = React.createRef<HTMLTextAreaElement>();
+    private msgList = React.createRef<HTMLDivElement>();
 
     public componentDidMount() {
-        WebSocketApi.registerHandler(GameMessages.MESSAGE, this.props.onReceiveMessage);
+        WebSocketApi.registerHandler(GameMessages.MESSAGE, this.onMessage);
+    }
+
+    public componentWillUnmount() {
+        WebSocketApi.deleteHandler(GameMessages.MESSAGE);
     }
 
     public render() {
-        const { history, opponent, active } = this.props;
+        const { history, opponent, active, onSendMessage } = this.props;
 
         return (
             <div className={b()}>
                 {active &&
                     <div className={b('opponent-card')}>
-                        {opponent.login}
+                        <OpponentCard user={opponent} />
                     </div>
                 }
-                <div className={b('messages-list')}>
-                    {active ? history && history.messages.map((item, index) =>
-                        <Message key={index} text={item.text} owner={item.author.id !== opponent.id} />
-                    ) :
-                        <div className={b('disconnect-message')}>Разорвано соединение с противником</div>
-                    }
+                <div className={b('messages-list')} ref={this.msgList}>
+                    {history && history.messages.map((item, index) =>
+                        <MessageComponent key={index} text={item.text} owner={item.author !== opponent.id} />
+                    )}
                 </div>
-                {active &&
-                    <div className={b('compose')}>
-                        <textarea className={b('input')} ref={this.textareaRef} />
-                        <IconButton className={b('submit')} onClick={this.sendMessage} type="button" icon={'arrow-right'} />
-                    </div>
-                }
+                {active ?
+                    <Compose onSubmit={onSendMessage} /> :
+                    <div className={b('disconnect-message')}>Нет соединения с противником</div>}
             </div>
         );
     }
 
-    private sendMessage = () => {
-        const textareaNode = this.textareaRef.current;
+    public onMessage = (message: Message) => {
+        const list = this.msgList.current;
 
-        if (textareaNode) {
-            this.props.onSendMessage(textareaNode.value);
-            textareaNode.value = '';
+        if (!list) {
+            return;
         }
+
+        this.props.onReceiveMessage(message);
+
+        // console.log(list.scrollTop, list.scrollHeight);
+
+        window.setTimeout(() => list.scrollTo(0, list.scrollHeight), 100);
     }
 }
