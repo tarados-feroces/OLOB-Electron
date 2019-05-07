@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import './index.scss';
 
-export type IconSize = 'xxs' | 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl';
+export type IconSize = 'xxs' | 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl' | 'huge' | 'main' | 'inherit';
 
 interface IconProps {
     /** ID иконки */
