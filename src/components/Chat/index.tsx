@@ -65,6 +65,7 @@ export default class Chat extends React.Component<ChatProps> {
 
         if (textareaNode) {
             this.props.onSendMessage(textareaNode.value);
+            textareaNode.value = '';
         }
     }
 }
