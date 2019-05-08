@@ -16,6 +16,12 @@
     flex-grow: 1;
     align-items: flex-end;
     justify-content: center;
+    margin-bottom: 20px;
+
   }
 
+  &__play-button {
+    min-width: 192px;
+    margin: 0;
+  }
 }
