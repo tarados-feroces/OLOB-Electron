@@ -16,7 +16,7 @@ import { WS_DOMEN } from '../../constants/WebSocketConstants';
 import gameAPI from '../../modules/GameApi';
 import { Message } from '../../typings/Chat';
 import PlayerInfo from '../PlayerInfo';
-import UserInfo from '../UserInfo';
+import UserInfo from '../../containers/UserInfoContainer';
 import IconButton from '../../ui/IconButton';
 import { RightContent } from '../RightContent';
 import { LeftContent } from '../LeftContent';

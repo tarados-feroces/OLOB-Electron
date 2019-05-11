@@ -21,10 +21,18 @@ interface EndGameState {
     winner: string;
 }
 
+export interface HistoryStep {
+    from: string;
+    to: string;
+    side: string;
+    figure: string;
+}
+
 interface GameUpdateEvent {
     situation: GameSituations;
     currentUser: string;
     fen: string;
+    steps: HistoryStep[];
 }
 
 /**
@@ -95,9 +103,8 @@ export function receiveSnapshot(snapshot: GameUpdateEvent): ThunkAction {
 
         dispatch(updateGameState({
             ...game,
-            situation: snapshot.situation,
-            state: parseFEN(snapshot.fen),
-            currentUser: snapshot.currentUser
+            ...snapshot,
+            state: parseFEN(snapshot.fen)
         }));
     };
 }

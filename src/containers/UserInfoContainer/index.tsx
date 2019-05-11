@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 
-import { updateUser } from '../../redux/actions/User';
+import { updateUser, changeUserAvatar } from '../../redux/actions/User';
 import { closePopup, openInfoPopup } from '../../redux/actions/Popup';
 
 import UserInfo from '../../components/UserInfo';
-import { UpdateUserData } from '../../modules/HttpApi';
+import { UpdateUserData, AvatarChangeOptions } from '../../modules/HttpApi';
 import { MapStateToProps, MapDispatchToProps } from '../../store/store';
 
 interface StateProps {
@@ -14,6 +14,7 @@ interface StateProps {
 
 interface DispatchProps {
     onSubmit(data: UpdateUserData): void;
+    onChangeAvatar(newAvatar: string, options?: AvatarChangeOptions): void;
 }
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch) => {
@@ -32,6 +33,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch) => 
                     }
                 }
             ));
+        },
+        onChangeAvatar(newAvatar: string, options?: AvatarChangeOptions) {
+            dispatch(changeUserAvatar(newAvatar, options));
         }
     };
 };
@@ -40,6 +44,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}> = (state) => {
     return {
         login: state.user.user.login,
         avatar: state.user.user.avatar,
+        newAvatar: state.user.newAvatar,
         error: state.user.error
     };
 };

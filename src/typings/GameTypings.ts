@@ -1,3 +1,5 @@
+import { HistoryStep } from '../redux/actions/Game';
+
 export const enum Side {
     WHITE,
     BLACK
@@ -27,6 +29,7 @@ export interface GameType {
     possibleSteps: PossibleSteps[];
     side: Side;
     state: GameState;
+    steps: HistoryStep[];
 }
 
 export interface Step {

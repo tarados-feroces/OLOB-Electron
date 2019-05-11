@@ -1,4 +1,4 @@
-import { httpApi, LoginData, SignupData, UpdateUserData } from '../../modules/HttpApi';
+import { httpApi, LoginData, SignupData, UpdateUserData, AvatarChangeOptions } from '../../modules/HttpApi';
 
 import { UserTypes } from '../constants/User';
 
@@ -16,6 +16,13 @@ const setUser = (user: UserData) => ({
     payload: {
         ...user,
         id: user._id
+    }
+});
+
+const setUserNewAvatar = (avatar: string) => ({
+    type: UserTypes.SET_NEW_AVATAR,
+    payload: {
+        avatar
     }
 });
 
@@ -90,6 +97,25 @@ export function signoutUser(): ThunkAction {
         if (response.ok) {
             dispatch(resetUserAuthorized());
             dispatch(closeGame());
+        }
+    };
+}
+
+export function changeUserAvatar(newAvatar: string, options?: AvatarChangeOptions): ThunkAction {
+    return async (dispatch) => {
+        if (!newAvatar) {
+            dispatch(setUserNewAvatar(newAvatar));
+            console.log('Дибил!');
+        }
+
+        console.log('Норм');
+
+        const response = await httpApi.changeAvatar(newAvatar, options);
+        const json = await response.json();
+        if (response.ok) {
+            dispatch(setUserNewAvatar(json.avatar));
+        } else {
+            dispatch(setError());
         }
     };
 }

@@ -11,6 +11,13 @@ export interface UpdateUserData {
     login?: string;
 }
 
+export interface AvatarChangeOptions {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+}
+
 export interface SignupData {
     email: string;
     login: string;
@@ -35,6 +42,13 @@ class HttpApi {
 
     public getUser = () => {
         return transport.doGet(HttpPaths.GET_USER);
+    }
+
+    public changeAvatar = (newAvatar: string, options: AvatarChangeOptions) => {
+        return transport.doPost(HttpPaths.UPDATE_USER_AVATAR, {
+            avatar: newAvatar,
+            options
+        });
     }
 }
 
