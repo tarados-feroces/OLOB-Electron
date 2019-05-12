@@ -9,8 +9,6 @@
         padding: 2px;
         box-sizing: border-box;
         align-self: center;
-        width: 45px;
-        height: 45px;
     }
 
     &__avatar-content {
@@ -22,7 +20,7 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
-        
+
         font-size: 24px;
         padding-left: 15px;
 

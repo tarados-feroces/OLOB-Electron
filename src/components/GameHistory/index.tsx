@@ -5,6 +5,7 @@ import './index.scss';
 
 import { HistoryGame } from '../../redux/reducers/User';
 import { User } from '../../typings/UserTypings';
+import { Icon } from '../../ui/Icon';
 
 interface OwnProps {
     user: User;
@@ -26,9 +27,13 @@ export default class GameHistory extends React.Component<StepHistoryProps> {
             <div className={b()}>
                 {history && history.length ? history.map((game, index) =>
                     (<div className={b('game')} key={index}>
-                        <div className={b('item')}>{game.opponent.login}</div>
-                        <div className={b('item')}>
-                            {!game.winner ? 'Ничья' : game.winner === user.id ? 'Победа' : 'Поражение'}
+                        <div className={b('nick')}>{game.opponent.login}</div>
+                        <div className={b('icon')}>
+                            {!game.winner ?
+                                <Icon size="m" id="draw_icon" /> :
+                                game.winner === user.id ?
+                                <Icon size="m" id="win" /> :
+                                <Icon size="m" id="lose" />}
                         </div>
                     </div>)
                 ) :
