@@ -107,7 +107,7 @@ export function receiveSnapshot(snapshot: GameUpdateEvent): ThunkAction {
     return async (dispatch, getState) => {
         const game: GameType = getState().game.game;
 
-        const steps = game.steps;
+        const steps = game.steps || [];
         steps.push(snapshot.step);
 
         dispatch(updateGameState({

@@ -3,16 +3,23 @@ import { Reducer } from 'redux';
 import { UserTypes } from '../constants/User';
 import { User } from '../../typings/UserTypings';
 
+export interface HistoryGame {
+    opponent: User;
+    side: string;
+    winner: string;
+}
 export interface UserState {
     isAuthorized?: boolean | null;
     user?: User;
     error?: boolean;
     newAvatar?: string;
+    gameList: HistoryGame[];
 }
 
 const initialState: UserState = {
     isAuthorized: null,
-    error: false
+    error: false,
+    gameList: []
 };
 
 const user: Reducer<UserState> = (state = initialState, action) => {
@@ -28,6 +35,9 @@ const user: Reducer<UserState> = (state = initialState, action) => {
 
     case UserTypes.RESET_ERROR:
         return { ...state, error: false };
+
+    case UserTypes.SET_GAMES_HISTORY:
+        return { ...state, gameList: action.payload.games };
 
     case UserTypes.SET_USER_AUTHORIZED:
         return { ...state, isAuthorized: true };

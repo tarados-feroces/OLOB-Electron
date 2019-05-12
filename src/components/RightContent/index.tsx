@@ -4,6 +4,7 @@ import { block } from 'bem-cn';
 import './index.scss';
 import { Icon } from '../../ui/Icon';
 import Chat from '../../containers/Chat';
+import GameHistory from '../../containers/GameHistory';
 import gameAPI from '../../modules/GameApi';
 import { User } from '../../typings/UserTypings';
 import { GameType, Navigation } from '../../typings/GameTypings';
@@ -12,15 +13,17 @@ import { GameMessages } from '../../redux/constants/Game';
 import { store } from '../../store/store';
 import ws from '../../modules/WebSocketApi';
 import USBConnector from '../../modules/USB/serialport';
+import UserCard from '../UserCard';
 
 export enum RightContentTypes {
     CHAT = 'CHAT',
-    MOVES = 'MOVES'
+    HISTORY = 'HISTORY'
 }
 
 interface RightContentProps {
     user: User;
     game: GameType;
+    opponent?: User;
     onSignoutUser?(): void;
 }
 
@@ -36,51 +39,56 @@ export class RightContent extends React.Component<RightContentProps, RightConten
     };
 
     private getRightContent = () => {
-        const { game } = this.props;
+        const { game, user } = this.props;
+
         switch (this.state.rightContent) {
         case RightContentTypes.CHAT:
             return (
                 <Chat onSendMessage={gameAPI.sendMessage} active={Boolean(game)} />
             );
-        case RightContentTypes.MOVES:
-            return <div />;
+        case RightContentTypes.HISTORY:
+            return <GameHistory user={user} />;
         default:
             return <div />;
         }
     }
 
     public render() {
-        const { onSignoutUser } = this.props;
+        const { onSignoutUser, game, opponent } = this.props;
 
         return (
             <div className={b()}>
-                <div className={b('data')}>
-                    {this.getRightContent()}
-                </div>
-                <div className={b('menu')}>
-                    <div className={b('tabs')}>
-                    <div
-                        id={RightContentTypes.CHAT}
-                        onClick={this.changeRightContent}
-                        className={this.state.rightContent === RightContentTypes.CHAT ?
-                            b('tab', { active: true }) :
-                            b('tab') }
-                    >
-                        <Icon id={'message_icon'} size={'xl'} />
+                {game && opponent ?
+                    <div className={b('opponent')}>
+                        <UserCard user={opponent} />
+                    </div> :
+                    <div className={b('crutch')} />
+                }
+                <div className={b('container')}>
+                    <div className={b('data')}>
+                        {this.getRightContent()}
                     </div>
-                    <div
-                        id={RightContentTypes.MOVES}
-                        onClick={this.changeRightContent}
-                        className={this.state.rightContent === RightContentTypes.MOVES ?
-                            b('tab', { active: true }) :
-                            b('tab') }
-                    >
-                        <Icon id={'gamelist_icon'} size={'xl'} />
-                    </div>
-                    </div>
-                    <div className={b('controls')}>
-                        <IconButton icon={'connect_icon'} onClick={this.onConnect} />
-                        <IconButton icon={'logout_icon'} onClick={onSignoutUser} />
+                    <div className={b('menu')}>
+                        <div className={b('tabs')}>
+                            <div
+                                id={RightContentTypes.CHAT}
+                                onClick={this.changeRightContent}
+                                className={b('tab', { active: this.state.rightContent === RightContentTypes.CHAT })}
+                            >
+                                <Icon id={'message_icon'} size={'xl'} />
+                            </div>
+                            <div
+                                id={RightContentTypes.HISTORY}
+                                onClick={this.changeRightContent}
+                                className={b('tab', { active: this.state.rightContent === RightContentTypes.HISTORY })}
+                            >
+                                <Icon id={'gamelist_icon'} size={'xl'} />
+                            </div>
+                        </div>
+                        <div className={b('controls')}>
+                            <IconButton icon={'connect_icon'} onClick={this.onConnect} />
+                            <IconButton icon={'logout_icon'} onClick={onSignoutUser} />
+                        </div>
                     </div>
                 </div>
             </div>
