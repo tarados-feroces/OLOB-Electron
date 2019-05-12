@@ -3,7 +3,7 @@ import { block } from 'bem-cn';
 
 import './index.scss';
 import { User } from '../../typings/UserTypings';
-import { Button } from 'semantic-ui-react';
+import Button from '../../ui/Button';
 import UserCard from '../UserCard';
 import WebSocketApi from '../../modules/WebSocketApi';
 import { GameMessages } from '../../redux/constants/Game';
@@ -52,7 +52,6 @@ export class LeftContent extends React.Component<LeftContentProps, LeftContentSt
                                 onClick={this.sendSearchGameRequest}
                                 size={'huge'}
                                 className={b('play-button').toString()}
-                                inverted={true}
                                 fluid={false}
                                 loading={this.state.loading}
                                 disabled={this.state.loading}

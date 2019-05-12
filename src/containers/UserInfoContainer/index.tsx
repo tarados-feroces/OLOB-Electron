@@ -10,6 +10,8 @@ import { MapStateToProps, MapDispatchToProps } from '../../store/store';
 interface StateProps {
     login: string;
     avatar: string;
+    error: boolean;
+    newAvatar: string;
 }
 
 interface DispatchProps {
