@@ -37,7 +37,13 @@ export default class Game extends React.Component<GameProps> {
     private options: Options;
     private boardRef = React.createRef<HTMLCanvasElement>();
     private figuresRef = React.createRef<HTMLCanvasElement>();
-    private choosenFigurePos: Navigation | null = null;
+    private chosenFigurePos: Navigation | null = null;
+
+    public resizeCanvas = () => {
+        this.options = constructOptions(this.boardRef.current, this.figuresRef.current);
+
+        drawFigures(this.options, this.props.game.side === Side.WHITE, this.props.game.state);
+    }
 
     public componentDidMount() {
         const { onSnapshot, onGetPossibleSteps, onOpponentDisconnected, game } = this.props;
@@ -46,6 +52,7 @@ export default class Game extends React.Component<GameProps> {
 
         this.options = constructOptions(this.boardRef.current, this.figuresRef.current);
         drawFigures(this.options, game.side === Side.WHITE, game.state);
+        window.addEventListener('resize', this.resizeCanvas, false);
     }
 
     public componentDidUpdate(prevProps) {
@@ -62,25 +69,34 @@ export default class Game extends React.Component<GameProps> {
     public render() {
         const { opponent, user, game, onDisconnect } = this.props;
 
+        const letters = [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' ];
+
         return (
             <div className={b()}>
-                <div className={b('user-info')}>
-                    {opponent &&  <PlayerInfo {...opponent} active={game.currentUser === opponent.id} />}
-                </div>
+                {/*<div className={b('user-info')}>*/}
+                {/*    {opponent &&  <PlayerInfo {...opponent} active={game.currentUser === opponent.id} />}*/}
+                {/*</div>*/}
                 <div className={b('board-container')}>
-                    <canvas ref={this.boardRef} className={b('board')} />
-                    <canvas ref={this.figuresRef} className={b('figures')} onClick={this.handleClick} />
-                </div>
-                <div className={b('user-info', { reverse: true })}>
-                    <div className={b('disconnect-button')}>
-                        <IconButton
-                            className={b('icon')}
-                            icon="cancel"
-                            size="s"
-                            onClick={() => onDisconnect(this.handleDisconnect)}
-                        />
+                    <div className={b('main')}>
+                        <div className={b('signs-left')}>
+                            {[ ...Array(8).keys() ].map((item: number) => {
+                                return (
+                                    <div key={item} className={b('number')}>{item + 1}</div>
+                                );
+                            })}
+                        </div>
+                        <div className={b('field')}>
+                            <canvas ref={this.boardRef} className={b('board')} />
+                            <canvas ref={this.figuresRef} className={b('figures')} onClick={this.handleClick} />
+                        </div>
                     </div>
-                    <PlayerInfo {...user} active={game.currentUser === user.id} />
+                    <div className={b('signs-bottom')}>
+                        {[ ...Array(8).keys() ].map((item: number) => {
+                            return (
+                                <div key={item} className={b('letter')}>{letters[item]}</div>
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
         );
@@ -88,12 +104,12 @@ export default class Game extends React.Component<GameProps> {
 
     private makeStep(prevPos: Navigation, nextPos: Navigation) {
         GameApi.makeStep({ prevPos, nextPos });
-        this.choosenFigurePos = null;
+        this.chosenFigurePos = null;
     }
 
     private checkPossibleMoves(pos: Navigation) {
         GameApi.sendPossibleMovesRequest(pos);
-        this.choosenFigurePos = pos;
+        this.chosenFigurePos = pos;
     }
 
     private handleClick = (event) => {
@@ -104,8 +120,10 @@ export default class Game extends React.Component<GameProps> {
             return;
         }
 
-        const top = this.options.board.parentElement.offsetTop;
-        const left = this.options.board.parentElement.offsetLeft;
+        const parentCoords = this.options.board.parentElement.getBoundingClientRect();
+
+        const top = parentCoords.top;
+        const left = parentCoords.left;
 
         const coords = coordsToIndexes({
             x: event.pageX - left,
@@ -116,7 +134,7 @@ export default class Game extends React.Component<GameProps> {
         );
 
         checkStepInPossible(coords, game.possibleSteps) ?
-            this.makeStep(this.choosenFigurePos, coords) :
+            this.makeStep(this.chosenFigurePos, coords) :
             this.checkPossibleMoves(coords);
     }
 

@@ -6,7 +6,12 @@ import { Icon } from '../../ui/Icon';
 import Chat from '../../containers/Chat';
 import gameAPI from '../../modules/GameApi';
 import { User } from '../../typings/UserTypings';
-import { GameType } from '../../typings/GameTypings';
+import { GameType, Navigation } from '../../typings/GameTypings';
+import IconButton from '../../ui/IconButton';
+import { GameMessages } from '../../redux/constants/Game';
+import { store } from '../../store/store';
+import ws from '../../modules/WebSocketApi';
+import USBConnector from '../../modules/USB/serialport';
 
 export enum RightContentTypes {
     CHAT = 'CHAT',
@@ -16,6 +21,7 @@ export enum RightContentTypes {
 interface RightContentProps {
     user: User;
     game: GameType;
+    onSignoutUser?(): void;
 }
 
 interface RightContentState {
@@ -44,9 +50,15 @@ export class RightContent extends React.Component<RightContentProps, RightConten
     }
 
     public render() {
+        const { onSignoutUser } = this.props;
+
         return (
             <div className={b()}>
-                <div className={b('controls').toString()}>
+                <div className={b('data')}>
+                    {this.getRightContent()}
+                </div>
+                <div className={b('menu')}>
+                    <div className={b('tabs')}>
                     <div
                         id={RightContentTypes.CHAT}
                         onClick={this.changeRightContent}
@@ -54,7 +66,7 @@ export class RightContent extends React.Component<RightContentProps, RightConten
                             b('tab', { active: true }) :
                             b('tab') }
                     >
-                        <Icon id={'message_dark'} size={'xl'} />
+                        <Icon id={'message_icon'} size={'xl'} />
                     </div>
                     <div
                         id={RightContentTypes.MOVES}
@@ -63,14 +75,60 @@ export class RightContent extends React.Component<RightContentProps, RightConten
                             b('tab', { active: true }) :
                             b('tab') }
                     >
-                        <Icon id={'gamelist_dark'} size={'xl'} />
+                        <Icon id={'gamelist_icon'} size={'xl'} />
                     </div>
-                </div>
-                <div className={b('data')}>
-                    {this.getRightContent()}
+                    </div>
+                    <div className={b('controls')}>
+                        <IconButton icon={'connect_icon'} onClick={this.onConnect} />
+                        <IconButton icon={'logout_icon'} onClick={onSignoutUser} />
+                    </div>
                 </div>
             </div>
         );
+    }
+
+    private onConnect = () => {
+        const USBConnection = new USBConnector();
+        USBConnection.registerHandler(GameMessages.SNAPSHOT, (usbData) => {
+            const data = usbData.trim().split(' ');
+
+            if (data.length === 8) {
+
+                const newGameState = data
+                    .reverse()
+                    .map((val) => parseInt(val, 16))
+                    .map((val, i) => {
+                        const arr = [ 8 - i ];
+                        for (let x = 0; x < 8; ++x) {
+                            arr.push((val & (0x80 >> x) ? 1 : 0));
+                        }
+
+                        return arr;
+                    });
+
+                const gameState = store.getState().game.game.state;
+                const diffIndexes: {
+                    [flag: number]: Navigation
+                } = [];
+
+                gameState.forEach((row, rowIndex: number) => {
+                    row.forEach((item, itemIndex: number) => {
+                        if (item !== newGameState[rowIndex][itemIndex]) {
+                            diffIndexes[item ? 0 : 1] = { x: rowIndex, y: itemIndex };
+                        }
+                    });
+                });
+
+                if (Object.keys(diffIndexes).length === 1) {
+                    ws.sendMessage({ position: diffIndexes[0] }, GameMessages.AREAS);
+                }
+
+                if (Object.keys(diffIndexes).length === 2) {
+                    ws.sendMessage({ step: { nextPos: diffIndexes[1], prevPos: diffIndexes[0] } }, GameMessages.STEP);
+                }
+
+            }
+        });
     }
 
     private changeRightContent = (event: React.MouseEvent) => {

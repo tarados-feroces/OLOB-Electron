@@ -22,12 +22,12 @@ export function constructOptions(board: HTMLCanvasElement, figures: HTMLCanvasEl
         figures,
         width: board.parentElement.offsetWidth,
         size: 8,
-        light: '#efefef',
-        dark: '#4d4d4d',
+        light: '#ffffff',
+        dark: '#1B1822',
         possible: '#51bd3c',
         captured: '#bc0100',
         lightPadding: 10,
-        lighting: '#83d9ff',
+        lighting: '#6dffb7',
         lightWidth: 2,
         possibleStepWidth: 3
     };
@@ -66,16 +66,16 @@ export function drawBoard(options: Options): void {
         ctx.lineWidth = options.lightWidth;
         ctx.strokeStyle = options.lighting;
 
-        roundRect(
-            ctx,
-            x * squareWidth + options.lightPadding / 2,
-            y * squareWidth + options.lightPadding / 2,
-            squareWidth - options.lightPadding,
-            squareWidth - options.lightPadding,
-            10,
-            false,
-            true
-        );
+        // roundRect(
+        //     ctx,
+        //     x * squareWidth + options.lightPadding / 2,
+        //     y * squareWidth + options.lightPadding / 2,
+        //     squareWidth - options.lightPadding,
+        //     squareWidth - options.lightPadding,
+        //     10,
+        //     false,
+        //     true
+        // );
     }
 }
 
@@ -83,14 +83,14 @@ export function drawFigures(options: Options, isWhiteSide: boolean, state: strin
     clearFigures(options);
     drawBoard(options);
 
-    const { figures: figuresCanvas, squareWidth } = options;
+    const { squareWidth } = options;
 
-    const ctx = figuresCanvas.getContext('2d');
+    const ctx = options.figures.getContext('2d');
 
-    const figures = isWhiteSide ? state : state.reverse() ;
+    const figures = isWhiteSide ? state : [ ...state ].reverse() ;
 
     figures.forEach((line, lineKey) => {
-        const row = isWhiteSide ? line : line.reverse();
+        const row = isWhiteSide ? line : [ ...line ].reverse();
         row.forEach((item, itemKey) => {
             if (isNaN(parseInt(item, 10))) {
                 const img = new Image();
@@ -121,17 +121,25 @@ export function drawPossibleMoves(options: Options, possibleSteps: PossibleSteps
 
         ctx.strokeStyle = item.captured ? captured : possible;
         ctx.lineWidth = options.possibleStepWidth;
+        ctx.beginPath();
 
-        roundRect(
-            ctx,
-            Number(x) + options.lightPadding / 2,
+        ctx.rect(Number(x) + options.lightPadding / 2,
             Number(y) + options.lightPadding / 2,
             squareWidth - options.lightPadding,
-            squareWidth - options.lightPadding,
-            10,
-            false,
-            true
-        );
+            squareWidth - options.lightPadding);
+        ctx.stroke();
+        ctx.closePath();
+
+        // roundRect(
+        //     ctx,
+        //     Number(x) + options.lightPadding / 2,
+        //     Number(y) + options.lightPadding / 2,
+        //     squareWidth - options.lightPadding,
+        //     squareWidth - options.lightPadding,
+        //     10,
+        //     false,
+        //     true
+        // );
     });
 }
 
