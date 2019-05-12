@@ -44,8 +44,6 @@ const b = block('olob-user-info');
 const f = block('ui-form');
 
 export default class UserInfo extends React.Component<UserInfoProps, UserInfoState> {
-    private fileReader: FileReader = new FileReader();
-
     public state: UserInfoState = {
         login: this.props.login,
         avatar: this.props.avatar,
@@ -136,17 +134,17 @@ export default class UserInfo extends React.Component<UserInfoProps, UserInfoSta
     }
 
     private updateInfo = () => {
-        const newData: UpdateUserData = Object.keys(this.state).reduce((res, item) => {
-            if (this.state[item] !== this.props[item]) {
-                return {
-                    ...res,
-                    [item]: this.state[item]
-                };
-            }
-        }, {});
+        const { login } = this.state;
+        const { newAvatar } = this.props;
 
-        if (this.state.newAvatar) {
-            newData.avatar = this.state.newAvatar.toString();
+        const newData: UpdateUserData = {};
+
+        if (login !== this.props.login) {
+            newData.login = login;
+        }
+
+        if (newAvatar) {
+            newData.avatar = newAvatar;
         }
 
         this.props.onSubmit(newData);
@@ -155,14 +153,16 @@ export default class UserInfo extends React.Component<UserInfoProps, UserInfoSta
     private changeAvatar = (event) => {
         const files = event.target.files;
         const file = files[files.length - 1];
-        this.fileReader.readAsDataURL(file);
+        const fileReader: FileReader = new FileReader();
+
+        fileReader.readAsDataURL(file);
 
         const fileExtention = file.name.split('.').pop();
 
         if (/(jpg|png|jpeg|svg)/gi.test(fileExtention)) {
-            this.fileReader.onload = () => {
+            fileReader.onload = () => {
                 this.setState({
-                    newAvatar: this.fileReader.result
+                    newAvatar: fileReader.result
                 });
                 this.openModal();
             };

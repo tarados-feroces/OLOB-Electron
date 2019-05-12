@@ -4,6 +4,7 @@ import { UserTypes } from '../constants/User';
 
 import { startGame, closeGame } from './Game';
 import { ThunkAction } from '../../store/store';
+import { HistoryGame } from '../reducers/User';
 
 interface UserData {
     _id: string;
@@ -16,6 +17,13 @@ const setUser = (user: UserData) => ({
     payload: {
         ...user,
         id: user._id
+    }
+});
+
+const setGamesHistory = (games: HistoryGame[]) => ({
+    type: UserTypes.SET_GAMES_HISTORY,
+    payload: {
+        games
     }
 });
 
@@ -38,6 +46,7 @@ export function getUser(): ThunkAction {
         if (response.ok) {
             const json = await response.json();
             dispatch(setUser(json.user));
+            dispatch(setGamesHistory(json.user.games));
 
             if (json.game) {
                 dispatch(startGame(json.game));
@@ -54,10 +63,16 @@ export function loginUser(data: LoginData): ThunkAction {
     return async (dispatch) => {
         const response = await httpApi.loginUser(data);
         const json = await response.json();
+
         if (response.ok) {
+            if (json.game) {
+                dispatch(startGame(json.game));
+            }
+
             dispatch(setUserAuthorized());
             dispatch(resetError());
             dispatch(setUser(json));
+            dispatch(setGamesHistory(json.user.games));
         } else {
             dispatch(setError());
         }

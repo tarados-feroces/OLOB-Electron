@@ -4,6 +4,7 @@ import { block } from 'bem-cn';
 import './index.scss';
 import { Icon } from '../../ui/Icon';
 import Chat from '../../containers/Chat';
+import GameHistory from '../../containers/GameHistory';
 import gameAPI from '../../modules/GameApi';
 import { User } from '../../typings/UserTypings';
 import { GameType, Navigation } from '../../typings/GameTypings';
@@ -15,7 +16,7 @@ import USBConnector from '../../modules/USB/serialport';
 
 export enum RightContentTypes {
     CHAT = 'CHAT',
-    MOVES = 'MOVES'
+    HISTORY = 'HISTORY'
 }
 
 interface RightContentProps {
@@ -36,14 +37,15 @@ export class RightContent extends React.Component<RightContentProps, RightConten
     };
 
     private getRightContent = () => {
-        const { game } = this.props;
+        const { game, user } = this.props;
+
         switch (this.state.rightContent) {
         case RightContentTypes.CHAT:
             return (
                 <Chat onSendMessage={gameAPI.sendMessage} active={Boolean(game)} />
             );
-        case RightContentTypes.MOVES:
-            return <div />;
+        case RightContentTypes.HISTORY:
+            return <GameHistory user={user} />;
         default:
             return <div />;
         }
@@ -69,9 +71,9 @@ export class RightContent extends React.Component<RightContentProps, RightConten
                         <Icon id={'message_icon'} size={'xl'} />
                     </div>
                     <div
-                        id={RightContentTypes.MOVES}
+                        id={RightContentTypes.HISTORY}
                         onClick={this.changeRightContent}
-                        className={this.state.rightContent === RightContentTypes.MOVES ?
+                        className={this.state.rightContent === RightContentTypes.HISTORY ?
                             b('tab', { active: true }) :
                             b('tab') }
                     >
