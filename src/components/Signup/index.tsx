@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { block } from 'bem-cn';
 import { SignupData } from '../../modules/HttpApi';
-import { Button, Input, Popup } from 'semantic-ui-react';
+import { Input, Popup } from 'semantic-ui-react';
 import * as PathConstants from '../../constants/PathsConstants';
 import Form from '../../ui/Form';
 import { History } from 'history';
+import Button from '../../ui/Button';
 
 interface OwnProps {
     history?: History;

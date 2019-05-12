@@ -51,7 +51,7 @@ export default class Chat extends React.Component<ChatProps> {
                     </div>
                 }
                 <div className={b('messages-list')} ref={this.msgList}>
-                    {history && history.messages.map((item, index) =>
+                    {history.messages && history.messages.map((item, index) =>
                         <MessageComponent key={index} text={item.text} owner={item.author !== opponent.id} />
                     )}
                 </div>
