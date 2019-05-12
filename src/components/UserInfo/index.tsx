@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { block } from 'bem-cn';
 
-import { Button, Image, Input, Label, Form as SForm, Modal } from 'semantic-ui-react';
+import { Image, Input, Form as SForm, Modal } from 'semantic-ui-react';
 import Form from '../../ui/Form';
+import Button from '../../ui/Button';
 
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';

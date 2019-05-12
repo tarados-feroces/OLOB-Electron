@@ -114,27 +114,31 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
         return (
             <div className={b()}>
                 <div className={b('header')}>
-                    <IconButton
-                        className={b('header-icon')}
-                        id={ContentTypes.SETTINGS}
-                        icon={'setting_icon'}
-                        size={'inherit'}
-                        onClick={this.changeContent}
-                    />
-                    <IconButton
-                        className={b('header-icon', { main: true })}
-                        id={ContentTypes.HOME}
-                        icon={'home_icon'}
-                        size={'inherit'}
-                        onClick={this.changeContent}
-                    />
-                    <IconButton
-                        className={b('header-icon')}
-                        id={ContentTypes.ABOUT}
-                        icon={'info_icon'}
-                        size={'inherit'}
-                        onClick={this.changeContent}
-                    />
+                    <div className={b('content-left')} />
+                    <div className={b('content-center')}>
+                        <IconButton
+                            className={b('header-icon')}
+                            id={ContentTypes.SETTINGS}
+                            icon={'setting_icon'}
+                            size={'inherit'}
+                            onClick={this.changeContent}
+                        />
+                        <IconButton
+                            className={b('header-icon', { main: true })}
+                            id={ContentTypes.HOME}
+                            icon={'home_icon'}
+                            size={'inherit'}
+                            onClick={this.changeContent}
+                        />
+                        <IconButton
+                            className={b('header-icon')}
+                            id={ContentTypes.ABOUT}
+                            icon={'info_icon'}
+                            size={'inherit'}
+                            onClick={this.changeContent}
+                        />
+                    </div>
+                    <div className={b('content-right')} />
                 </div>
                 <div className={b('content')}>
                     <div className={b('content-left')}>
@@ -149,7 +153,16 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
                         <RightContent user={user} game={game} onSignoutUser={onSignoutUser} />
                     </div>
                 </div>
-                <div className={b('footer')} />
+                <div className={b('footer')}>
+                    <div className={b('content-left')}>
+                        <IconButton size={'xl'} icon={'surrender_icon'} />
+                        <IconButton size={'xl'} icon={'draw_icon'} />
+                    </div>
+                    <div className={b('content-center')}>
+                        <IconButton size={'xl'} icon={'home_icon'} />
+                    </div>
+                    <div className={b('content-right')} />
+                </div>
             </div>
         );
     }
