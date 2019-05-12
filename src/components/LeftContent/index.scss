@@ -14,10 +14,14 @@
     width: 100%;
     display: flex;
     flex-grow: 1;
-    align-items: flex-end;
     justify-content: center;
-    margin-bottom: 20px;
+  }
 
+  &__button-container {
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 20px;
   }
 
   &__play-button {

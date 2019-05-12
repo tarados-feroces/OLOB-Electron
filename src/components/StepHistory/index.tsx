@@ -2,8 +2,7 @@ import * as React from 'react';
 import { block } from 'bem-cn';
 
 import './index.scss';
-import { Player } from '../../typings/GameTypings';
-import { Avatar } from '../../ui/Avatar';
+
 import { HistoryStep } from '../../redux/actions/Game';
 
 interface StepHistoryProps {
@@ -18,12 +17,14 @@ export default class StepHistory extends React.Component<StepHistoryProps> {
 
         return (
             <div className={b()}>
-                {history.map((step, index) =>
+                {history && history.map((step, index) =>
                     (<div className={b('step')} key={index}>
-                        <div className={b('index')}>{`${index}.`}</div>
-                        <div className={b('figure')}>{step.figure}</div>
-                        <div className={b('from')}>{step.from}</div>
-                        <div className={b('to')}>{step.to}</div>
+                        <div className={b('item')}>{`${index + 1}.`}</div>
+                        <div className={b('info')}>
+                            <div className={b('item')}>{step.figure}</div>
+                            <div className={b('item')}>{step.from}</div>
+                            <div className={b('item')}>{step.to}</div>
+                        </div>
                     </div>)
                 )}
             </div>

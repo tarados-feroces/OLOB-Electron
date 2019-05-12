@@ -105,10 +105,7 @@ export function changeUserAvatar(newAvatar: string, options?: AvatarChangeOption
     return async (dispatch) => {
         if (!newAvatar) {
             dispatch(setUserNewAvatar(newAvatar));
-            console.log('Дибил!');
         }
-
-        console.log('Норм');
 
         const response = await httpApi.changeAvatar(newAvatar, options);
         const json = await response.json();

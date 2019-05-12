@@ -139,7 +139,7 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
                 </div>
                 <div className={b('content')}>
                     <div className={b('content-left')}>
-                        <LeftContent user={user} loading={this.state.loading} />
+                        <LeftContent user={user} loading={this.state.loading} game={game} />
                     </div>
                     <div className={b('content-center')}>
                         {this.getMainContent()}
