@@ -13,5 +13,6 @@ export const enum HttpPaths {
     SIGNUP = '/user/signup',
     SIGNOUT = '/user/signout',
     LOGIN = '/user/login',
-    UPDATE_USER = '/user/update'
+    UPDATE_USER = '/user/update',
+    UPDATE_USER_AVATAR = '/user/update/avatar'
 }

@@ -13,15 +13,24 @@
   &__data {
     width: 100%;
     display: flex;
+    flex-direction: column;
     flex-grow: 1;
-    align-items: flex-end;
     justify-content: center;
-    margin-bottom: 20px;
+  }
 
+  &__button-container {
+    height: 100%;
+    flex-grow: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 20px;
   }
 
   &__play-button {
     min-width: 192px;
-    margin: 0;
+    // margin: 0;
   }
 }

@@ -7,10 +7,13 @@ import { Button } from 'semantic-ui-react';
 import UserCard from '../UserCard';
 import WebSocketApi from '../../modules/WebSocketApi';
 import { GameMessages } from '../../redux/constants/Game';
+import { GameType } from '../../typings/GameTypings';
+import StepHistory from '../StepHistory';
 
 interface LeftContentProps {
     user: User;
     loading: boolean;
+    game?: GameType;
 }
 
 interface LeftContentState {
@@ -33,7 +36,7 @@ export class LeftContent extends React.Component<LeftContentProps, LeftContentSt
     }
 
     public render() {
-        const { user } = this.props;
+        const { user, game } = this.props;
 
         return (
             <div className={b()}>
@@ -41,17 +44,24 @@ export class LeftContent extends React.Component<LeftContentProps, LeftContentSt
                     <UserCard user={user} />
                 </div>
                 <div className={b('data')}>
-                    <Button
-                        onClick={this.sendSearchGameRequest}
-                        size={'huge'}
-                        className={b('play-button').toString()}
-                        inverted={true}
-                        fluid={false}
-                        loading={this.state.loading}
-                        disabled={this.state.loading}
-                    >
-                        Найти игру
-                    </Button>
+                    {game ?
+                        <StepHistory history={game.steps} />
+                        :
+                        <div className={b('button-container')}>
+                            <Button
+                                onClick={this.sendSearchGameRequest}
+                                size={'huge'}
+                                className={b('play-button').toString()}
+                                inverted={true}
+                                fluid={false}
+                                loading={this.state.loading}
+                                disabled={this.state.loading}
+                            >
+                            Найти игру
+                            </Button>
+                        </div>
+                    }
+
                 </div>
             </div>
         );

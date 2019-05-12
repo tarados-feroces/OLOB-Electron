@@ -7,6 +7,7 @@ export interface UserState {
     isAuthorized?: boolean | null;
     user?: User;
     error?: boolean;
+    newAvatar?: string;
 }
 
 const initialState: UserState = {
@@ -30,6 +31,9 @@ const user: Reducer<UserState> = (state = initialState, action) => {
 
     case UserTypes.SET_USER_AUTHORIZED:
         return { ...state, isAuthorized: true };
+
+    case UserTypes.SET_NEW_AVATAR:
+        return { ...state, newAvatar: action.payload.avatar };
 
     case UserTypes.RESET_USER_AUTHORIZED:
         return {

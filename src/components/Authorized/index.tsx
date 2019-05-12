@@ -13,6 +13,8 @@ import './index.scss';
 
 import { WS_DOMEN } from '../../constants/WebSocketConstants';
 import { Message } from '../../typings/Chat';
+import PlayerInfo from '../PlayerInfo';
+
 import UserInfo from '../../containers/UserInfoContainer';
 import IconButton from '../../ui/IconButton';
 import { RightContent } from '../RightContent';
@@ -136,7 +138,7 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
                 </div>
                 <div className={b('content')}>
                     <div className={b('content-left')}>
-                        <LeftContent user={user} loading={this.state.loading} />
+                        <LeftContent user={user} loading={this.state.loading} game={game} />
                     </div>
                     <div className={game ? b('content-center', { game: true }) : b('content-center')}>
                         <div className={b('center-data')}>

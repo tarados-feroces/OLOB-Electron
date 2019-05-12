@@ -15,16 +15,26 @@ interface StartGameState {
     currentUser: string;
     fen: string;
     side: Side;
+    messages: Message[];
+    steps: HistoryStep[];
 }
 
 interface EndGameState {
     winner: string;
 }
 
+export interface HistoryStep {
+    from: string;
+    to: string;
+    side: string;
+    figure: string;
+}
+
 interface GameUpdateEvent {
     situation: GameSituations;
     currentUser: string;
     fen: string;
+    step: HistoryStep;
 }
 
 /**
@@ -37,11 +47,15 @@ export function startGame(state: StartGameState) {
         situation: state.situation,
         currentUser: state.currentUser,
         possibleSteps: [],
-        side: state.side
+        side: state.side,
+        steps: state.steps
     };
 
     return { type: GameTypes.START_GAME, payload: {
         opponent: { ...state.opponent, id: state.opponent._id, connected: true  },
+        history: {
+            messages: state.messages
+        },
         game
     } };
 }
@@ -93,11 +107,14 @@ export function receiveSnapshot(snapshot: GameUpdateEvent): ThunkAction {
     return async (dispatch, getState) => {
         const game: GameType = getState().game.game;
 
+        const steps = game.steps;
+        steps.push(snapshot.step);
+
         dispatch(updateGameState({
             ...game,
-            situation: snapshot.situation,
-            state: parseFEN(snapshot.fen),
-            currentUser: snapshot.currentUser
+            ...snapshot,
+            steps,
+            state: parseFEN(snapshot.fen)
         }));
     };
 }
