@@ -8,12 +8,9 @@
   flex-direction: column;
   align-items: center;
   background-color: #0B0B15;
-  //background: -webkit-linear-gradient(bottom right, #780206, #071161);
-  //background: -moz-linear-gradient(bottom right, #780206, #071161);
-  //background: linear-gradient(bottom right, #780206, #071161);
 
   &__header {
-    width: 60%;
+    width: 40%;
     display: flex;
     justify-content: space-between;
     height: 150px;
@@ -22,12 +19,12 @@
 
   &__header-icon {
     align-self: center;
-    width: 70px;
-    height: 70px;
+    width: 40px;
+    height: 40px;
 
     &_main {
-      width: 90px;
-      height: 90px;
+      width: 60px;
+      height: 60px;
     }
   }
 
@@ -35,16 +32,17 @@
   &__content {
     display: flex;
     width: 100%;
-    height: 90%;
+    height: 600px;
     align-self: center;
     justify-content: space-between;
     padding-left: 130px;
+    padding-right: 130px;
   }
 
   &__content-left {
     background-color: #36363e;
-    width: 300px;
-    min-width: 300px;
+    width: 25%;
+    //min-width: 300px;
     margin-right: 15px;
     display: flex;
     flex-direction: column;
@@ -53,26 +51,42 @@
   }
 
   &__content-center {
+    //position: relative;
     background-color: #36363e;
-    width: 1000px;
+    width: 50%;
     margin-right: 15px;
     display: flex;
     justify-content: center;
+
+    &_game {
+      background-color: inherit;
+    }
   }
+
+  &__center-data {
+    align-self: center;
+    position: relative;
+    display: block;
+    width: 100%;
+
+    &:after {
+      content: "";
+      display: block;
+      padding-bottom: 100%;
+    }
+  }
+
 
   &__content-right {
     background-color: #36363e;
-    width: 300px;
-    min-width: 300px;
-  }
-
-  &__content-controls {
-    background-color: black;
-    width: 130px;
-    min-width: 130px;
+    width: 25%;
+    //min-width: 300px;
   }
 
   &__game {
+    position: absolute;
+    width: 100%;
+    height: 100%;
     display: flex;
     align-self: center;
   }

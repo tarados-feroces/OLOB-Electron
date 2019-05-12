@@ -12,7 +12,7 @@ import {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        signoutUser() {
+        onSignoutUser() {
             dispatch(signoutUser());
         },
         onGameEndPopup(data: { text: string, buttonText: string }) {

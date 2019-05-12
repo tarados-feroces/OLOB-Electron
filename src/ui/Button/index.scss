@@ -1,0 +1,12 @@
+@import "../../static/config";
+
+#root .ui-button {
+  font-size: 17px;
+  font-family: $font-family;
+  font-weight: lighter;
+  background-color: inherit;
+  color: white;
+  border: white solid 1px;
+  border-radius: 4px;
+  margin: 0;
+}

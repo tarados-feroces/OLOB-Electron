@@ -3,7 +3,6 @@ import { block } from 'bem-cn';
 
 import * as PathConstants from '../../constants/PathsConstants';
 import WebSocketApi from '../../modules/WebSocketApi';
-import { Button } from 'semantic-ui-react';
 import { User } from '../../typings/UserTypings';
 import Game from '../../containers/GameContainer';
 import { GameType } from '../../typings/GameTypings';
@@ -13,10 +12,8 @@ import { History } from 'history';
 import './index.scss';
 
 import { WS_DOMEN } from '../../constants/WebSocketConstants';
-import gameAPI from '../../modules/GameApi';
 import { Message } from '../../typings/Chat';
-import PlayerInfo from '../PlayerInfo';
-import UserInfo from '../UserInfo';
+import UserInfo from '../../containers/UserInfoContainer';
 import IconButton from '../../ui/IconButton';
 import { RightContent } from '../RightContent';
 import { LeftContent } from '../LeftContent';
@@ -87,7 +84,7 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
                 <div>Main content</div>
             );
         case ContentTypes.SETTINGS:
-            return <UserInfo login={user.login} avatar={user.avatar}  />;
+            return <UserInfo />;
         case ContentTypes.ABOUT:
             return <div />;
         default:
@@ -102,7 +99,7 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
     }
 
     public render() {
-        const { user, isAuthorized, game } = this.props;
+        const { user, isAuthorized, game, onSignoutUser } = this.props;
 
         if (!isAuthorized) {
             this.props.history.push(PathConstants.LOGIN);
@@ -118,21 +115,21 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
                     <IconButton
                         className={b('header-icon')}
                         id={ContentTypes.SETTINGS}
-                        icon={'settings_dark'}
+                        icon={'setting_icon'}
                         size={'inherit'}
                         onClick={this.changeContent}
                     />
                     <IconButton
                         className={b('header-icon', { main: true })}
                         id={ContentTypes.HOME}
-                        icon={'avatar_dark'}
+                        icon={'home_icon'}
                         size={'inherit'}
                         onClick={this.changeContent}
                     />
                     <IconButton
                         className={b('header-icon')}
                         id={ContentTypes.ABOUT}
-                        icon={'info_dark'}
+                        icon={'info_icon'}
                         size={'inherit'}
                         onClick={this.changeContent}
                     />
@@ -141,13 +138,14 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
                     <div className={b('content-left')}>
                         <LeftContent user={user} loading={this.state.loading} />
                     </div>
-                    <div className={b('content-center')}>
-                        {this.getMainContent()}
+                    <div className={game ? b('content-center', { game: true }) : b('content-center')}>
+                        <div className={b('center-data')}>
+                            {this.getMainContent()}
+                        </div>
                     </div>
                     <div className={b('content-right')}>
-                        <RightContent user={user} game={game} />
+                        <RightContent user={user} game={game} onSignoutUser={onSignoutUser} />
                     </div>
-                    <div className={b('content-controls')} />
                 </div>
                 <div className={b('footer')} />
             </div>
