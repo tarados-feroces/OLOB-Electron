@@ -4,11 +4,11 @@ import { LoginData } from '../../modules/HttpApi';
 
 import './index.scss';
 
-import { Button, Input, Popup } from 'semantic-ui-react';
+import { Input, Popup } from 'semantic-ui-react';
 import { History } from 'history';
 import * as PathConstants from '../../constants/PathsConstants';
 import Form from '../../ui/Form';
-import {  } from 'react-router';
+import Button from '../../ui/Button';
 
 interface OwnProps {
     history?: History;
