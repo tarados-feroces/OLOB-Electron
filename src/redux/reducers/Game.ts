@@ -54,7 +54,7 @@ const game: Reducer<GameState> = (state = initialState, action) => {
             game: null
         };
     case GameTypes.RESEIVE_MESSAGE:
-        const messageHistory = state.history ? state.history.messages : [];
+        const messageHistory = state.history ? state.history.messages || [] : [];
         messageHistory.push(action.payload.message);
 
         return {

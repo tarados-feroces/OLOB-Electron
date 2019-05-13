@@ -82,9 +82,12 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
         switch (this.state.currentContent) {
         case ContentTypes.HOME:
             return game ? (
-                <div className={b('game')}>
-                    <Game user={user} game={game} />
-                </div>
+                <>
+                    <div className={b('crutch')} />
+                    <div className={b('game')}>
+                        <Game user={user} game={game} />
+                    </div>
+                </>
             ) : (
                 <div>Main content</div>
             );

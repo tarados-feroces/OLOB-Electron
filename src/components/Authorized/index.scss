@@ -12,6 +12,13 @@ $main-width: 1300px;
   align-items: center;
   background-color: #0B0B15;
 
+  &__crutch {
+    height: 64px;
+    width: 100%;
+    background-color: #0B0B15;
+    flex-shrink: 0;
+  }
+
   &__header {
     width: 100%;
     min-width: $main-width;
@@ -71,6 +78,7 @@ $main-width: 1300px;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 
     &_game {
       background-color: inherit;
