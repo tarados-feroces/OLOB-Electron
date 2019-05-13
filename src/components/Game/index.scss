@@ -76,13 +76,13 @@ $board-height: 500px;
     min-height: $board-height;
     height: $board-height;
     margin-right: 5px;
+    margin-left: 5px;
   }
 
   &__signs-bottom {
     width: $board-height;
     height: $signs-width;
-    margin-left: 25px;
-    margin-top: 5px;
+    margin: 5px 25px;
   }
 
   &__letter {

@@ -44,7 +44,7 @@ $main-width: 1300px;
   &__content {
     display: flex;
     width: 100%;
-    min-height: 520px;
+    min-height: 600px;
     height: 65%;
     min-width: $main-width;
     align-self: center;
@@ -111,6 +111,7 @@ $main-width: 1300px;
     display: flex;
     justify-content: space-between;
     height: 80px;
+    min-height: 80px;
     padding-left: $main-padding;
     padding-right: $main-padding;
   }
