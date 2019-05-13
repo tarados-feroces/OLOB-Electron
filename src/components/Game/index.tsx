@@ -3,14 +3,11 @@ import { block } from 'bem-cn';
 
 import { GameType, Navigation, Side } from '../../typings/GameTypings';
 import { User } from '../../typings/UserTypings';
-import { Options, constructOptions, drawFigures, drawPossibleMoves, coordsToIndexes, checkStepInPossible } from './utils';
-
-import PlayerInfo from '../PlayerInfo';
+import { checkStepInPossible, constructOptions, coordsToIndexes, drawFigures, drawPossibleMoves, Options } from './utils';
 
 import GameApi from '../../modules/GameApi';
 
 import './index.scss';
-import IconButton from '../../ui/IconButton';
 
 interface OwnProps {
     game: GameType;
@@ -67,9 +64,13 @@ export default class Game extends React.Component<GameProps> {
     }
 
     public render() {
-        const { opponent, user, game, onDisconnect } = this.props;
+        const { game } = this.props;
+        const isWhite = game.side === Side.WHITE;
 
         const letters = [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' ];
+        if (!isWhite) {
+            letters.reverse();
+        }
 
         return (
             <div className={b()}>
@@ -78,7 +79,7 @@ export default class Game extends React.Component<GameProps> {
                         <div className={b('signs-left')}>
                             {[ ...Array(8).keys() ].map((item: number) => {
                                 return (
-                                    <div key={item} className={b('number')}>{item + 1}</div>
+                                    <div key={item} className={b('number')}>{!isWhite ? item + 1 : 8 - item}</div>
                                 );
                             })}
                         </div>
