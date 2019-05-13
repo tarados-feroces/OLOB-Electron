@@ -75,6 +75,13 @@ export default class Game extends React.Component<GameProps> {
         return (
             <div className={b()}>
                 <div className={b('board-container')}>
+                    <div className={b('signs-bottom')}>
+                        {[ ...Array(8).keys() ].map((item: number) => {
+                            return (
+                                <div key={item} className={b('letter')}>{letters[item]}</div>
+                            );
+                        })}
+                    </div>
                     <div className={b('main')}>
                         <div className={b('signs-left')}>
                             {[ ...Array(8).keys() ].map((item: number) => {
@@ -86,6 +93,13 @@ export default class Game extends React.Component<GameProps> {
                         <div className={b('field')}>
                             <canvas ref={this.boardRef} className={b('board')} />
                             <canvas ref={this.figuresRef} className={b('figures')} onClick={this.handleClick} />
+                        </div>
+                        <div className={b('signs-left')}>
+                            {[ ...Array(8).keys() ].map((item: number) => {
+                                return (
+                                    <div key={item} className={b('number')}>{!isWhite ? item + 1 : 8 - item}</div>
+                                );
+                            })}
                         </div>
                     </div>
                     <div className={b('signs-bottom')}>
