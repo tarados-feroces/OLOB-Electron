@@ -105,7 +105,7 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
     }
 
     public render() {
-        const { user, isAuthorized, game, onSignoutUser, onDisconnect } = this.props;
+        const { user, isAuthorized, game, onSignoutUser, opponent, onDisconnect } = this.props;
 
         if (!isAuthorized) {
             this.props.history.push(PathConstants.LOGIN);
@@ -154,7 +154,7 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
                         </div>
                     </div>
                     <div className={b('content-right')}>
-                        <RightContent user={user} game={game} onSignoutUser={onSignoutUser} />
+                        <RightContent user={user} game={game} onSignoutUser={onSignoutUser} opponent={opponent} />
                     </div>
                 </div>
                 <div className={b('footer')}>
