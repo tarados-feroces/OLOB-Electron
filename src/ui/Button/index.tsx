@@ -10,11 +10,11 @@ export default class Button extends React.Component<ButtonProps> {
     public render() {
         const className = this.props.className || '';
 
-        const newProps = { ...this.props };
-        newProps.className = '';
+        // const newProps = { ...this.props };
+        // newProps.className = '';
 
         return (
-            <SButton {...newProps} className={`${b().toString()} ${className}`}>{this.props.children}</SButton>
+            <SButton {...this.props} className={b.mix(className).toString()}>{this.props.children}</SButton>
         );
     }
 }

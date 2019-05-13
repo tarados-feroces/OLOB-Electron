@@ -19,6 +19,8 @@ import UserInfo from '../../containers/UserInfoContainer';
 import IconButton from '../../ui/IconButton';
 import { RightContent } from '../RightContent';
 import { LeftContent } from '../LeftContent';
+import GameApi from '../../modules/GameApi';
+import { Icon } from '../../ui/Icon';
 
 export enum ContentTypes {
     HOME = 'HOME',
@@ -35,12 +37,14 @@ interface ReduxProps {
     onGameEnd?(): void;
     onGameEndPopup?(data: object): void;
     onOpenInfoPopup?(description: string, data: object): void;
-    onGameClose?(): void;
+    onCloseGame?(): void;
     onSnapshot?(state: object): void;
     onReceiveMessage(message: Message): void;
     onGetPossibleSteps?(state: object): void;
     onResetPossibleSteps?(): void;
     onSignoutUser?(): void;
+    onOpponentDisconnected?(): void;
+    onDisconnect?(): void;
     isAuthorized?: boolean;
     isFinished?: boolean;
     opponent?: User;
@@ -101,7 +105,7 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
     }
 
     public render() {
-        const { user, isAuthorized, game, onSignoutUser, opponent } = this.props;
+        const { user, isAuthorized, game, onSignoutUser, opponent, onDisconnect } = this.props;
 
         if (!isAuthorized) {
             this.props.history.push(PathConstants.LOGIN);
@@ -144,8 +148,8 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
                     <div className={b('content-left')}>
                         <LeftContent user={user} loading={this.state.loading} game={game} />
                     </div>
-                    <div className={game ? b('content-center', { game: true }) : b('content-center')}>
-                        <div className={b('center-data')}>
+                    <div className={b('content-center')}>
+                        <div className={b('center-data', { game: Boolean(game) })}>
                             {this.getMainContent()}
                         </div>
                     </div>
@@ -155,11 +159,16 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
                 </div>
                 <div className={b('footer')}>
                     <div className={b('content-left')}>
-                        <IconButton size={'xl'} icon={'surrender_icon'} />
-                        <IconButton size={'xl'} icon={'draw_icon'} />
+                        <IconButton
+                            size={'xl'}
+                            icon={'surrender_icon'}
+                            onClick={onDisconnect.bind(this, this.handleDisconnect)}
+                            disabled={!game}
+                        />
+                        <IconButton size={'xl'} icon={'draw_icon'} disabled={!game} />
                     </div>
                     <div className={b('content-center')}>
-                        <IconButton size={'xl'} icon={'home_icon'} />
+                        <Icon size={'xl'} id={'home_icon'} />
                     </div>
                     <div className={b('content-right')} />
                 </div>
@@ -181,5 +190,10 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
         this.setState({ loading: false });
 
         onGameEndPopup({ text, buttonText: 'ОК' });
+    }
+
+    private handleDisconnect = () => {
+        GameApi.disconnect();
+        this.props.onCloseGame();
     }
 }

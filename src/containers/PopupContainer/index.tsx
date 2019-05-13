@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { closePopup } from '../../redux/actions/Popup';
-import IconButton from '../../ui/IconButton';
 
 import block from 'bem-cn';
 
 import './index.scss';
 import { MapDispatchToProps, MapStateToProps } from '../../store/store';
+import { Modal } from 'semantic-ui-react';
 
 interface StateProps {
     component?: React.ComponentType;
@@ -38,26 +38,15 @@ const b = block('olob-popup');
 const PopupWrapper: React.FunctionComponent<StateProps & OwnProps & DispatchProps> =
     ({ component, props, visibility, description, onClose }) => {
 
-        if (!visibility) {
-            return (<></>);
-        }
-
         return (
-            <div className={b()}>
-                <div className={b('container')}>
-                    <div className={b('header')}>
-                        <div className={b('header-item')}>
-                            <p className={b('description')}>{description}</p>
-                        </div>
-                        <div className={b('header-item')}>
-                            <IconButton className={b('close-icon')} size="xs" icon="cancel" onClick={onClose} />
-                        </div>
-                    </div>
-                    <div className={b('content')}>
-                        {component && React.createElement(component, props)}
-                    </div>
-                </div>
-            </div>
+            <Modal open={visibility} onClose={onClose} className={b().toString()}>
+                <Modal.Header>
+                    {description}
+                </Modal.Header>
+                <Modal.Content>
+                    {component && React.createElement(component, props)}
+                </Modal.Content>
+            </Modal>
         );
     };
 

@@ -73,9 +73,6 @@ export default class Game extends React.Component<GameProps> {
 
         return (
             <div className={b()}>
-                {/*<div className={b('user-info')}>*/}
-                {/*    {opponent &&  <PlayerInfo {...opponent} active={game.currentUser === opponent.id} />}*/}
-                {/*</div>*/}
                 <div className={b('board-container')}>
                     <div className={b('main')}>
                         <div className={b('signs-left')}>

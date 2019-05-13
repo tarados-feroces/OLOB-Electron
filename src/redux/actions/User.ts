@@ -82,8 +82,8 @@ export function loginUser(data: LoginData): ThunkAction {
 export function updateUser(data: UpdateUserData): ThunkAction {
     return async (dispatch) => {
         const response = await httpApi.updateUser(data);
-        const json = await response.json();
         if (response.ok) {
+            const json = await response.json();
             dispatch(setUser(json));
             dispatch(resetError());
         } else {
@@ -95,8 +95,8 @@ export function updateUser(data: UpdateUserData): ThunkAction {
 export function signupUser(data: SignupData): ThunkAction {
     return async (dispatch) => {
         const response = await httpApi.signupUser(data);
-        const json = await response.json();
         if (response.ok) {
+            const json = await response.json();
             dispatch(setUserAuthorized());
             dispatch(resetError());
             dispatch(setUser(json));
