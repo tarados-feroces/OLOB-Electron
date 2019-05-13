@@ -11,11 +11,12 @@
         background-color: #36363e;
         display: flex;
         flex-direction: row;
-        height: 40px;
         min-height: 40px;
         width: 100%;
         font-size: 20px;
-        justify-content: center;
+        justify-content: space-between;
+        box-sizing: border-box;
+        border-bottom: 1px solid #646369;
 
         &:nth-child(2n + 1) {
             background-color: #646369;
@@ -23,49 +24,17 @@
     }
 
     &__nick {
-        height: 100%;
-        flex-grow: 1;
-        // max-width: 50%;
-        // width: 50%;
-        // display: flex;
-        // justify-content: center;
-        // align-items: center;
-        padding-left: 10px;
+        padding: 0 10px;
         box-sizing: border-box;
-        margin: auto;
-
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
+        margin: auto 0;
     }
 
     &__icon {
-        padding: 10px;
-    }
-
-
-    &__emty-message-container {
-        width: 100%;
-        align-items: flex-end;
         display: flex;
-        height: 100%;
-        flex-direction: column-reverse;
-    }
-
-    &__empty-message {
-        align-self: center;
-        word-wrap: break-word;
-        font-size: 20px;
-        text-align: center;
-        margin-bottom: 20px;
-        // margin-top: auto;
-
         padding: 0 10px;
     }
 
-    &__crutch {
-        height: 64px;
-        width: 100%;
-        background-color: #0B0B15;
+    &::-webkit-scrollbar{
+        width: 4px;
     }
 }

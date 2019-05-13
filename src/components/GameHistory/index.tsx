@@ -32,8 +32,8 @@ export default class GameHistory extends React.Component<StepHistoryProps> {
                             {!game.winner ?
                                 <Icon size="m" id="draw_icon" /> :
                                 game.winner === user.id ?
-                                <Icon size="m" id="win" /> :
-                                <Icon size="m" id="lose" />}
+                                <Icon size="m" id="finger_up" /> :
+                                <Icon size="m" id="finger_dawn" />}
                         </div>
                     </div>)
                 ) :

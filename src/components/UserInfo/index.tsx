@@ -80,6 +80,7 @@ export default class UserInfo extends React.Component<UserInfoProps, UserInfoSta
                                         onChange={this.changeData}
                                         label={'Логин'}
                                         value={this.state.login}
+                                        maxLength={14}
                                     />
                                     {/*<Label basic={true} color={'red'} pointing={'left'}>*/}
                                         {/*That name is taken!*/}

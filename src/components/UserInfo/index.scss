@@ -54,6 +54,10 @@
         padding: 20px;
     }
 
+    #root &__modal {
+        background-color: gray;
+    }
+
     &__confirm-avatar-button {
         border: white thin solid;
         width: 140px;

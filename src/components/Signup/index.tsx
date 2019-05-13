@@ -109,6 +109,7 @@ export default class Login extends React.Component<SignupProps, SignupState> {
                             placeholder={'Введите логин'}
                             onChange={this.changeData}
                             error={this.props.error}
+                            maxLength={14}
                         />
                         <Input
                             id={'email'}

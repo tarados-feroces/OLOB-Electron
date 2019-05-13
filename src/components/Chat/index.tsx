@@ -7,12 +7,10 @@ import { MessageHistory, Message } from '../../typings/Chat';
 import WebSocketApi from '../../modules/WebSocketApi';
 
 import './index.scss';
-import IconButton from '../../ui/IconButton';
 import { Player } from '../../typings/GameTypings';
 import { GameMessages } from '../../redux/constants/Game';
-import UserCard from '../UserCard';
 import Compose from '../Compose';
-import { listenerCount } from 'cluster';
+import { scrollBottom } from '../../lib/scrollBottom';
 
 interface OwnProps {
     onSendMessage(text: string): void;
@@ -34,6 +32,8 @@ export default class Chat extends React.Component<ChatProps> {
 
     public componentDidMount() {
         WebSocketApi.registerHandler(GameMessages.MESSAGE, this.onMessage);
+
+        scrollBottom(this.msgList.current);
     }
 
     public componentWillUnmount() {
@@ -65,8 +65,6 @@ export default class Chat extends React.Component<ChatProps> {
         }
 
         this.props.onReceiveMessage(message);
-
-        // console.log(list.scrollTop, list.scrollHeight);
 
         window.setTimeout(() => list.scrollTo(0, list.scrollHeight), 100);
     }
