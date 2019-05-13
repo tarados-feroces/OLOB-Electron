@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { block } from 'bem-cn';
 
-import { Image, Input, Form as SForm, Modal } from 'semantic-ui-react';
+import { Image, Input, Form as SForm, Modal, Popup } from 'semantic-ui-react';
 import Form from '../../ui/Form';
 import Button from '../../ui/Button';
 
@@ -38,25 +38,61 @@ interface UserInfoState {
     showModal: boolean;
     newAvatar: string | ArrayBuffer;
     avatarChangeOptions?: AvatarChangeOptions;
+    showError: boolean;
 }
 
 const b = block('olob-user-info');
 const f = block('ui-form');
 
 export default class UserInfo extends React.Component<UserInfoProps, UserInfoState> {
+    private fileReader: FileReader = new FileReader();
+    private errorTimeout;
+
     public state: UserInfoState = {
         login: this.props.login,
         avatar: this.props.avatar,
         showModal: false,
-        newAvatar: ''
+        newAvatar: '',
+        showError: false
     };
 
     public componentWillUnmount() {
         this.props.onChangeAvatar('');
+        clearTimeout(this.errorTimeout);
+    }
+
+    public componentDidUpdate(prevProps: Readonly<OwnProps & ReduxProps>, prevState: Readonly<UserInfoState>) {
+        if (prevProps.error !== this.props.error && this.props.error) {
+            this.setState({
+                showError: true
+            });
+
+            this.errorTimeout = setTimeout(() => {
+                this.setState({
+                    showError: false
+                });
+            }, 2000);
+        }
+    }
+
+    private getLoginInput = () => {
+        return (
+            <Input
+                id={'login'}
+                onChange={this.changeData}
+                value={this.state.login}
+                label={'Логин'}
+            />
+        );
     }
 
     public render() {
         const { error, newAvatar } = this.props;
+        const errorStyle = {
+            fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
+            fontWeight: 'lighter',
+            color: '#cc1600'
+        };
 
         return (
             <>
@@ -75,16 +111,14 @@ export default class UserInfo extends React.Component<UserInfoProps, UserInfoSta
                         <div className={b('form')}>
                             <Form>
                                 <SForm.Field inline={true} className={f('item').toString()}>
-                                    <Input
-                                        id={'login'}
-                                        onChange={this.changeData}
-                                        label={'Логин'}
-                                        value={this.state.login}
-                                        maxLength={14}
+                                    <Popup
+                                        trigger={this.getLoginInput()}
+                                        closeOnDocumentClick={true}
+                                        content={'Такой логин уже занят!'}
+                                        open={this.state.showError}
+                                        position={'top center'}
+                                        style={errorStyle}
                                     />
-                                    {/*<Label basic={true} color={'red'} pointing={'left'}>*/}
-                                        {/*That name is taken!*/}
-                                    {/*</Label>*/}
                                 </SForm.Field>
                             </Form>
                         </div>
@@ -105,6 +139,7 @@ export default class UserInfo extends React.Component<UserInfoProps, UserInfoSta
 
     private renderModal = () => {
         const { newAvatar, showModal } = this.state;
+        const m = block('avatar-modal');
 
         return (
             <Modal open={showModal} onClose={this.closeModal}>
@@ -118,10 +153,10 @@ export default class UserInfo extends React.Component<UserInfoProps, UserInfoSta
                         guides={false}
                         crop={this.handleAvatarResize}
                     />
-                    <div className={b('confirm-avatar')}>
-                        <div className={b('confirm-avatar-button')} onClick={this.onConfirmAvatar}>
-                        Готово!
-                        </div>
+                    <div className={m('confirm-avatar')}>
+                        <Button className={m('confirm-avatar-button')} onClick={this.onConfirmAvatar}>
+                            Готово!
+                        </Button>
                     </div>
                 </Modal.Content>
             </Modal>

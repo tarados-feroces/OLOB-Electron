@@ -2,13 +2,25 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import Authorized from '../../components/Authorized';
 import { signoutUser } from '../../redux/actions/User';
-import { openInfoPopup, closePopup } from '../../redux/actions/Popup';
+import { openInfoPopup, closePopup, openConfirmPopup } from '../../redux/actions/Popup';
 
 import {
     startGame,
     endGame,
-    closeGame
+    closeGame,
+    opponentDisconnected
 } from '../../redux/actions/Game';
+
+const disconnectInfoPopupProps = {
+    text: 'Вы выиграли! Ваш соперник бесславно покинул игру.',
+    buttonText: 'Ок'
+};
+
+const disconnectConfirmPopupProps = {
+    text: 'Вы точно хотите выйти из игры?',
+    confirmButtonText: 'Да',
+    declineButtonText: 'Нет'
+};
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -44,8 +56,22 @@ const mapDispatchToProps = (dispatch) => {
         onGameEnd(state) {
             dispatch(endGame(state));
         },
-        onGameClose() {
+        onCloseGame() {
             dispatch(closeGame());
+        },
+        onOpponentDisconnected() {
+            dispatch(opponentDisconnected());
+            dispatch(openInfoPopup('Конец игры', disconnectInfoPopupProps));
+        },
+        onDisconnect(onAccept: () => void) {
+            dispatch(openConfirmPopup('Выход из игры', {
+                ...disconnectConfirmPopupProps,
+                onAccept: () => {
+                    onAccept();
+                    dispatch(closePopup());
+                },
+                onDecline: () => dispatch(closePopup())
+            }));
         }
     };
 };
