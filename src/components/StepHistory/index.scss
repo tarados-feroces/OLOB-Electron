@@ -9,10 +9,11 @@
         background-color: #36363e;
         display: flex;
         flex-direction: row;
-        height: 40px;
-        min-height: 40px;
         width: 100%;
+        min-height: 40px;
         font-size: 20px;
+        box-sizing: border-box;
+        border-bottom: 1px solid #646369;
 
         &:nth-child(2n + 1) {
             background-color: #646369;
@@ -32,6 +33,7 @@
         flex-grow: 1;
         flex-direction: row;
         justify-content: space-around;
+        align-self: center;
     }
 
     &__item {
@@ -39,5 +41,9 @@
         display: flex;
         justify-content: center;
         margin: auto;
+    }
+
+    &::-webkit-scrollbar{
+        width: 0px;
     }
 }

@@ -27,7 +27,7 @@ export default class Compose extends React.Component<ComposeProps> {
                     />
                 </div>
                 <div className={b('submit-container')}>
-                    <IconButton onClick={this.handleSubmit} icon="arrow-right" size="m" />
+                    <IconButton onClick={this.handleSubmit} icon="send-button" size="m" />
                 </div>
             </div>
         );

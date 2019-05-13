@@ -69,10 +69,12 @@ export function loginUser(data: LoginData): ThunkAction {
                 dispatch(startGame(json.game));
             }
 
+            dispatch(setUser(json.user));
+            dispatch(setGamesHistory(json.user.games));
+
             dispatch(setUserAuthorized());
             dispatch(resetError());
-            dispatch(setUser(json));
-            dispatch(setGamesHistory(json.user.games));
+
         } else {
             dispatch(setError());
         }

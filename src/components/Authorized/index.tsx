@@ -13,7 +13,6 @@ import './index.scss';
 
 import { WS_DOMEN } from '../../constants/WebSocketConstants';
 import { Message } from '../../typings/Chat';
-import PlayerInfo from '../PlayerInfo';
 
 import UserInfo from '../../containers/UserInfoContainer';
 import IconButton from '../../ui/IconButton';

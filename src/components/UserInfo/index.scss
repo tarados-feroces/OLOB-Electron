@@ -71,6 +71,10 @@
         padding: 20px 20px 0;
     }
 
+    #root &__modal {
+        background-color: gray;
+    }
+
     &__confirm-avatar-button {
         border: #0B0B15 1px solid;
         background: inherit;

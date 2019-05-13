@@ -3,6 +3,7 @@
     align-self: center;
     flex-shrink: 0;
     pointer-events: none;
+    user-select: none;
 
     &_size_xxs {
         width: 12px;

@@ -7,6 +7,7 @@
     height: 64px;
     width: 100%;
     background-color: #0B0B15;
+    flex-shrink: 0;
   }
 
   &__container {
@@ -20,6 +21,7 @@
 
   &__opponent {
     padding: 5px;
+    flex-shrink: 0;
   }
 
   &__data {

@@ -22,6 +22,10 @@
     &__messages-list {
         flex-grow: 1;
         overflow: auto;
+
+        &::-webkit-scrollbar{
+            width: 0px;
+        }
     }
 
     &__disconnect-message {
