@@ -7,6 +7,7 @@ import LoginContainer from '../LoginContainer';
 import SignupContainer from '../SignupContainer';
 import AuthorizedContainer from '../AuthorizedContainer';
 import PopupWrapper from '../PopupContainer';
+import Main from '../Main';
 
 import 'semantic-ui-css/semantic.min.css';
 import { getUser } from '../../redux/actions/User';
@@ -27,7 +28,7 @@ class App extends React.Component<AppProps> {
             <>
                 <Router history={history}>
                     <Switch>
-                        <Route exact={true} path={PathConstants.MAINPAGE} component={LoginContainer} />
+                        <Route exact={true} path={PathConstants.MAINPAGE} component={Main} />
                         <Route exact={true} path={PathConstants.LOGIN} component={LoginContainer} />
                         <Route exact={true} path={PathConstants.SIGNUP} component={SignupContainer} />
                         <Route exact={true} path={PathConstants.AUTH} component={AuthorizedContainer} />

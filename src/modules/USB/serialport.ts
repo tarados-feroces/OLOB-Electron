@@ -2,15 +2,27 @@ import SerialPort from 'serialport';
 import Readline from '@serialport/parser-readline';
 import { BAUD_RATE, PORT_LINE } from '../../constants/USBConstants';
 
-export default class USBConnector {
-    private readonly portLine;
-    private readonly baudRate;
-    private port;
-    private parser;
-    private handlerCounter;
-    private readonly eventHandlers;
+export interface CommandType {
+    cls: number;
+    msg: string;
+}
 
-    constructor(portLine = PORT_LINE, baudRate = BAUD_RATE) {
+// Все по пробелам
+// Первое число - код ответа, ответ в виде строки
+
+class USBConnector {
+    private portLine: string;
+    private baudRate: number;
+    private port: SerialPort;
+    private parser;
+    private handlerCounter: number;
+    private eventHandlers;
+
+    // constructor(portLine = PORT_LINE, baudRate = BAUD_RATE) {
+
+    // }
+
+    public init(portLine = PORT_LINE, baudRate = BAUD_RATE) {
         this.portLine = portLine;
         this.baudRate = baudRate;
         this.port = new SerialPort(this.portLine, { baudRate: this.baudRate });
@@ -22,49 +34,37 @@ export default class USBConnector {
             // console.log('Built-in func: serial port open');
         }));
 
-        this.parser.on('data', this.handleMessage || ((data) => {
-            // console.log('Built-in func: got data', data);
+        this.parser.on('data', this.handleMessage || ((data: string) => {
+            const parsedData = data.trim().split(' ');
+
+            const keyCode = parseInt(parsedData[0], 16);
         }));
     }
 
-    public sendMessage(msg) {
+    public sendMessage(keyCode: number, data: string) {
         this.port.write(msg, (err, bytesWritten) => {
-            // console.error(err);
-            // console.log(`Written ${bytesWritten} bytes.`);
+            return;
         });
     }
 
-    public handleMessage = (event) => {
-        const { cls, data } = JSON.parse(event.data);
+    public handleMessage = (message: string) => {
+        const parsedData = message.trim().split(' ');
 
-        if (this.eventHandlers[cls]) {
-            this.eventHandlers[cls].forEach(({ callback }) => callback(data));
-        }
-    }
+        const keyCode = parseInt(parsedData[0], 16);
 
-    public registerHandler(cls, callback) {
-        if (!this.eventHandlers[cls]) {
-            this.eventHandlers[cls] = [ {
-                id: this.handlerCounter,
-                callback
-            } ];
-        } else {
-            this.eventHandlers[cls].push({
-                id: this.handlerCounter,
-                callback
+        if (this.eventHandlers[keyCode]) {
+            this.eventHandlers[keyCode].forEach((callback) => {
+                callback(parsedData);
             });
         }
-
-        return this.handlerCounter++;
     }
 
-    public deleteHandler(cls, id) {
-        if (!this.eventHandlers[cls]) {
-            return;
-        } else if (id != null) {
-            this.eventHandlers[cls] = this.eventHandlers[cls].filter((handler) => handler.id !== id);
-        } else {
-            this.eventHandlers[cls] = [];
-        }
+    public registerHandler = (keyCode: number, callback) => {
+        this.eventHandlers[keyCode] ?
+            this.eventHandlers[keyCode].push(callback) :
+            this.eventHandlers[keyCode] = [ callback ];
     }
 }
+
+const Connector = new USBConnector();
+export default Connector;

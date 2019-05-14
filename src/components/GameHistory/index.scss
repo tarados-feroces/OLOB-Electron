@@ -37,4 +37,19 @@
     &::-webkit-scrollbar{
         width: 4px;
     }
+
+    &__emty-message-container {
+        height: 100%;
+        flex-direction: column-reverse;
+    }
+
+    &__empty-message {
+        align-self: center;
+        word-wrap: break-word;
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 20px;
+
+        padding: 0 10px;
+    }
 }

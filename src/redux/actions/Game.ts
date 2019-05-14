@@ -2,6 +2,7 @@ import { GameTypes } from '../constants/Game';
 import { GameType, GameSituations, PossibleSteps, Side } from '../../typings/GameTypings';
 import { ThunkAction } from '../../store/store';
 import { Message } from '../../typings/Chat';
+import BoardManager from '../../modules/BoardManager';
 
 interface UserData {
     _id: string;
@@ -109,6 +110,8 @@ export function receiveSnapshot(snapshot: GameUpdateEvent): ThunkAction {
 
         const steps = game.steps || [];
         steps.push(snapshot.step);
+
+        // BoardManager.sendOpponentStep(snapshot.step);
 
         dispatch(updateGameState({
             ...game,

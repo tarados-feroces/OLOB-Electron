@@ -45,7 +45,8 @@ interface ReduxProps {
     onResetPossibleSteps?(): void;
     onSignoutUser?(): void;
     onOpponentDisconnected?(): void;
-    onDisconnect?(): void;
+    onDisconnect?(onAccept: () => void): void;
+    onDraw?(onAccept: () => void, onDecline?: () => void, offered?: boolean): void;
     isAuthorized?: boolean;
     isFinished?: boolean;
     opponent?: User;
@@ -76,6 +77,7 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
             WebSocketApi.open(WS_DOMEN);
             WebSocketApi.registerHandler(GameMessages.STARTED, onGameStarted);
             WebSocketApi.registerHandler(GameMessages.FINISHED, this.onGameEnd);
+            WebSocketApi.registerHandler(GameMessages.DRAW, this.onDrawOffered);
         }
     }
 
@@ -108,7 +110,7 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
     }
 
     public render() {
-        const { user, isAuthorized, game, onSignoutUser, opponent, onDisconnect } = this.props;
+        const { user, isAuthorized, game, onSignoutUser, opponent, onDisconnect, onDraw } = this.props;
 
         if (!isAuthorized) {
             this.props.history.push(PathConstants.LOGIN);
@@ -166,10 +168,19 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
                         <IconButton
                             size={'xl'}
                             icon={'surrender_icon'}
-                            onClick={onDisconnect.bind(this, this.handleDisconnect)}
+                            onClick={() => {
+                                onDisconnect(this.handleDisconnect);
+                            }}
                             disabled={!game}
                         />
-                        <IconButton size={'xl'} icon={'draw_icon'} disabled={!game} />
+                        <IconButton
+                            size={'xl'}
+                            icon={'draw_icon'}
+                            disabled={!game}
+                            onClick={() => {
+                                onDraw(this.handleDraw);
+                            }}
+                        />
                     </div>
                     <div className={b('content-center')}>
                         <Icon size={'xl'} id={'home_icon'} />
@@ -187,8 +198,10 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
 
         if (data.winner === user.id) {
             text = `Вы выиграли, а ${opponent.login} с грустью уходит с поля боя!`;
-        } else {
+        } else if (data.winner === opponent.id) {
             text = `${opponent.login} празднует победу, а Вам стоит лучше продумывать тактику!`;
+        } else {
+            text = 'Это ничья, вы разошлись в равной степени неудовлетворенности';
         }
 
         this.setState({ loading: false });
@@ -196,8 +209,24 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
         onGameEndPopup({ text, buttonText: 'ОК' });
     }
 
+    private onDrawOffered = () => {
+        this.props.onDraw(this.handleDrawAccept, this.handleDrawDecline, true);
+    }
+
     private handleDisconnect = () => {
         GameApi.disconnect();
         this.props.onCloseGame();
+    }
+
+    private handleDraw = () => {
+        GameApi.offerDraw();
+    }
+
+    private handleDrawAccept = () => {
+        GameApi.confirmDraw();
+    }
+
+    private handleDrawDecline = () => {
+        GameApi.declineDraw();
     }
 }

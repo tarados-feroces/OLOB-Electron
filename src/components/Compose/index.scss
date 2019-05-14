@@ -28,6 +28,10 @@
         line-height: 18px;
         word-wrap: break-word;
 
+        &::-webkit-scrollbar{
+            width: 0px;
+        }
+
         resize: none;
         border: none;
         box-sizing: border-box;

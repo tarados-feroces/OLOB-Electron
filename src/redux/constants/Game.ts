@@ -14,6 +14,7 @@ export const enum GameMessages {
     FINISHED = 'Finished',
     OPPONENT_DISCONNECTED = 'OpponentDisconnected',
     DISCONNECT = 'Disconnect',
+    DRAW = 'Draw',
 
     STEP = 'Step',
     UPDATE = 'UpdateState',

@@ -22,6 +22,18 @@ const disconnectConfirmPopupProps = {
     declineButtonText: 'Нет'
 };
 
+const drawConfirmPopupProps = {
+    text: 'Хотите предложить ничью?',
+    confirmButtonText: 'Да',
+    declineButtonText: 'Нет'
+};
+
+const drawOfferConfirmPopupProps = {
+    text: 'Противник предлагает ничью. Согласиться?',
+    confirmButtonText: 'Да',
+    declineButtonText: 'Нет'
+};
+
 const mapDispatchToProps = (dispatch) => {
     return {
         onSignoutUser() {
@@ -71,6 +83,24 @@ const mapDispatchToProps = (dispatch) => {
                     dispatch(closePopup());
                 },
                 onDecline: () => dispatch(closePopup())
+            }));
+        },
+        onDraw(onAccept: () => void, onDecline?: () => void, offered?: boolean) {
+            const props = offered ? drawOfferConfirmPopupProps : drawConfirmPopupProps;
+
+            dispatch(openConfirmPopup('Предложение ничьи', {
+                ...props,
+                onAccept: () => {
+                    onAccept();
+                    dispatch(closePopup());
+                },
+                onDecline: () => {
+                    if (onDecline) {
+                        onDecline();
+                    }
+
+                    dispatch(closePopup());
+                }
             }));
         }
     };

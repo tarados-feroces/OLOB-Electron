@@ -14,6 +14,7 @@ import { store } from '../../store/store';
 import ws from '../../modules/WebSocketApi';
 import USBConnector from '../../modules/USB/serialport';
 import UserCard from '../UserCard';
+import boardManager from '../../modules/BoardManager';
 
 export enum RightContentTypes {
     CHAT = 'CHAT',
@@ -96,47 +97,48 @@ export class RightContent extends React.Component<RightContentProps, RightConten
     }
 
     private onConnect = () => {
-        const USBConnection = new USBConnector();
-        USBConnection.registerHandler(GameMessages.SNAPSHOT, (usbData) => {
-            const data = usbData.trim().split(' ');
+        USBConnector.init();
+        boardManager.init();
+        // USBConnection.registerHandler(GameMessages.SNAPSHOT, (usbData) => {
+        //     const data = usbData.trim().split(' ');
 
-            if (data.length === 8) {
+        //     if (data.length === 8) {
 
-                const newGameState = data
-                    .reverse()
-                    .map((val) => parseInt(val, 16))
-                    .map((val, i) => {
-                        const arr = [ 8 - i ];
-                        for (let x = 0; x < 8; ++x) {
-                            arr.push((val & (0x80 >> x) ? 1 : 0));
-                        }
+        //         const newGameState = data
+        //             .reverse()
+        //             .map((val) => parseInt(val, 16))
+        //             .map((val, i) => {
+        //                 const arr = [ 8 - i ];
+        //                 for (let x = 0; x < 8; ++x) {
+        //                     arr.push((val & (0x80 >> x) ? 1 : 0));
+        //                 }
 
-                        return arr;
-                    });
+        //                 return arr;
+        //             });
 
-                const gameState = store.getState().game.game.state;
-                const diffIndexes: {
-                    [flag: number]: Navigation
-                } = [];
+        //         const gameState = store.getState().game.game.state;
+        //         const diffIndexes: {
+        //             [flag: number]: Navigation
+        //         } = [];
 
-                gameState.forEach((row, rowIndex: number) => {
-                    row.forEach((item, itemIndex: number) => {
-                        if (item !== newGameState[rowIndex][itemIndex]) {
-                            diffIndexes[item ? 0 : 1] = { x: rowIndex, y: itemIndex };
-                        }
-                    });
-                });
+        //         gameState.forEach((row, rowIndex: number) => {
+        //             row.forEach((item, itemIndex: number) => {
+        //                 if (item !== newGameState[rowIndex][itemIndex]) {
+        //                     diffIndexes[item ? 0 : 1] = { x: rowIndex, y: itemIndex };
+        //                 }
+        //             });
+        //         });
 
-                if (Object.keys(diffIndexes).length === 1) {
-                    ws.sendMessage({ position: diffIndexes[0] }, GameMessages.AREAS);
-                }
+        //         if (Object.keys(diffIndexes).length === 1) {
+        //             ws.sendMessage({ position: diffIndexes[0] }, GameMessages.AREAS);
+        //         }
 
-                if (Object.keys(diffIndexes).length === 2) {
-                    ws.sendMessage({ step: { nextPos: diffIndexes[1], prevPos: diffIndexes[0] } }, GameMessages.STEP);
-                }
+        //         if (Object.keys(diffIndexes).length === 2) {
+        //             ws.sendMessage({ step: { nextPos: diffIndexes[1], prevPos: diffIndexes[0] } }, GameMessages.STEP);
+        //         }
 
-            }
-        });
+        //     }
+        // });
     }
 
     private changeRightContent = (event: React.MouseEvent) => {
