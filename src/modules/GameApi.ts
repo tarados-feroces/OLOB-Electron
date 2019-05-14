@@ -1,15 +1,14 @@
 import ws from './WebSocketApi';
 
 import { GameMessages } from '../redux/constants/Game';
-import { Step, Navigation } from '../typings/GameTypings';
-import USBConnector from './USB/serialport';
-import { store } from '../store/store';
+import { Step, Navigation, Figure } from '../typings/GameTypings';
 
 class GameApi {
-    public init({ onReceiveSnapshot, onGetPossibleSteps, onOpponentDisconnected }) {
+    public init({ onReceiveSnapshot, onGetPossibleSteps, onOpponentDisconnected, onFigureChange }) {
         ws.registerHandler(GameMessages.UPDATE, onGetPossibleSteps);
         ws.registerHandler(GameMessages.SNAPSHOT, onReceiveSnapshot);
         ws.registerHandler(GameMessages.OPPONENT_DISCONNECTED, onOpponentDisconnected);
+        ws.registerHandler(GameMessages.CHANGE_FIGURE, onFigureChange);
     }
 
     public clear() {
@@ -32,6 +31,10 @@ class GameApi {
 
     public sendPossibleMovesRequest(position: Navigation) {
         ws.sendMessage({ position }, GameMessages.AREAS);
+    }
+
+    public sendFigureChange(figure: Figure) {
+        ws.sendMessage({ figure }, GameMessages.CHANGE_FIGURE);
     }
 
     public disconnect() {

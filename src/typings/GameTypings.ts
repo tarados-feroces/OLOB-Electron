@@ -48,3 +48,8 @@ export interface Player {
     avatar: string;
     connected?: boolean;
 }
+
+export interface Figure {
+    type: string;
+    color: string;
+}
