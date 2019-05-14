@@ -27,12 +27,17 @@ app.on('ready', () => {
 
     mainWindow.loadURL(`file://${path.join(__dirname, 'dist/index.html')}`);
     // mainWindow.loadURL(`http://127.0.0.1:8080`);
-    mainWindow.webContents.once('dom-ready', () => {
-        mainWindow.webContents.openDevTools()
-    });
+    // mainWindow.webContents.once('dom-ready', () => {
+    //     mainWindow.webContents.openDevTools()
+    // });
 
     mainWindow.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
         details.requestHeaders['Origin'] = 'electron://olob-app';
         callback({ cancel: false, requestHeaders: details.requestHeaders });
+    });
+
+    mainWindow.webContents.on('new-window', function(event, url){
+        event.preventDefault();
+        open(url);
     });
 });
