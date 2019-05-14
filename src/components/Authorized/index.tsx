@@ -20,6 +20,8 @@ import { RightContent } from '../RightContent';
 import { LeftContent } from '../LeftContent';
 import GameApi from '../../modules/GameApi';
 import { Icon } from '../../ui/Icon';
+import MainContent from '../MainContent';
+import About from '../About';
 
 export enum ContentTypes {
     HOME = 'HOME',
@@ -83,18 +85,17 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
         case ContentTypes.HOME:
             return game ? (
                 <>
-                    <div className={b('crutch')} />
                     <div className={b('game')}>
                         <Game user={user} game={game} />
                     </div>
                 </>
             ) : (
-                <div>Main content</div>
+                <MainContent />
             );
         case ContentTypes.SETTINGS:
             return <UserInfo />;
         case ContentTypes.ABOUT:
-            return <div />;
+            return <About />;
         default:
             return <div />;
         }
@@ -152,6 +153,7 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
                     </div>
                     <div className={b('content-center')}>
                         <div className={b('center-data', { game: Boolean(game) })}>
+                            <div className={b('crutch')} />
                             {this.getMainContent()}
                         </div>
                     </div>

@@ -1,0 +1,46 @@
+@import '../../static/config.scss';
+
+.main-content {
+  width: 100%;
+  height: 100%;
+
+  &__field {
+    flex-grow: 1;
+    display: block;
+    position: relative;
+    max-width: $board-height;
+    max-height: $board-height;
+    min-width: $board-height;
+    min-height: $board-height;
+    cursor: pointer;
+    border: 1px solid white;
+  }
+
+  &__board {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.2;
+    background-color: white;
+  }
+
+  &__text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    font-weight: 200;
+    opacity: 1;
+    color: white;
+  }
+
+}

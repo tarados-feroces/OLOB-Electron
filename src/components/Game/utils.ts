@@ -16,7 +16,8 @@ export interface Options {
     squareWidth?: number;
 }
 
-export function constructOptions(board: HTMLCanvasElement, figures: HTMLCanvasElement): Options {
+// tslint:disable-next-line:no-any
+export function constructOptions(board: HTMLCanvasElement, figures: HTMLCanvasElement = {} as any): Options {
     const options: Options = {
         board,
         figures,
