@@ -22,5 +22,7 @@ export const enum GameMessages {
 
     AREAS = 'Areas',
 
-    MESSAGE = 'Chat:Message'
+    MESSAGE = 'Chat:Message',
+
+    CHANGE_FIGURE = 'Change_Figure'
 }

@@ -1,13 +1,15 @@
 import * as React from 'react';
 import { block } from 'bem-cn';
 
-import { GameType, Navigation, Side } from '../../typings/GameTypings';
+import { Figure, GameType, Navigation, Side } from '../../typings/GameTypings';
 import { User } from '../../typings/UserTypings';
 import { checkStepInPossible, constructOptions, coordsToIndexes, drawFigures, drawPossibleMoves, Options } from './utils';
 
 import GameApi from '../../modules/GameApi';
 
 import './index.scss';
+import { Modal } from 'semantic-ui-react';
+import Button from '../../ui/Button';
 
 interface OwnProps {
     game: GameType;
@@ -24,17 +26,26 @@ interface ReduxProps {
     onOpponentDisconnected?(): void;
     onCloseGame?(): void;
     onDisconnect?(handler: () => void): void;
+    onFigureChange?(figure): void;
 }
 
 type GameProps = OwnProps & ReduxProps;
 
-const b = block('olob-chess');
+interface GameState {
+    isFigureChoose: boolean;
+}
 
-export default class Game extends React.Component<GameProps> {
+const b = block('olob-chess');
+const m = block('game-modal');
+
+export default class Game extends React.Component<GameProps, GameState> {
     private options: Options;
     private boardRef = React.createRef<HTMLCanvasElement>();
     private figuresRef = React.createRef<HTMLCanvasElement>();
     private chosenFigurePos: Navigation | null = null;
+    public state = {
+        isFigureChoose: false
+    };
 
     public resizeCanvas = () => {
         this.options = constructOptions(this.boardRef.current, this.figuresRef.current);
@@ -45,14 +56,19 @@ export default class Game extends React.Component<GameProps> {
     public componentDidMount() {
         const { onSnapshot, onGetPossibleSteps, onOpponentDisconnected, game } = this.props;
 
-        GameApi.init({ onReceiveSnapshot: onSnapshot, onGetPossibleSteps, onOpponentDisconnected });
+        GameApi.init({
+            onReceiveSnapshot: onSnapshot,
+            onGetPossibleSteps,
+            onOpponentDisconnected,
+            onFigureChange: this.onFigureChange
+        });
 
         this.options = constructOptions(this.boardRef.current, this.figuresRef.current);
         drawFigures(this.options, game.side === Side.WHITE, game.state);
         window.addEventListener('resize', this.resizeCanvas, false);
     }
 
-    public componentDidUpdate(prevProps) {
+    public componentDidUpdate(prevProps, prevState) {
         const game = this.props.game;
         if (prevProps.game.state !== game.state) {
             drawFigures(this.options, game.side === Side.WHITE, game.state);
@@ -74,6 +90,37 @@ export default class Game extends React.Component<GameProps> {
 
         return (
             <div className={b()}>
+                <Modal open={this.state.isFigureChoose}>
+                    <Modal.Header>Изменить фигуру</Modal.Header>
+                    <Modal.Content>
+                        <div className={m('button-row')}>
+                            <Button
+                                className={m('button')}
+                                onClick={() => { this.setFigureChange({ type: 'q', color: isWhite ? 'w' : 'b' }); }}
+                            >
+                                Ферзь
+                            </Button>
+                            <Button
+                                className={m('button')}
+                                onClick={() => { this.setFigureChange({ type: 'r', color: isWhite ? 'w' : 'b' }); }}
+                            >
+                                Ладья
+                            </Button>
+                            <Button
+                                className={m('button')}
+                                onClick={() => { this.setFigureChange({ type: 'n', color: isWhite ? 'w' : 'b' }); }}
+                            >
+                                Конь
+                            </Button>
+                            <Button
+                                className={m('button')}
+                                onClick={() => { this.setFigureChange({ type: 'b', color: isWhite ? 'w' : 'b' }); }}
+                            >
+                                Слон
+                            </Button>
+                        </div>
+                    </Modal.Content>
+                </Modal>
                 <div className={b('board-container')}>
                     <div className={b('signs-bottom')}>
                         {[ ...Array(8).keys() ].map((item: number) => {
@@ -114,6 +161,13 @@ export default class Game extends React.Component<GameProps> {
         );
     }
 
+    private setFigureChange(figure: Figure) {
+        GameApi.sendFigureChange(figure);
+        this.setState({
+            isFigureChoose: false
+        });
+    }
+
     private makeStep(prevPos: Navigation, nextPos: Navigation) {
         GameApi.makeStep({ prevPos, nextPos });
         this.chosenFigurePos = null;
@@ -150,8 +204,9 @@ export default class Game extends React.Component<GameProps> {
             this.checkPossibleMoves(coords);
     }
 
-    private handleDisconnect = () => {
-        GameApi.disconnect();
-        this.props.onCloseGame();
+    private onFigureChange = () => {
+        this.setState({
+            isFigureChoose: true
+        });
     }
 }
