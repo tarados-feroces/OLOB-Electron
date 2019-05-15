@@ -100,6 +100,7 @@
     "redux": "^4.0.1",
     "redux-actions": "^2.2.1",
     "redux-thunk": "^2.2.0",
-    "serialport": "^6.1.0"
+    "serialport": "^6.1.0",
+    "throttle-typescript": "^1.0.1"
   }
 }

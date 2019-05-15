@@ -1,6 +1,7 @@
 import SerialPort from 'serialport';
 import Readline from '@serialport/parser-readline';
 import { BAUD_RATE, PORT_LINE } from '../../constants/USBConstants';
+import { throttle } from 'throttle-typescript';
 
 export interface CommandType {
     cls: number;
@@ -47,7 +48,7 @@ class USBConnector {
         });
     }
 
-    public handleMessage = (message: string) => {
+    public handleMessage = throttle((message: string) => {
         const parsedData = message.trim().split(' ');
 
         const keyCode = parseInt(parsedData[0], 16);
@@ -57,7 +58,7 @@ class USBConnector {
                 callback(parsedData);
             });
         }
-    }
+    }, 200);
 
     public registerHandler = (keyCode: number, callback) => {
         this.eventHandlers[keyCode] ?
