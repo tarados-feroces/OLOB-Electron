@@ -82,10 +82,12 @@ class BoardManager {
         this.gameState.forEach((str, yIndex) => {
             str.forEach((element, xIndex) => {
                 if (element < newState[yIndex][xIndex]) {
-                    result.push({ x: xIndex, y: yIndex, action: 1 });
+                    result.push({ x: xIndex, y: yIndex , action: 1 });
                 } else if (element > newState[yIndex][xIndex]) {
                     result.push({ x: xIndex, y: yIndex, action: 0 });
-                    this.prevPos = { x: xIndex, y: yIndex };
+                    if (!this.prevPos) {
+                        this.prevPos = { x: xIndex, y: yIndex };
+                    }
                 }
             });
         });
@@ -112,12 +114,12 @@ class BoardManager {
 
     private parseState(data: string[]): number[][] {
         return data.slice(1).
-                    reverse().
+                    // reverse().
                     map((item) => parseInt(item, 16)).
                     map((item, index) => {
-                        const arr = [ 8 - index ];
+                        const arr = [];
                         for (let i = 0; i < 8; ++i) {
-                            arr.push((item & (0x80 >> i) ? 1 : 0));
+                            arr.unshift((item & (0x80 >> i) ? 1 : 0));
                         }
 
                         return arr;
