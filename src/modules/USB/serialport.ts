@@ -31,10 +31,11 @@ class USBConnector {
         this.eventHandlers = {};
 
         this.port.on('open', (() => {
-            // console.log('Built-in func: serial port open');
+            console.log('Built-in func: serial port open');
         }));
 
         this.parser.on('data', this.handleMessage || ((data: string) => {
+            console.log(data);
             const parsedData = data.trim().split(' ');
 
             const keyCode = parseInt(parsedData[0], 16);
@@ -48,6 +49,7 @@ class USBConnector {
     }
 
     public handleMessage = (message: string) => {
+        // console.log(message);
         const parsedData = message.trim().split(' ');
 
         const keyCode = parseInt(parsedData[0], 16);
