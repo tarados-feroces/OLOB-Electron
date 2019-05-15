@@ -79,6 +79,9 @@ export function receivePossibleSteps(data: { steps: PossibleSteps[] }): ThunkAct
 
         delete game.possibleSteps;
 
+        BoardManager.sendPossibleSteps(data.steps.map((item) =>
+            ({ ...item, color: item.captured ? '#bc0100' : '#51bd3c' })));
+
         dispatch(updateGameState({
             ...game,
             possibleSteps: data.steps
@@ -111,7 +114,7 @@ export function receiveSnapshot(snapshot: GameUpdateEvent): ThunkAction {
         const steps = game.steps || [];
         steps.push(snapshot.step);
 
-        // BoardManager.sendOpponentStep(snapshot.step);
+        BoardManager.sendOpponentStep(transpileStepsToCoords(snapshot.step));
 
         dispatch(updateGameState({
             ...game,
@@ -155,4 +158,17 @@ function parseFEN(fen: string): string[][] {
     });
 
     return result;
+}
+
+function transpileStepsToCoords(item: { from: string, to: string }) {
+    return {
+        prevPos: {
+            x: item.from[0].charCodeAt(0) - 97,
+            y: Number(item.from[1]) - 1
+        },
+        nextPos: {
+            x: item.to[0].charCodeAt(0) - 97,
+            y: Number(item.to[1]) - 1
+        }
+    };
 }

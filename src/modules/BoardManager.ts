@@ -29,12 +29,12 @@ class BoardManager {
         USBConnector.sendMessage(MessageTypes.End, '');
     }
 
-    public sendPossibleSteps = (steps: Array<{ x: number, y: number }>) => {
-        this.sendColorMap(steps, '#51bd3c');
+    public sendPossibleSteps = (steps: Array<{ x: number, y: number, color: string }>) => {
+        this.sendColorMap(steps);
     }
 
-    public sendOpponentStep = (step: { x: number, y: number }) => {
-        this.sendColorMap([ step ], '#51bd3c');
+    public sendOpponentStep = (step: { prevPos: { x: number, y: number }, nextPos: { x: number, y: number }}) => {
+        this.sendColorMap([ { ...step.prevPos, color: '#51bd3c' }, { ...step.nextPos, color: '#51bd3c' } ]);
     }
 
     public sendError() {
@@ -54,13 +54,13 @@ class BoardManager {
         return state;
     }
 
-    private sendColorMap(data: Array<{ x: number, y: number }>, color: string) {
+    private sendColorMap(data: Array<{ x: number, y: number, color: string }>) {
         let result = '';
 
         result += data.length.toString(16) + ' ';
 
         data.forEach((item) => {
-            result += item.x.toString(16) + item.y.toString(16) + ' ' + color.slice(1) + '';
+            result += item.x.toString(16) + item.y.toString(16) + ' ' + item.color.slice(1) + '';
         });
 
         USBConnector.sendMessage(MessageTypes.ColorMap, result.slice(0, -1));
