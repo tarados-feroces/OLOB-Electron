@@ -15,8 +15,7 @@ interface UserData {
 const setUser = (user: UserData) => ({
     type: UserTypes.SET_USER,
     payload: {
-        ...user,
-        id: user._id
+        ...user
     }
 });
 
