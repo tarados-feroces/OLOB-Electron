@@ -10,6 +10,7 @@ import GameApi from '../../modules/GameApi';
 import './index.scss';
 import { Modal } from 'semantic-ui-react';
 import Button from '../../ui/Button';
+import gameAPI from '../../modules/GameApi';
 
 interface OwnProps {
     game: GameType;
@@ -66,6 +67,10 @@ export default class Game extends React.Component<GameProps, GameState> {
         this.options = constructOptions(this.boardRef.current, this.figuresRef.current);
         drawFigures(this.options, game.side === Side.WHITE, game.state);
         window.addEventListener('resize', this.resizeCanvas, false);
+    }
+
+    public componentWillUnmount() {
+        gameAPI.clear();
     }
 
     public componentDidUpdate(prevProps, prevState) {
