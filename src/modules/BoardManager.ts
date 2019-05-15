@@ -79,11 +79,11 @@ class BoardManager {
 
         const result = [];
 
-        this.gameState.forEach((str, xIndex) => {
-            str.forEach((element, yIndex) => {
-                if (element < newState[xIndex][yIndex]) {
+        this.gameState.forEach((str, yIndex) => {
+            str.forEach((element, xIndex) => {
+                if (element < newState[yIndex][xIndex]) {
                     result.push({ x: xIndex, y: yIndex, action: 1 });
-                } else if (element > newState[xIndex][yIndex]) {
+                } else if (element > newState[yIndex][xIndex]) {
                     result.push({ x: xIndex, y: yIndex, action: 0 });
                     this.prevPos = { x: xIndex, y: yIndex };
                 }
