@@ -85,7 +85,9 @@ class BoardManager {
                     result.push({ x: xIndex, y: yIndex , action: 1 });
                 } else if (element > newState[yIndex][xIndex]) {
                     result.push({ x: xIndex, y: yIndex, action: 0 });
-                    this.prevPos = { x: xIndex, y: yIndex };
+                    if (!this.prevPos) {
+                        this.prevPos = { x: xIndex, y: yIndex };
+                    }
                 }
             });
         });
