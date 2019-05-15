@@ -42,7 +42,7 @@ class USBConnector {
     }
 
     public sendMessage(keyCode: number, data: string) {
-        this.port.write(msg, (err, bytesWritten) => {
+        this.port.write(data, (err, bytesWritten) => {
             return;
         });
     }

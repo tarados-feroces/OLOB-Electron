@@ -12,6 +12,7 @@ enum MessageTypes {
 class BoardManager {
     private gameState: number[][];
     private prevPos = null;
+    private active = false;
 
     // constructor() {
     //     USBConnector.registerHandler(MessageTypes.BoardState, this.getStateDiff);
@@ -19,21 +20,32 @@ class BoardManager {
 
     public init() {
         USBConnector.registerHandler(MessageTypes.BoardState, this.getStateDiff);
+        this.active = true;
     }
 
     public start = () => {
+        this.active = true;
         USBConnector.sendMessage(MessageTypes.Start, '');
     }
 
     public end = () => {
+        this.active = false;
         USBConnector.sendMessage(MessageTypes.End, '');
     }
 
     public sendPossibleSteps = (steps: Array<{ x: number, y: number, color: string }>) => {
+        if (!this.active) {
+            return;
+        }
+
         this.sendColorMap(steps);
     }
 
     public sendOpponentStep = (step: { prevPos: { x: number, y: number }, nextPos: { x: number, y: number }}) => {
+        if (!this.active) {
+            return;
+        }
+
         this.sendColorMap([ { ...step.prevPos, color: '#51bd3c' }, { ...step.nextPos, color: '#51bd3c' } ]);
     }
 
