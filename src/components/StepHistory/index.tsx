@@ -26,6 +26,7 @@ export default class StepHistory extends React.Component<StepHistoryProps> {
 
     public render() {
         const { history } = this.props;
+        console.log(history);
 
         return (
             <div className={b()} ref={this.stepsList}>
@@ -34,7 +35,7 @@ export default class StepHistory extends React.Component<StepHistoryProps> {
                         <div className={b('item')}>{`${index + 1}.`}</div>
                         <div className={b('info')}>
                             <div className={b('item')}>
-                                <Icon size="m" id={`${index % 2 === 0 ? 'w' : 'b'}${step.figure}`} />
+                                <Icon size="m" id={`${step.side}${step.figure}`} />
                             </div>
                             <div className={b('item')}>{step.from}</div>
                             <div className={b('item')}>{step.to}</div>
