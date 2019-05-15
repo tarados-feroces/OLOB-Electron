@@ -183,7 +183,7 @@ export default class Authorized extends React.Component<AuthProps, AuthState> {
                         />
                     </div>
                     <div className={b('content-center')}>
-                        <Icon size={'xl'} id={'home_icon'} />
+                        <Icon size={'huge'} id={'logo_dark'} />
                     </div>
                     <div className={b('content-right')} />
                 </div>
