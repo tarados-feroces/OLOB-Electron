@@ -7,11 +7,8 @@ import Chat from '../../containers/Chat';
 import GameHistory from '../../containers/GameHistory';
 import gameAPI from '../../modules/GameApi';
 import { User } from '../../typings/UserTypings';
-import { GameType, Navigation } from '../../typings/GameTypings';
+import { GameType } from '../../typings/GameTypings';
 import IconButton from '../../ui/IconButton';
-import { GameMessages } from '../../redux/constants/Game';
-import { store } from '../../store/store';
-import ws from '../../modules/WebSocketApi';
 import USBConnector from '../../modules/USB/serialport';
 import UserCard from '../UserCard';
 import boardManager from '../../modules/BoardManager';
@@ -30,13 +27,15 @@ interface RightContentProps {
 
 interface RightContentState {
     rightContent: RightContentTypes;
+    boardActive: boolean;
 }
 
 const b = block('right-content');
 
 export class RightContent extends React.Component<RightContentProps, RightContentState> {
     public state = {
-        rightContent: RightContentTypes.CHAT
+        rightContent: RightContentTypes.CHAT,
+        boardActive: false
     };
 
     private getRightContent = () => {
@@ -87,7 +86,10 @@ export class RightContent extends React.Component<RightContentProps, RightConten
                             </div>
                         </div>
                         <div className={b('controls')}>
-                            <IconButton icon={'connect_icon'} onClick={this.onConnect} />
+                            {<IconButton
+                                icon={this.state.boardActive ? 'connect_icon_yes' : 'connect_icon'}
+                                onClick={this.onConnect}
+                            />}
                             <IconButton icon={'logout_icon'} onClick={onSignoutUser} />
                         </div>
                     </div>
@@ -97,48 +99,12 @@ export class RightContent extends React.Component<RightContentProps, RightConten
     }
 
     private onConnect = () => {
-        USBConnector.init();
         boardManager.init();
-        // USBConnection.registerHandler(GameMessages.SNAPSHOT, (usbData) => {
-        //     const data = usbData.trim().split(' ');
-
-        //     if (data.length === 8) {
-
-        //         const newGameState = data
-        //             .reverse()
-        //             .map((val) => parseInt(val, 16))
-        //             .map((val, i) => {
-        //                 const arr = [ 8 - i ];
-        //                 for (let x = 0; x < 8; ++x) {
-        //                     arr.push((val & (0x80 >> x) ? 1 : 0));
-        //                 }
-
-        //                 return arr;
-        //             });
-
-        //         const gameState = store.getState().game.game.state;
-        //         const diffIndexes: {
-        //             [flag: number]: Navigation
-        //         } = [];
-
-        //         gameState.forEach((row, rowIndex: number) => {
-        //             row.forEach((item, itemIndex: number) => {
-        //                 if (item !== newGameState[rowIndex][itemIndex]) {
-        //                     diffIndexes[item ? 0 : 1] = { x: rowIndex, y: itemIndex };
-        //                 }
-        //             });
-        //         });
-
-        //         if (Object.keys(diffIndexes).length === 1) {
-        //             ws.sendMessage({ position: diffIndexes[0] }, GameMessages.AREAS);
-        //         }
-
-        //         if (Object.keys(diffIndexes).length === 2) {
-        //             ws.sendMessage({ step: { nextPos: diffIndexes[1], prevPos: diffIndexes[0] } }, GameMessages.STEP);
-        //         }
-
-        //     }
-        // });
+        if (boardManager.getConnectionState()) {
+            this.setState({
+                boardActive: true
+            });
+        }
     }
 
     private changeRightContent = (event: React.MouseEvent) => {

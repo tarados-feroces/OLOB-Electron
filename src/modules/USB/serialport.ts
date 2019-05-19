@@ -19,10 +19,6 @@ class USBConnector {
     private handlerCounter: number;
     private eventHandlers;
 
-    // constructor(portLine = PORT_LINE, baudRate = BAUD_RATE) {
-
-    // }
-
     public init(portLine = PORT_LINE, baudRate = BAUD_RATE) {
         this.portLine = portLine;
         this.baudRate = baudRate;
