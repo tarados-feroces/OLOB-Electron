@@ -3,6 +3,8 @@ import { GameType, GameSituations, PossibleSteps, Side } from '../../typings/Gam
 import { ThunkAction } from '../../store/store';
 import { Message } from '../../typings/Chat';
 import BoardManager from '../../modules/BoardManager';
+import boardManager from '../../modules/BoardManager';
+import { User } from '../../typings/UserTypings';
 
 interface UserData {
     _id: string;
@@ -100,6 +102,8 @@ export function resetPossibleSteps(): ThunkAction {
             ...game,
             possibleSteps: []
         }));
+
+        boardManager.resetColorMap();
     };
 }
 
@@ -110,11 +114,14 @@ export function closeGame() {
 export function receiveSnapshot(snapshot: GameUpdateEvent): ThunkAction {
     return async (dispatch, getState) => {
         const game: GameType = getState().game.game;
+        const user: User = getState().user.user;
 
         const steps = game.steps || [];
         steps.push(snapshot.step);
 
-        BoardManager.sendOpponentStep(transpileStepsToCoords(snapshot.step));
+        if (game.currentUser !== user.id) {
+            BoardManager.sendOpponentStep(transpileStepsToCoords(snapshot.step));
+        }
 
         dispatch(updateGameState({
             ...game,

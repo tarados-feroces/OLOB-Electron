@@ -5,7 +5,7 @@ enum MessageTypes {
     Start = 0x34,
     End = 0x35,
     BoardState = 0x36,
-    ColorMap = 0x33,
+    ColorMap = '36',
     Ping = 0x71
 }
 
@@ -46,7 +46,10 @@ class BoardManager {
             return;
         }
 
-        this.sendColorMap([ { ...step.prevPos, color: '#51bd3c' }, { ...step.nextPos, color: '#51bd3c' } ]);
+        // const endColor = this.gameState[step.nextPos.y][step.nextPos.x] ? '#bc0100' : '#51bd3c';
+        const endColor = '#51bd3c';
+
+        this.sendColorMap([ { ...step.prevPos, color: '#8e17bd' }, { ...step.nextPos, color: endColor } ]);
     }
 
     public sendError() {
@@ -59,11 +62,15 @@ class BoardManager {
 
     public getStateDiff = (data: string[]) => {
         const state = this.parseState(data);
-        console.log('PARSED_STATE: ', state);
+        // console.log('PARSED_STATE: ', state);
 
         this.countDiff(state);
 
         return state;
+    }
+
+    public resetColorMap() {
+        this.sendColorMap([]);
     }
 
     private sendColorMap(data: Array<{ x: number, y: number, color: string }>) {
@@ -72,8 +79,10 @@ class BoardManager {
         result += data.length.toString(16) + ' ';
 
         data.forEach((item) => {
-            result += item.x.toString(16) + item.y.toString(16) + ' ' + item.color.slice(1) + '';
+            result += item.x.toString(16) + item.y.toString(16) + item.color + ' ';
         });
+
+        // console.log(result.slice(0, -1));
 
         USBConnector.sendMessage(MessageTypes.ColorMap, result.slice(0, -1));
     }
@@ -108,7 +117,7 @@ class BoardManager {
             return;
         }
 
-        console.log('RESULT: ', result);
+        // console.log('RESULT: ', result);
 
         if (result.length > 1) {
             this.sendError();
@@ -125,6 +134,7 @@ class BoardManager {
     }
 
     private parseState(data: string[]): number[][] {
+        // console.log('RECIEVED DATA: ', data);
         return data.slice(1).
                     // reverse().
                     map((item) => parseInt(item, 16)).

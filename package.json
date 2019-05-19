@@ -10,8 +10,8 @@
     "start": "webpack-dev-server --mode development --inline",
     "electron-rebuild": "$(npm bin)/electron-rebuild",
     "electron-start": "APP_DEV=true electron .",
-    "preelectron-pack": "npm run build &",
-    "electron-pack:mac": "build --mac -c.extraMetadata.main=main.js",
+    "preelectron-pack": "npm run build-dev &",
+    "electron-pack:mac": "sudo build --mac -c.extraMetadata.main=main.js",
     "electron-pack:win": "build --win -c.extraMetadata.main=main.js",
     "electron-pack:linux": "build --linux -c.extraMetadata.main=main.js",
     "dist": "build"
@@ -83,6 +83,7 @@
     "webpack-dev-server": "^3.1.9"
   },
   "dependencies": {
+    "@babel/core": "^7.4.4",
     "@serialport/bindings": "^2.0.8",
     "@serialport/parser-readline": "^2.0.2",
     "@types/redux": "^3.6.0",

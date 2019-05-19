@@ -2,6 +2,7 @@ import ws from './WebSocketApi';
 
 import { GameMessages } from '../redux/constants/Game';
 import { Step, Navigation, Figure } from '../typings/GameTypings';
+import boardManager from './BoardManager';
 
 enum DrawOptions {
     OFFER = 'Offer',
@@ -25,6 +26,7 @@ class GameApi {
 
     public makeStep(step: Step) {
         ws.sendMessage({ step }, GameMessages.STEP);
+        boardManager.resetColorMap();
     }
 
     public sendSnapshotRequest() {

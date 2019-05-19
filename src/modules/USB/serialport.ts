@@ -26,7 +26,12 @@ class USBConnector {
     public init(portLine = PORT_LINE, baudRate = BAUD_RATE) {
         this.portLine = portLine;
         this.baudRate = baudRate;
-        this.port = new SerialPort(this.portLine, { baudRate: this.baudRate });
+        try {
+            this.port = new SerialPort('/dev/tty.usbserial-AH0707R9', { baudRate: this.baudRate });
+        } catch (e) {
+            this.port = new SerialPort('/dev/tty.usbmodem14201', { baudRate: this.baudRate });
+        }
+
         this.parser = this.port.pipe(new Readline({ delimiter: '\n' }));
         this.handlerCounter = 0;
         this.eventHandlers = {};
@@ -43,12 +48,17 @@ class USBConnector {
     }
 
     public sendMessage(keyCode: number, data: string) {
-        this.port.write(data, (err, bytesWritten) => {
+        console.log(`"${keyCode} ${data} ;"`);
+        this.port.write(`${keyCode} ${data} ;`, (err, bytesWritten) => {
             return;
         });
+        // this.port.write(`;`, (err, bytesWritten) => {
+        //     return;
+        // });
     }
 
     public handleMessage = throttle((message: string) => {
+        console.log('RECEIVED: ', `"${message}"`);
         const parsedData = message.trim().split(' ');
 
         const keyCode = parseInt(parsedData[0], 16);
