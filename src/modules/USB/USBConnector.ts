@@ -17,14 +17,15 @@ class USBConnector {
     private parser;
     private eventHandlers;
 
-    public init(baudRate = BAUD_RATE) {
+    public async init(baudRate = BAUD_RATE) {
         let connectionStatus = false;
         this.baudRate = baudRate;
         try {
-            this.port = new SerialPort('/dev/tty.usbserial-AH0707R9', { baudRate: this.baudRate });
+            this.port = await new SerialPort('/dev/tty.usbserial-AH0707R9', { baudRate: this.baudRate });
             connectionStatus = true;
         } catch (e) {
-            connectionStatus = false;
+            console.log('error');
+            return false;
         }
 
         this.parser = this.port.pipe(new Readline({ delimiter: '\n' }));

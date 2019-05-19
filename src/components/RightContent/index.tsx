@@ -9,10 +9,6 @@ import gameAPI from '../../modules/GameApi';
 import { User } from '../../typings/UserTypings';
 import { GameType } from '../../typings/GameTypings';
 import IconButton from '../../ui/IconButton';
-import { GameMessages } from '../../redux/constants/Game';
-import { store } from '../../store/store';
-import ws from '../../modules/WebSocketApi';
-import USBConnector from '../../modules/USB/USBConnector';
 import UserCard from '../UserCard';
 import boardManager from '../../modules/BoardManager';
 
@@ -26,6 +22,7 @@ interface RightContentProps {
     game: GameType;
     opponent?: User;
     onSignoutUser?(): void;
+    onOpenInfoPopup?(description: string, data: object): void;
 }
 
 interface RightContentState {
@@ -107,6 +104,9 @@ export class RightContent extends React.Component<RightContentProps, RightConten
             this.setState({
                 boardActive: true
             });
+        } else {
+            this.props.onOpenInfoPopup('Ошибка подключения доски',
+                { text: 'Похоже, наш проект опять не работает, или Вы не подключили доску :(' });
         }
     }
 

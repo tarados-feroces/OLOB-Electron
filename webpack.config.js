@@ -82,7 +82,9 @@ module.exports = {
             filename: 'style.css'
         }),
         new CopyWebpackPlugin([
-            {from: Path.join(__dirname, 'src/static/images'), to: Path.join(outPath, 'images')}
+            {from: Path.join(__dirname, 'src/static/images'), to: Path.join(outPath, 'images')},
+            {from: Path.join(__dirname, 'src/static/images/icons/main_logo.ico'), to: Path.join(outPath)},
+            {from: Path.join(__dirname, 'src/static/images/icons/main_logo.icns'), to: Path.join(outPath)}
         ])
     ]
 };
