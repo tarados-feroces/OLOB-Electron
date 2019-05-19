@@ -1,6 +1,7 @@
 import SerialPort from 'serialport';
 import Readline from '@serialport/parser-readline';
 import { BAUD_RATE, PORT_LINE } from '../../constants/USBConstants';
+import { throttle } from 'throttle-typescript';
 
 export interface CommandType {
     cls: number;
@@ -23,9 +24,16 @@ class USBConnector {
     // }
 
     public init(portLine = PORT_LINE, baudRate = BAUD_RATE) {
+        let connectionStatus = false;
         this.portLine = portLine;
         this.baudRate = baudRate;
-        this.port = new SerialPort(this.portLine, { baudRate: this.baudRate });
+        try {
+            this.port = new SerialPort('/dev/tty.usbserial-AH0707R9', { baudRate: this.baudRate });
+            connectionStatus = true;
+        } catch (e) {
+            connectionStatus = false;
+        }
+
         this.parser = this.port.pipe(new Readline({ delimiter: '\n' }));
         this.handlerCounter = 0;
         this.eventHandlers = {};
@@ -35,21 +43,23 @@ class USBConnector {
         }));
 
         this.parser.on('data', this.handleMessage || ((data: string) => {
-            console.log(data);
             const parsedData = data.trim().split(' ');
 
             const keyCode = parseInt(parsedData[0], 16);
         }));
+
+        return connectionStatus;
     }
 
-    public sendMessage(keyCode: number, data: string) {
-        this.port.write(data, (err, bytesWritten) => {
+    public sendMessage(keyCode: string, data: string) {
+        console.log(`"${keyCode} ${data} ;"`);
+        this.port.write(`${keyCode} ${data} ;`, (err, bytesWritten) => {
             return;
         });
     }
 
-    public handleMessage = (message: string) => {
-        // console.log(message);
+    public handleMessage = throttle((message: string) => {
+        console.log('RECEIVED: ', `"${message}"`);
         const parsedData = message.trim().split(' ');
 
         const keyCode = parseInt(parsedData[0], 16);
@@ -59,7 +69,7 @@ class USBConnector {
                 callback(parsedData);
             });
         }
-    }
+    }, 200);
 
     public registerHandler = (keyCode: number, callback) => {
         this.eventHandlers[keyCode] ?
