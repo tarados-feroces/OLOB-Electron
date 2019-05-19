@@ -12,20 +12,13 @@ export interface CommandType {
 // Первое число - код ответа, ответ в виде строки
 
 class USBConnector {
-    private portLine: string;
     private baudRate: number;
     private port: SerialPort;
     private parser;
-    private handlerCounter: number;
     private eventHandlers;
 
-    // constructor(portLine = PORT_LINE, baudRate = BAUD_RATE) {
-
-    // }
-
-    public init(portLine = PORT_LINE, baudRate = BAUD_RATE) {
+    public init(baudRate = BAUD_RATE) {
         let connectionStatus = false;
-        this.portLine = portLine;
         this.baudRate = baudRate;
         try {
             this.port = new SerialPort('/dev/tty.usbserial-AH0707R9', { baudRate: this.baudRate });
@@ -35,7 +28,6 @@ class USBConnector {
         }
 
         this.parser = this.port.pipe(new Readline({ delimiter: '\n' }));
-        this.handlerCounter = 0;
         this.eventHandlers = {};
 
         this.port.on('open', (() => {
