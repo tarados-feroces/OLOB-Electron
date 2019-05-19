@@ -14,8 +14,8 @@ class BoardManager {
     private prevPos = null;
     private active = false;
 
-    public init() {
-        this.active = USBConnector.init();
+    public async init() {
+        this.active = await USBConnector.init();
         USBConnector.registerHandler(MessageTypes.BoardState, this.getStateDiff);
     }
 

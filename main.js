@@ -14,9 +14,12 @@ if (isDev) {
 
 let mainWindow;
 
+app.setName('OnLine On Board');
+
 app.on('ready', () => {
 
     mainWindow = new BrowserWindow({width: 1920, height: 1080, webSecurity: false,
+        icon: path.join(__dirname, 'dist/images/icons/main_logo.svg'),
         node: {
             __dirname: false
         }});
