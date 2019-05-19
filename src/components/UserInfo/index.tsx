@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { block } from 'bem-cn';
 
-import { Image, Input, Form as SForm, Modal, Popup } from 'semantic-ui-react';
+import { Image, Input, Form as SForm, Modal, Popup, Dimmer, Loader } from 'semantic-ui-react';
 import Form from '../../ui/Form';
 import Button from '../../ui/Button';
 
@@ -28,6 +28,7 @@ interface ReduxProps {
     avatar?: string;
     error?: boolean;
     newAvatar?: string;
+    loading?: boolean;
 }
 
 type UserInfoProps = OwnProps & ReduxProps;
@@ -87,12 +88,22 @@ export default class UserInfo extends React.Component<UserInfoProps, UserInfoSta
     }
 
     public render() {
-        const { error, newAvatar } = this.props;
+        const { error, newAvatar, loading } = this.props;
         const errorStyle = {
             fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
             fontWeight: 'lighter',
             color: '#cc1600'
         };
+
+        if (loading) {
+            return (
+                <div className={b()} >
+                    <Dimmer active={true}>
+                        <Loader content="Loading" />
+                    </Dimmer>
+                </div>
+            );
+        }
 
         return (
             <>
