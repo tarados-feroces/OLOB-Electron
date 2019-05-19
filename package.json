@@ -14,7 +14,8 @@
     "electron-pack:mac": "sudo build --mac -c.extraMetadata.main=main.js",
     "electron-pack:win": "build --win -c.extraMetadata.main=main.js",
     "electron-pack:linux": "build --linux -c.extraMetadata.main=main.js",
-    "dist": "build"
+    "dist": "build",
+    "electron-packager": "electron-packager . --icon=\"/Users/danchetto/Desktop/logo_128x128.icns\""
   },
   "build": {
     "appId": "1",
@@ -22,6 +23,7 @@
       "category": "Game"
     }
   },
+  "productName": "OnLine On Board",
   "pre-commit": [
     "tslint"
   ],
@@ -56,6 +58,7 @@
     "css-loader": "^1.0.0",
     "electron": "^4.1.4",
     "electron-builder": "^20.40.2",
+    "electron-packager": "^13.1.1",
     "electron-rebuild": "^1.8.4",
     "electron-reload": "^1.4.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
