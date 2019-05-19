@@ -9,7 +9,10 @@ import gameAPI from '../../modules/GameApi';
 import { User } from '../../typings/UserTypings';
 import { GameType } from '../../typings/GameTypings';
 import IconButton from '../../ui/IconButton';
-import USBConnector from '../../modules/USB/serialport';
+import { GameMessages } from '../../redux/constants/Game';
+import { store } from '../../store/store';
+import ws from '../../modules/WebSocketApi';
+import USBConnector from '../../modules/USB/USBConnector';
 import UserCard from '../UserCard';
 import boardManager from '../../modules/BoardManager';
 
@@ -100,7 +103,7 @@ export class RightContent extends React.Component<RightContentProps, RightConten
 
     private onConnect = () => {
         boardManager.init();
-        if (boardManager.getConnectionState()) {
+        if (boardManager.getConnectedState()) {
             this.setState({
                 boardActive: true
             });

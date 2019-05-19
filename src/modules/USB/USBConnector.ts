@@ -20,12 +20,14 @@ class USBConnector {
     private eventHandlers;
 
     public init(portLine = PORT_LINE, baudRate = BAUD_RATE) {
+        let connectionStatus = false;
         this.portLine = portLine;
         this.baudRate = baudRate;
         try {
             this.port = new SerialPort('/dev/tty.usbserial-AH0707R9', { baudRate: this.baudRate });
+            connectionStatus = true;
         } catch (e) {
-            this.port = new SerialPort('/dev/tty.usbmodem14201', { baudRate: this.baudRate });
+            connectionStatus = false;
         }
 
         this.parser = this.port.pipe(new Readline({ delimiter: '\n' }));
@@ -33,7 +35,7 @@ class USBConnector {
         this.eventHandlers = {};
 
         this.port.on('open', (() => {
-            // console.log('Built-in func: serial port open');
+            console.log('Built-in func: serial port open');
         }));
 
         this.parser.on('data', this.handleMessage || ((data: string) => {
@@ -41,16 +43,15 @@ class USBConnector {
 
             const keyCode = parseInt(parsedData[0], 16);
         }));
+
+        return connectionStatus;
     }
 
-    public sendMessage(keyCode: number, data: string) {
+    public sendMessage(keyCode: string, data: string) {
         console.log(`"${keyCode} ${data} ;"`);
         this.port.write(`${keyCode} ${data} ;`, (err, bytesWritten) => {
             return;
         });
-        // this.port.write(`;`, (err, bytesWritten) => {
-        //     return;
-        // });
     }
 
     public handleMessage = throttle((message: string) => {

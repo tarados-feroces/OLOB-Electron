@@ -1,12 +1,12 @@
-import USBConnector from './USB/serialport';
+import USBConnector from './USB/USBConnector';
 import GameApi from './GameApi';
 
 enum MessageTypes {
-    Start = 0x34,
-    End = 0x35,
+    Start = '34',
+    End = '35',
     BoardState = 0x36,
-    ColorMap = '36',
-    Ping = 0x71
+    ColorMap = '33',
+    Ping = '71'
 }
 
 class BoardManager {
@@ -14,13 +14,9 @@ class BoardManager {
     private prevPos = null;
     private active = false;
 
-    // constructor() {
-    //     USBConnector.registerHandler(MessageTypes.BoardState, this.getStateDiff);
-    // }
-
     public init() {
+        this.active = USBConnector.init();
         USBConnector.registerHandler(MessageTypes.BoardState, this.getStateDiff);
-        this.active = true;
     }
 
     public start = () => {
@@ -33,6 +29,10 @@ class BoardManager {
         USBConnector.sendMessage(MessageTypes.End, '');
     }
 
+    public getConnectedState() {
+        return this.active;
+    }
+
     public sendPossibleSteps = (steps: Array<{ x: number, y: number, color: string }>) => {
         if (!this.active) {
             return;
@@ -41,28 +41,27 @@ class BoardManager {
         this.sendColorMap(steps);
     }
 
+    public resetPossibleSteps() {
+        this.resetColorMap();
+    }
+
     public sendOpponentStep = (step: { prevPos: { x: number, y: number }, nextPos: { x: number, y: number }}) => {
         if (!this.active) {
             return;
         }
 
-        // const endColor = this.gameState[step.nextPos.y][step.nextPos.x] ? '#bc0100' : '#51bd3c';
+        const startColor = '#8e17bd';
         const endColor = '#51bd3c';
 
-        this.sendColorMap([ { ...step.prevPos, color: '#8e17bd' }, { ...step.nextPos, color: endColor } ]);
+        this.sendColorMap([ { ...step.prevPos, color: startColor }, { ...step.nextPos, color: endColor } ]);
     }
 
     public sendError() {
         return;
     }
 
-    // public sendGameSituation() {
-    //     return;
-    // }
-
     public getStateDiff = (data: string[]) => {
         const state = this.parseState(data);
-        // console.log('PARSED_STATE: ', state);
 
         this.countDiff(state);
 
@@ -81,8 +80,6 @@ class BoardManager {
         data.forEach((item) => {
             result += item.x.toString(16) + item.y.toString(16) + item.color + ' ';
         });
-
-        // console.log(result.slice(0, -1));
 
         USBConnector.sendMessage(MessageTypes.ColorMap, result.slice(0, -1));
     }
@@ -116,8 +113,6 @@ class BoardManager {
         if (!result.length) {
             return;
         }
-
-        // console.log('RESULT: ', result);
 
         if (result.length > 1) {
             this.sendError();

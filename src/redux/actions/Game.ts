@@ -2,7 +2,6 @@ import { GameTypes } from '../constants/Game';
 import { GameType, GameSituations, PossibleSteps, Side } from '../../typings/GameTypings';
 import { ThunkAction } from '../../store/store';
 import { Message } from '../../typings/Chat';
-import BoardManager from '../../modules/BoardManager';
 import boardManager from '../../modules/BoardManager';
 import { User } from '../../typings/UserTypings';
 
@@ -81,7 +80,7 @@ export function receivePossibleSteps(data: { steps: PossibleSteps[] }): ThunkAct
 
         delete game.possibleSteps;
 
-        BoardManager.sendPossibleSteps(data.steps.map((item) =>
+        boardManager.sendPossibleSteps(data.steps.map((item) =>
             ({ ...item, color: item.captured ? '#bc0100' : '#51bd3c' })));
 
         dispatch(updateGameState({
@@ -103,7 +102,7 @@ export function resetPossibleSteps(): ThunkAction {
             possibleSteps: []
         }));
 
-        boardManager.resetColorMap();
+        boardManager.resetPossibleSteps();
     };
 }
 
@@ -120,7 +119,7 @@ export function receiveSnapshot(snapshot: GameUpdateEvent): ThunkAction {
         steps.push(snapshot.step);
 
         if (game.currentUser !== user.id) {
-            BoardManager.sendOpponentStep(transpileStepsToCoords(snapshot.step));
+            boardManager.sendOpponentStep(transpileStepsToCoords(snapshot.step));
         }
 
         dispatch(updateGameState({
