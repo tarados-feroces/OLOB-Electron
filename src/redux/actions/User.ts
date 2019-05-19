@@ -37,6 +37,7 @@ const setUserAuthorized = () => ({ type: UserTypes.SET_USER_AUTHORIZED });
 const resetUserAuthorized = () => ({ type: UserTypes.RESET_USER_AUTHORIZED });
 const setError = () => ({ type: UserTypes.SET_ERROR });
 const resetError = () => ({ type: UserTypes.RESET_ERROR });
+const setLoading = () => ({ type: UserTypes.SET_LOADING });
 
 export function getUser(): ThunkAction {
     return async (dispatch) => {
@@ -82,6 +83,7 @@ export function loginUser(data: LoginData): ThunkAction {
 
 export function updateUser(data: UpdateUserData): ThunkAction {
     return async (dispatch) => {
+        dispatch(setLoading());
         const response = await httpApi.updateUser(data);
         if (response.ok) {
             const json = await response.json();
@@ -122,6 +124,8 @@ export function changeUserAvatar(newAvatar: string, options?: AvatarChangeOption
         if (!newAvatar) {
             dispatch(setUserNewAvatar(newAvatar));
         }
+
+        dispatch(setLoading());
 
         const response = await httpApi.changeAvatar(newAvatar, options);
         const json = await response.json();

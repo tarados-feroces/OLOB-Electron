@@ -12,6 +12,7 @@ interface StateProps {
     avatar: string;
     error: boolean;
     newAvatar: string;
+    loading: boolean;
 }
 
 interface DispatchProps {
@@ -47,7 +48,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}> = (state) => {
         login: state.user.user.login,
         avatar: state.user.user.avatar,
         newAvatar: state.user.newAvatar,
-        error: state.user.error
+        error: state.user.error,
+        loading: state.user.loading
     };
 };
 

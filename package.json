@@ -21,7 +21,14 @@
     "appId": "1",
     "mac": {
       "category": "Game"
-    }
+    },
+    "directories": { "output": "./dist/" },
+    "files": [
+      "./dist/**/*",
+      "node_modules",
+      "Release",
+      "./main.js"
+    ]
   },
   "productName": "OnLine On Board",
   "pre-commit": [

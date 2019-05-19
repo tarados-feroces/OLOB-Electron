@@ -14,12 +14,14 @@ export interface UserState {
     error?: boolean;
     newAvatar?: string;
     gameList: HistoryGame[];
+    loading?: boolean;
 }
 
 const initialState: UserState = {
     isAuthorized: null,
     error: false,
-    gameList: []
+    gameList: [],
+    loading: false
 };
 
 const user: Reducer<UserState> = (state = initialState, action) => {
@@ -27,7 +29,8 @@ const user: Reducer<UserState> = (state = initialState, action) => {
     case UserTypes.SET_USER:
         return {
             ...state,
-            user: action.payload
+            user: action.payload,
+            loading: false
         };
 
     case UserTypes.SET_ERROR:
@@ -43,7 +46,10 @@ const user: Reducer<UserState> = (state = initialState, action) => {
         return { ...state, isAuthorized: true };
 
     case UserTypes.SET_NEW_AVATAR:
-        return { ...state, newAvatar: action.payload.avatar };
+        return { ...state, newAvatar: action.payload.avatar, loading: false };
+
+    case UserTypes.SET_LOADING:
+        return { ...state, loading: true };
 
     case UserTypes.RESET_USER_AUTHORIZED:
         return {
