@@ -26,7 +26,6 @@ export default class StepHistory extends React.Component<StepHistoryProps> {
 
     public render() {
         const { history } = this.props;
-        console.log(history);
 
         return (
             <div className={b()} ref={this.stepsList}>
