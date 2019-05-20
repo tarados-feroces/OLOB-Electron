@@ -1,6 +1,6 @@
 import SerialPort from 'serialport';
 import Readline from '@serialport/parser-readline';
-import { BAUD_RATE, PORT_LINE } from '../../constants/USBConstants';
+import { BAUD_RATE, PORT_LINE } from '../constants/USBConstants';
 import { throttle } from 'throttle-typescript';
 
 export interface CommandType {
