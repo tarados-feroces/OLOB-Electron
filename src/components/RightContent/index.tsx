@@ -105,8 +105,8 @@ export class RightContent extends React.Component<RightContentProps, RightConten
                 boardActive: true
             });
         } else {
-            this.props.onOpenInfoPopup('Ошибка подключения доски',
-                { text: 'Похоже, наш проект опять не работает, или Вы не подключили доску :(' });
+        //     this.props.onOpenInfoPopup('Ошибка подключения доски',
+        //         { text: 'Похоже, наш проект опять не работает, или Вы не подключили доску :(' });
         }
     }
 

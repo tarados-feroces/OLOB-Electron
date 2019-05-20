@@ -18,14 +18,17 @@ class USBConnector {
     private eventHandlers;
 
     public async init(baudRate = BAUD_RATE) {
-        let connectionStatus = false;
+        let connectionStatus = true;
         this.baudRate = baudRate;
         try {
-            this.port = await new SerialPort('/dev/tty.usbserial-AH0707R9', { baudRate: this.baudRate });
+            this.port = await new SerialPort('/dev/tty.usbmodem14101', { baudRate: this.baudRate });
             connectionStatus = true;
         } catch (e) {
-            console.log('error');
+            // try {
+            //     this.port = await new SerialPort('/dev/tty.usbmodem14201', { baudRate: this.baudRate });
+            // } catch (k) {
             return false;
+            // }
         }
 
         this.parser = this.port.pipe(new Readline({ delimiter: '\n' }));
@@ -62,7 +65,7 @@ class USBConnector {
                 callback(parsedData);
             });
         }
-    }, 200);
+    }, 700);
 
     public registerHandler = (keyCode: number, callback) => {
         this.eventHandlers[keyCode] ?

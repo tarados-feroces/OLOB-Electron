@@ -19,13 +19,16 @@
   },
   "build": {
     "appId": "1",
+    "icon": "./logo_128x128.icns",
     "dmg": {
       "icon": "./logo_128x128.icns"
     },
     "mac": {
       "category": "Game"
     },
-    "directories": { "output": "./dist/" },
+    "directories": {
+      "output": "./dist/"
+    },
     "files": [
       "./dist/**/*",
       "node_modules",

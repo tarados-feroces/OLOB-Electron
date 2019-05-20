@@ -26,7 +26,7 @@ class GameApi {
 
     public makeStep(step: Step) {
         ws.sendMessage({ step }, GameMessages.STEP);
-        boardManager.resetColorMap();
+        // boardManager.resetColorMap();
     }
 
     public sendSnapshotRequest() {

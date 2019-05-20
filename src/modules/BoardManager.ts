@@ -114,8 +114,17 @@ class BoardManager {
             return;
         }
 
+        console.log('DIFF: ', result);
+
         if (result.length > 1) {
-            this.sendError();
+            result.forEach((item) => {
+                if (item.action && this.prevPos) {
+                    GameApi.makeStep({ prevPos: this.prevPos, nextPos: item });
+                    this.prevPos = null;
+                } else if (!result[0].action) {
+                    GameApi.sendPossibleMovesRequest(result[0]);
+                }
+            });
         } else if (result.length === 1) {
             if (result[0].action && this.prevPos) {
                 GameApi.makeStep({ prevPos: this.prevPos, nextPos: result[0] });
@@ -136,7 +145,7 @@ class BoardManager {
                     map((item, index) => {
                         const arr = [];
                         for (let i = 0; i < 8; ++i) {
-                            arr.unshift((item & (0x80 >> i) ? 1 : 0));
+                            arr.push((item & (0x80 >> i) ? 1 : 0));
                         }
 
                         return arr;
