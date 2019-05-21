@@ -7,7 +7,7 @@ interface DiffCounter {
     [diffStr: string]: number;
 }
 
-const MIN_DIFF_COUNTER = 15;
+const MIN_DIFF_COUNTER = 1;
 
 class BoardManager {
     private gameState: number[][];
@@ -66,6 +66,9 @@ class BoardManager {
     }
 
     public getStateDiff = (data: string[]) => {
+        if (data.length !== 9) {
+            return;
+        }
         const state = this.parseState(data);
 
         if (!this.gameState) {
@@ -141,7 +144,7 @@ class BoardManager {
             if (this.diffCounter[diffStr] < MIN_DIFF_COUNTER && !diffStrs.includes(diffStr)) {
                 console.log(`DELETED FROM COUNTER: ${diffStr}`);
 
-                this.diffCounter[diffStr] = undefined;
+                delete this.diffCounter[diffStr];
             } else {
                 console.log(`REMAINS: ${diffStr}`);
             }
@@ -164,7 +167,7 @@ class BoardManager {
             const diff = stringToDiff(diffStr);
             this.handleAction(diff);
 
-            this.diffCounter[diffStr] = undefined;
+            delete this.diffCounter[diffStr];
 
             stateChanged = true;
         });
@@ -178,16 +181,15 @@ class BoardManager {
 
     private handleAction(action: Action) {
         switch (action.action) {
-        case ActionTypes.FIGURE_UP:
+        case ActionTypes.FIGURE_DOWN:
             if (this.prevPos) {
                 GameApi.makeStep({ prevPos: this.prevPos, nextPos: action });
+                this.prevPos = null;
             }
 
             break;
-        case ActionTypes.FIGURE_DOWN:
+        case ActionTypes.FIGURE_UP:
             GameApi.sendPossibleMovesRequest(action);
-            this.prevPos = null;
-
             break;
         default:
             console.log('BOARD_ACTION IS UNDEFINED');
